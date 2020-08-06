@@ -52,4 +52,10 @@ public class KataTest
     {
     	assertEquals("(123) 456-7890", Kata.createPhoneNumber(new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));
     }
+    
+    public void test_ListJoin() {
+    	String[] testinput = {"8", "2", "7", "10"};
+    	assertEquals("8,2,7,10", Kata.ListJoin(testinput));
+    }
+   
 }

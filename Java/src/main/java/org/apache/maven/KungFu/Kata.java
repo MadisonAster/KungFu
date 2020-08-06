@@ -1,5 +1,9 @@
 package org.apache.maven.KungFu;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import java.util.List;
+
 public class Kata {
     public static int square(int x) {
         return x*x;
@@ -50,6 +54,11 @@ public class Kata {
             if (i == 2) {result += ") ";}
             if (i == 5) {result += "-";}
         }
+        return result;
+    }
+    public static String ListJoin(String[] args) {
+        List<String> myList = Lists.newArrayList(args);
+        String result = Joiner.on(",").join(myList);
         return result;
     }
 }
