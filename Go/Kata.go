@@ -1,6 +1,7 @@
-package main
+package Kata
 
 import "fmt"
+import "crypto/md5"
 
 func main() {
     fmt.Println("hello world")
@@ -22,4 +23,8 @@ func main() {
     	break
     }
     fmt.Println(twoD)
+}
+
+func GetMD5Hash(str string) string {
+   return fmt.Sprintf("%x",md5.Sum([]byte(str)))
 }
