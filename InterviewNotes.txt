@@ -1,0 +1,51 @@
+https://www.youtube.com/watch?time_continue=435&v=ko-KkSmp-Lk&feature=emb_title
+
+
+Data Structrues:
+	Hash Tables
+	Stacks
+	Arrays
+Tree construction
+Traversal and Manipulation
+Link Lists
+
+Algorithms:
+	Measure Space and Time Complexity
+
+	dijkstras
+	A*
+
+	Recursive algorithms
+
+
+Things to do in Go:
+	Unit tests
+
+	Sempaphores
+	Mutexes
+	Locks
+	Context Switching (Take control)
+	
+
+
+System Design
+	Feature Sets
+	Interfaces
+	Class hierarchies
+	distributed systems
+	system constraints
+
+OO Programming
+
+
+Math Problems:
+	Probability
+	Combinatorics
+	N choose K problems nCk (Binomial coefficient)
+
+
+	P Space Problems
+
+	NP Complete
+		Traveling Salesman
+		Napsack
