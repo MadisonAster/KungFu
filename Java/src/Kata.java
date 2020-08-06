@@ -39,6 +39,17 @@ public class Kata {
 	public static final String generateShape(int n) {
 		return ("+".repeat(n)+"\n").repeat(n).trim();
     }
+	
+	public static String createPhoneNumber(int[] numbers) {
+		String result = "";
+		for(int i = 0; i < numbers.length; i++) {
+			if (i == 0) {result += "(";}
+			result += numbers[i];
+			if (i == 2) {result += ") ";}
+			if (i == 5) {result += "-";}
+		}
+		return result;
+	}
 }
 
 

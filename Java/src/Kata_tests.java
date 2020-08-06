@@ -29,5 +29,10 @@ class Kata_tests {
         assertEquals("+++++\n+++++\n+++++\n+++++\n+++++", Kata.generateShape(5));
         assertEquals("++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++", Kata.generateShape(8));
     }
+	
+	@Test
+	public void createPhoneNumber_test() {
+	    assertEquals("(123) 456-7890", Kata.createPhoneNumber(new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));
+	}
 
 }
