@@ -2,6 +2,9 @@ package org.apache.maven.KungFu;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Range;
+import com.google.common.collect.DiscreteDomain;
+import com.google.common.collect.ContiguousSet;
 import java.util.List;
 
 public class Kata {
@@ -61,4 +64,42 @@ public class Kata {
         String result = Joiner.on(",").join(myList);
         return result;
     }
+    
+    public static long SumSeries(long n) {
+    	long result = 0;
+        for(long i=0;i<n;i++)
+            result += i;
+        return result;
+    }
+    /*
+    public static int BecomeImmortalO(int m, int n, int l, int t) {
+    	int rowvalue = SumSeries(m);
+    	int rowsubtract = l*(m-1);
+        int row = rowvalue - rowsubtract;
+        int total = row * n;
+        //return total;
+        return (SumSeries(m) - (l*(m-1))) * n;
+    }
+    */
+
+    public static long BecomeImmortal(long n, long m, long k, long newp) {
+    	long rowvalue = SumSeries(n);
+    	long rowsubtract = k*(n-1);
+    	long row = rowvalue - rowsubtract;
+    	long total = row * m;
+
+		System.out.println(rowvalue);
+		System.out.println(rowsubtract);
+		System.out.println(row);
+		System.out.println(total);
+		System.out.println("----");
+		
+    	return total % newp;
+    }
+    
+    public static long BecomeImmortal1(long n, long m, long k, long newp) {
+        return Long.valueOf(  ((SumSeries(n) - (k*(n-1))) * m) % newp );
+    }
 }
+
+
