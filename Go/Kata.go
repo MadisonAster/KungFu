@@ -3,6 +3,7 @@ package Kata
 import "fmt"
 import "crypto/md5"
 import "strings"
+import "math/big"
 
 func main() {
     fmt.Println("hello world")
@@ -61,4 +62,9 @@ func BecomeImmortal(m int, n int, l int, t int) int {
     row := rowvalue - rowsubtract
     total := row * n
     return total % 100
+}
+
+func HugeNumber(x int64, y int64) *big.Int{
+    result := new(big.Int).Exp(big.NewInt(x), big.NewInt(y), nil)
+    return result
 }

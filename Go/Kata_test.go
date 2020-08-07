@@ -6,6 +6,8 @@ import "reflect"
 //import "strings"
 import "fmt"
 
+//import "math/big"
+
 //func formatlist(A []int) {
 //    return strings.Trim(strings.Replace(fmt.Sprint(A), " ", ",", -1), "[]")
 //}
@@ -69,3 +71,7 @@ func Test_BecomeImmortal(t *testing.T){
     }
 }
 
+func Test_HugeNumber(t *testing.T){
+    number := HugeNumber(5, 20)
+    fmt.Println(number)
+}
