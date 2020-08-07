@@ -1,6 +1,7 @@
 package Kata
 
 import "testing"
+import "strconv"
 
 func GetMD5Hash_test1(t *testing.T) {
 	input := "password"
@@ -16,6 +17,15 @@ func RepeatStr_test1(t *testing.T) {
 	actual := RepeatStr(4, "a") 
 	if actual != expected {
 		t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+	}
+}
+
+
+func IsDivisible_test1(t *testing.T) {
+	expected := false
+	actual := IsDivisible(3, 3, 4) 
+	if actual != expected {
+		t.Errorf("Test failed! Expected: '%s', got: '%s'", strconv.FormatBool(expected), strconv.FormatBool(actual))
 	}
 }
 
