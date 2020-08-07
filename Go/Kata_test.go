@@ -10,3 +10,12 @@ func GetMD5Hash_test1(t *testing.T) {
 		t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
 	}
 }
+
+func RepeatStr_test1(t *testing.T) {
+	expected := "aaaa"
+	actual := RepeatStr(4, "a") 
+	if actual != expected {
+		t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+	}
+}
+

@@ -2,6 +2,7 @@ package Kata
 
 import "fmt"
 import "crypto/md5"
+import "strings"
 
 func main() {
     fmt.Println("hello world")
@@ -28,3 +29,9 @@ func main() {
 func GetMD5Hash(str string) string {
    return fmt.Sprintf("%x",md5.Sum([]byte(str)))
 }
+
+func RepeatStr(repetitions int, value string) string {
+    return strings.Repeat(value, repetitions)
+}
+
+
