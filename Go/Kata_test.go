@@ -42,18 +42,30 @@ func TestIsDivisible_1(t *testing.T) {
     }
 }
 
-
 func Test_listrange_1(t *testing.T) {
     expected := []int {0,1,2,3}
-    //actual := []int {1,2,3,4}
     actual := listrange(0,4)
     fmt.Println(reflect.DeepEqual(actual, expected))
 
     if !reflect.DeepEqual(actual, expected) {
-    //if true {
         t.Errorf("list range test failed!")
     //    t.Errorf("Test failed! Expected: '%s', got: '%s'", formatlist(expected), formatlist(actual))
     }
 }
 
+func Test_sum_1(t *testing.T){
+    expected := 6
+    actual := sum(listrange(0,4))
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
+}
+
+func Test_BecomeImmortal(t *testing.T){
+    expected := 5
+    actual := BecomeImmortal(8,5,1,100)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
+}
 

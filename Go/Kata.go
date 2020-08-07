@@ -39,25 +39,26 @@ func IsDivisible(n, x, y int) bool {
     return (n%x==0 && n%y==0)
 }
 
-
-
 func listrange(start, end int) []int {
-    //for N := start; N < end; N++ {
     s := make([]int, end-start)
     for i := range s {
         s[i] = i
     }
     return s
-    //}
 }
 
+func sum(array []int) int {
+    result := 0
+    for _, v := range array {
+        result += v
+    }
+    return result
+}
 
-/*
 func BecomeImmortal(m int, n int, l int, t int) int {
-    rowvalue = m-1
-    rowsubtract = l*(m-1)
-    row = rowvalue - rowsubtract
-    total = row * n
+    rowvalue := sum(listrange(0,m))
+    rowsubtract := l*(m-1)
+    row := rowvalue - rowsubtract
+    total := row * n
     return total % 100
 }
-*/
