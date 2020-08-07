@@ -33,12 +33,14 @@ func GetMD5Hash(str string) string {
 }
 
 func BruteMD5Pin(str string) string {
+    var result string
     for i := 0; i <= 99999; i++ {
-        if str == GetMD5Hash(fmt.Sprintf("%05d", i)) {
-            return fmt.Sprintf("%05d", i)
+        if str == fmt.Sprintf("%x",md5.Sum([]byte(fmt.Sprintf("%05d", i)))) {
+            result = fmt.Sprintf("%05d", i)
+            break
         }
     }
-    return ""
+    return result
 }
 
 func RepeatStr(repetitions int, value string) string {
