@@ -32,21 +32,26 @@ func GetMD5Hash(str string) string {
     return fmt.Sprintf("%x",md5.Sum([]byte(str)))
 }
 
-func BruteMD5Pin(str string) string {
-    var result string
+func BruteMD5Pin(hash string) (result string) {
     for i := 0; i <= 99999; i++ {
-        if str == fmt.Sprintf("%x",md5.Sum([]byte(fmt.Sprintf("%05d", i)))) {
+        if hash == fmt.Sprintf("%x",md5.Sum([]byte(fmt.Sprintf("%05d", i)))) {
             result = fmt.Sprintf("%05d", i)
             break
         }
     }
-    return result
+    return
 }
 
 func RepeatStr(repetitions int, value string) string {
     return strings.Repeat(value, repetitions)
 }
 
+func reverse(s string) (result string) {
+    for _, v := range s {
+        result = string(v) + result
+    }
+    return
+}
 
 func IsDivisible(n, x, y int) bool {
     return (n%x==0 && n%y==0)

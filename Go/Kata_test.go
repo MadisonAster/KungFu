@@ -66,6 +66,14 @@ func TestBruteMD5Pin_99999(t *testing.T) {
     }
 }
 
+func Test_reverse_1(t *testing.T) {
+    input := "helloworld"
+    expected := "dlrowolleh"
+    actual := reverse(input)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: %s, got: %s,", expected, actual)
+    }
+}
 
 
 func TestRepeatStr_1(t *testing.T) {
