@@ -21,6 +21,53 @@ func TestGetMD5Hash_1(t *testing.T) {
     }
 }
 
+func TestGetMD5Hash_2(t *testing.T) {
+    input := "00000"
+    expected := "dcddb75469b4b4875094e14561e573d8"
+    actual := GetMD5Hash(input)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+    }
+}
+
+func TestBruteMD5Pin_1(t *testing.T) {
+    input := "dcddb75469b4b4875094e14561e573d8"
+    expected := "00000"
+    actual := BruteMD5Pin(input)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+    }
+}
+
+func TestBruteMD5Pin_2(t *testing.T) {
+    input := "86aa400b65433b608a9db30070ec60cd"
+    expected := "00078"
+    actual := BruteMD5Pin(input)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+    }
+}
+
+func TestBruteMD5Pin_3(t *testing.T) {
+    input := "827ccb0eea8a706c4c34a16891f84e7b"
+    expected := "12345"
+    actual := BruteMD5Pin(input)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+    }
+}
+
+func TestBruteMD5Pin_99999(t *testing.T) {
+    input := "d3eb9a9233e52948740d7eb8c3062d14"
+    expected := "99999"
+    actual := BruteMD5Pin(input)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+    }
+}
+
+
+
 func TestRepeatStr_1(t *testing.T) {
     expected := "aaaa"
     actual := RepeatStr(4, "a") 

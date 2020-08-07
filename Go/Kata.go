@@ -4,6 +4,7 @@ import "fmt"
 import "crypto/md5"
 import "strings"
 import "math/big"
+//import "strconv"
 
 func main() {
     fmt.Println("hello world")
@@ -28,7 +29,16 @@ func main() {
 }
 
 func GetMD5Hash(str string) string {
-   return fmt.Sprintf("%x",md5.Sum([]byte(str)))
+    return fmt.Sprintf("%x",md5.Sum([]byte(str)))
+}
+
+func BruteMD5Pin(str string) string {
+    for i := 0; i <= 99999; i++ {
+        if str == GetMD5Hash(fmt.Sprintf("%05d", i)) {
+            return fmt.Sprintf("%05d", i)
+        }
+    }
+    return ""
 }
 
 func RepeatStr(repetitions int, value string) string {
