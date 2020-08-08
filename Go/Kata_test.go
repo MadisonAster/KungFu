@@ -126,9 +126,17 @@ func Test_BecomeImmortal(t *testing.T){
     }
 }
 
-func Test_HugeExponent(t *testing.T){
-    number := HugeExponent([]int {12, 30, 21})
-    fmt.Println(number)
+//func Test_HugeExponent(t *testing.T){
+//    number := HugeExponent([]int {12, 30, 21})
+//    fmt.Println(number)
+//}
+
+func Test_ModExpGoBigInteger(t *testing.T){
+    expected := int64(4)
+    actual := ModExpGoBigInteger(int64(499942), int64(898102), int64(10))
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
 }
 
 func Test_LastDigit_1(t *testing.T){
@@ -143,6 +151,24 @@ func Test_LastDigit_1(t *testing.T){
 func Test_LastDigit_2(t *testing.T){
     expected := 6
     actual := LastDigit([]int {12, 30, 21})
+    fmt.Println(actual)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
+}
+
+func Test_LastDigit_3(t *testing.T){
+    expected := 1
+    actual := LastDigit([]int {7,6,21})
+    fmt.Println(actual)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
+}
+
+func Test_LastDigit_4(t *testing.T){
+    expected := 6
+    actual := LastDigit([]int {123232,694022,140249})
     fmt.Println(actual)
     if actual != expected {
         t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)

@@ -93,7 +93,7 @@ func HugeExponent(A []int) *big.Int{
     return exponent
 }
 
-func LastDigit(as []int) int {
+func LastDigit1(as []int) int {
     exponent := big.NewInt(int64(as[0]))
     for i := 1; i < len(as); i++ {
         exponent = new(big.Int).Exp(exponent, big.NewInt(int64(as[i])), nil)
@@ -104,3 +104,38 @@ func LastDigit(as []int) int {
     return result
 }
 
+func ModExpGoBigInteger(base, exponent, modulus int64) int64 {
+    return new(big.Int).Mod(new(big.Int).Exp(big.NewInt(base), big.NewInt(exponent), nil), big.NewInt(modulus)).Int64()
+}
+
+func ModExpGoBigIntegerExp(base, exponent, modulus int64) int64 {
+    return new(big.Int).Exp(big.NewInt(base), big.NewInt(exponent), big.NewInt(modulus)).Int64()
+}
+
+func LastDigit2(as []int) int {
+    exponent := int64(as[0])
+    for i := 1; i < len(as); i++ {
+        exponent = ModExpGoBigIntegerExp(exponent, int64(as[i]), int64(10))
+        fmt.Println(exponent)
+    }
+    fmt.Println("---")
+    fmt.Println(exponent)
+    Sexponent := strconv.FormatInt(exponent, 10)
+    newresult := Sexponent[len(Sexponent)-1:]
+    result, _ := strconv.Atoi(newresult)
+    return result
+}
+
+func LastDigit(as []int) int {
+    exponent := int64(as[len(as)-1])
+    for i := len(as)-2; i >= 0; i-- {
+        exponent = ModExpGoBigIntegerExp(int64(as[i]), exponent, int64(100))
+        fmt.Println(exponent)
+    }
+    fmt.Println("---")
+    fmt.Println(exponent)
+    Sexponent := strconv.FormatInt(exponent, 10)
+    newresult := Sexponent[len(Sexponent)-1:]
+    result, _ := strconv.Atoi(newresult)
+    return result
+}
