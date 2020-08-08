@@ -217,6 +217,6 @@ func LastDigit(as []int) int {
 }
 
 func ToMilliseconds(h, m, s int) int {
-    return ((h *60 +m) * 60 + s) * 1000 
+    return ((h *60 + m) * 60 + s) * 1000 
 }
 

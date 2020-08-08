@@ -78,5 +78,10 @@ func Test_LastDigit(t *testing.T){
     assertEqual(t, 6, LastDigit([]int {123232,694022,140249}))
 }
 
-//func Test_ToMilliseconds(t *testing.T){
-//}
+func Test_ToMilliseconds(t *testing.T){
+    assertEqual(t, 61000, ToMilliseconds(0, 1, 1))
+    assertEqual(t, 3661000, ToMilliseconds(1, 1, 1))
+    assertEqual(t, 0, ToMilliseconds(0, 0, 0))
+    assertEqual(t, 3601000, ToMilliseconds(1, 0, 1))
+    assertEqual(t, 3600000, ToMilliseconds(1, 0, 0))
+}
