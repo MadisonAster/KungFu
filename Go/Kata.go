@@ -220,3 +220,17 @@ func ToMilliseconds(h, m, s int) int {
     return ((h *60 + m) * 60 + s) * 1000 
 }
 
+func ExpressionsMatter(a int, b int, c int) int {
+    return int( 
+        math.Max( 
+            math.Max( 
+                math.Max(
+                    float64(a*b*c), 
+                    float64(a+b+c),
+                ), 
+                float64((a+b)*c),
+            ),
+            float64(a*(b+c)),
+        ),
+    )
+}

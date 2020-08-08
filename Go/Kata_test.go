@@ -85,3 +85,25 @@ func Test_ToMilliseconds(t *testing.T){
     assertEqual(t, 3601000, ToMilliseconds(1, 0, 1))
     assertEqual(t, 3600000, ToMilliseconds(1, 0, 0))
 }
+
+func Test_ExpressionsMatter(t *testing.T){
+    assertEqual(t, 6, ExpressionsMatter(2, 1, 2))
+    assertEqual(t, 4, ExpressionsMatter(2, 1, 1))
+    assertEqual(t, 3, ExpressionsMatter(1, 1, 1))
+    assertEqual(t, 9, ExpressionsMatter(1, 2, 3))
+    assertEqual(t, 5, ExpressionsMatter(1, 3, 1))
+    assertEqual(t, 8, ExpressionsMatter(2, 2, 2))
+    assertEqual(t, 20, ExpressionsMatter(5, 1, 3))
+    assertEqual(t, 105, ExpressionsMatter(3, 5, 7))
+    assertEqual(t, 35, ExpressionsMatter(5, 6, 1))
+    assertEqual(t, 8, ExpressionsMatter(1, 6, 1))
+    assertEqual(t, 14, ExpressionsMatter(2, 6, 1))
+    assertEqual(t, 48, ExpressionsMatter(6, 7, 1))
+    assertEqual(t, 60, ExpressionsMatter(2, 10, 3))
+    assertEqual(t, 27, ExpressionsMatter(1, 8, 3))
+    assertEqual(t, 126, ExpressionsMatter(9, 7, 2))
+    assertEqual(t, 20, ExpressionsMatter(1, 1, 10))
+    assertEqual(t, 18, ExpressionsMatter(9, 1, 1))
+    assertEqual(t, 300, ExpressionsMatter(10, 5, 6))
+    assertEqual(t, 12, ExpressionsMatter(1, 10, 1))
+}
