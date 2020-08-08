@@ -112,10 +112,7 @@ func ModExpGoBigInteger(base, exponent, modulus int64) int64 {
 func ModExpGoBigIntegerExp(base, exponent, modulus int64) int64 {
     return new(big.Int).Exp(big.NewInt(base), big.NewInt(exponent), big.NewInt(modulus)).Int64()
 }
-func BigExp(base, exponent int64) *big.Int{
-    result := new(big.Int).Exp(big.NewInt(base), big.NewInt(exponent), nil)
-    return result
-}
+
 
 func LastDigit2(as []int) int {
     exponent := int64(as[0])
@@ -198,30 +195,29 @@ def last_digit(lst):
     return n % 10
 */
 
+func BigExp(base, exponent int64) *big.Int{
+    var i, e = big.NewInt(base), big.NewInt(exponent)
+    i.Exp(i, e, nil)
+    return i
+}
 func LastDigit(as []int) int {
     if len(as) == 0{
         return 1
     }
-    n := 1
-    var c int
+    n := big.NewInt(1)
+    c := big.NewInt(1)
     for i := len(as)-1; i >= 0; i-- {
-        x := as[i]
-        if n < 4 {
-            c = n
+        x := big.NewInt(int64(as[i]))
+        if n.Cmp(big.NewInt(4)) < 0 {
+            c.Set(n)
         } else {
-            c = n % 4 + 4
+            c.Mod(n, big.NewInt(4))
+            c.Add(c, big.NewInt(4))
         }
-        n = int(math.Pow(float64(x), float64(c)))
-        //n = BigExp(int64(x), int64(c))
-        fmt.Println(n)
-        fmt.Println("---")
+        n.Exp(x, c, nil)
     }
-    fmt.Println("returning")
-    fmt.Println(n)
-    return n % 10
-    
-    //return int(math.Pow(float64(as[0]), float64(out))) % 10
-    //result := int64(BigExp(int64(as[0]), int64(out)))
-    //return result % 10
+    n.Mod(n, big.NewInt(10))
+    result, _ := strconv.Atoi(n.String())
+    return result
 }
 
