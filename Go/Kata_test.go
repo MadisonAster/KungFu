@@ -152,7 +152,7 @@ func Test_LastDigit_1(t *testing.T){
 func Test_LastDigit_2(t *testing.T){
     fmt.Println("---start test 2---")
     expected := 1
-    actual := LastDigit2([]int {3, 4, 2})
+    actual := LastDigit([]int {3, 4, 2})
     fmt.Println(actual)
     if actual != expected {
         t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
@@ -163,7 +163,7 @@ func Test_LastDigit_2(t *testing.T){
 func Test_LastDigit_3(t *testing.T){
     fmt.Println("---start test 3---")
     expected := 6
-    actual := LastDigit2([]int {12, 30, 21})
+    actual := LastDigit([]int {12, 30, 21})
     fmt.Println(actual)
     if actual != expected {
         t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)

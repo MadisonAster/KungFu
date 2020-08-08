@@ -148,6 +148,33 @@ func LastDigit3(as []int) int {
     return result
 }
 
+func LastDigit4(as []int) int {
+    if len(as) == 0{
+        return 1
+    }
+    //out := 1
+    out := 1
+    for i := len(as)-1; i > 0; i-- {
+        n := as[i]
+        fmt.Println(n)
+        fmt.Println(out)
+        out = int(math.Pow(float64(n), float64(out)))
+        //out = BigExp(int64(n), int64(out))
+        fmt.Println(out)
+        if out > 2 {
+            out -= 2
+            out %= 4
+            out += 2
+        }
+        fmt.Println(out)
+        fmt.Println("---")
+    }
+    return int(math.Pow(float64(as[0]), float64(out))) % 10
+    //result := int64(BigExp(int64(as[0]), int64(out)))
+    //return result % 10
+}
+
+
 /*
 def last_digit(lst):
     if not lst:
@@ -175,24 +202,25 @@ func LastDigit(as []int) int {
     if len(as) == 0{
         return 1
     }
-    //out := 1
-    out := 1
-    for i := len(as)-1; i > 0; i-- {
-        n := as[i]
-        fmt.Println(n)
-        fmt.Println(out)
-        out = int(math.Pow(float64(n), float64(out)))
-        //out = BigExp(int64(n), int64(out))
-        fmt.Println(out)
-        if out > 2 {
-            out -= 2
-            out %= 4
-            out += 2
+    n := 1
+    var c int
+    for i := len(as)-1; i >= 0; i-- {
+        x := as[i]
+        if n < 4 {
+            c = n
+        } else {
+            c = n % 4 + 4
         }
-        fmt.Println(out)
+        n = int(math.Pow(float64(x), float64(c)))
+        //n = BigExp(int64(x), int64(c))
+        fmt.Println(n)
         fmt.Println("---")
     }
-    return int(math.Pow(float64(as[0]), float64(out))) % 10
+    fmt.Println("returning")
+    fmt.Println(n)
+    return n % 10
+    
+    //return int(math.Pow(float64(as[0]), float64(out))) % 10
     //result := int64(BigExp(int64(as[0]), int64(out)))
     //return result % 10
 }
