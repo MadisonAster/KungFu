@@ -195,11 +195,6 @@ def last_digit(lst):
     return n % 10
 */
 
-func BigExp(base, exponent int64) *big.Int{
-    var i, e = big.NewInt(base), big.NewInt(exponent)
-    i.Exp(i, e, nil)
-    return i
-}
 func LastDigit(as []int) int {
     if len(as) == 0{
         return 1
@@ -219,5 +214,9 @@ func LastDigit(as []int) int {
     n.Mod(n, big.NewInt(10))
     result, _ := strconv.Atoi(n.String())
     return result
+}
+
+func ToMilliseconds(h, m, s int) int {
+    return ((h *60 +m) * 60 + s) * 1000 
 }
 

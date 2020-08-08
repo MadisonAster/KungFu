@@ -8,6 +8,15 @@ import "fmt"
 
 //import "math/big"
 
+func assertEqual(t *testing.T, a interface{}, b interface{}) {
+  if a == b {
+    return
+    }
+    message := fmt.Sprintf("%v != %v", a, b)
+    t.Fatal(message)
+}
+
+
 //func formatlist(A []int) {
 //    return strings.Trim(strings.Replace(fmt.Sprint(A), " ", ",", -1), "[]")
 //}
@@ -139,43 +148,13 @@ func Test_ModExpGoBigInteger(t *testing.T){
     }
 }
 
-func Test_LastDigit_1(t *testing.T){
-    expected := 5
-    actual := LastDigit([]int {5, 20})
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
+func Test_LastDigit(t *testing.T){
+    assertEqual(t, 5, LastDigit([]int {5, 20}))
+    assertEqual(t, 1, LastDigit([]int {3, 4, 2}))
+    assertEqual(t, 6, LastDigit([]int {12, 30, 21}))
+    assertEqual(t, 1, LastDigit([]int {7,6,21}))
+    assertEqual(t, 6, LastDigit([]int {123232,694022,140249}))
 }
 
-func Test_LastDigit_2(t *testing.T){
-    expected := 1
-    actual := LastDigit([]int {3, 4, 2})
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
-}
-
-
-func Test_LastDigit_3(t *testing.T){
-    expected := 6
-    actual := LastDigit([]int {12, 30, 21})
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
-}
-
-func Test_LastDigit_4(t *testing.T){
-    expected := 1
-    actual := LastDigit([]int {7,6,21})
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
-}
-
-func Test_LastDigit_5(t *testing.T){
-    expected := 6
-    actual := LastDigit([]int {123232,694022,140249})
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
-}
+//func Test_ToMilliseconds(t *testing.T){
+//}
