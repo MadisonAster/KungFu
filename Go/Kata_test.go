@@ -1,7 +1,7 @@
 package Kata
 
 import "testing"
-import "strconv"
+//import "strconv"
 import "reflect"
 //import "strings"
 import "fmt"
@@ -15,124 +15,50 @@ func assertEqual(t *testing.T, a interface{}, b interface{}) {
     message := fmt.Sprintf("%v != %v", a, b)
     t.Fatal(message)
 }
-
-
-//func formatlist(A []int) {
-//    return strings.Trim(strings.Replace(fmt.Sprint(A), " ", ",", -1), "[]")
-//}
-
-func TestGetMD5Hash_1(t *testing.T) {
-    input := "password"
-    expected := "5f4dcc3b5aa765d61d8327deb882cf99"
-    actual := GetMD5Hash(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
+func assertDeepEqual(t *testing.T, a interface{}, b interface{}) {
+  if reflect.DeepEqual(a, b) {
+    return
     }
+    message := fmt.Sprintf("%v != %v", a, b)
+    t.Fatal(message)
 }
 
-func TestGetMD5Hash_2(t *testing.T) {
-    input := "00000"
-    expected := "dcddb75469b4b4875094e14561e573d8"
-    actual := GetMD5Hash(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
+func Test_GetMD5Hash(t *testing.T) {
+    assertEqual(t, "5f4dcc3b5aa765d61d8327deb882cf99", GetMD5Hash("password"))
+    assertEqual(t, "dcddb75469b4b4875094e14561e573d8", GetMD5Hash("00000"))
 }
 
-func TestBruteMD5Pin_1(t *testing.T) {
-    input := "dcddb75469b4b4875094e14561e573d8"
-    expected := "00000"
-    actual := BruteMD5Pin(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
+func Test_BruteMD5Pin(t *testing.T) {
+    assertEqual(t, "00000", BruteMD5Pin("dcddb75469b4b4875094e14561e573d8"))
+    assertEqual(t, "00078", BruteMD5Pin("86aa400b65433b608a9db30070ec60cd"))
+    assertEqual(t, "12345", BruteMD5Pin("827ccb0eea8a706c4c34a16891f84e7b"))
+    assertEqual(t, "99999", BruteMD5Pin("d3eb9a9233e52948740d7eb8c3062d14"))
+    assertEqual(t, "99999", BruteMD5Pin("d3eb9a9233e52948740d7eb8c3062d14"))
 }
 
-func TestBruteMD5Pin_2(t *testing.T) {
-    input := "86aa400b65433b608a9db30070ec60cd"
-    expected := "00078"
-    actual := BruteMD5Pin(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
+func Test_reverse(t *testing.T) {
+    assertEqual(t, "dlrowolleh", reverse("helloworld"))
 }
 
-func TestBruteMD5Pin_3(t *testing.T) {
-    input := "827ccb0eea8a706c4c34a16891f84e7b"
-    expected := "12345"
-    actual := BruteMD5Pin(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
+func Test_RepeatStr(t *testing.T) {
+    assertEqual(t, "aaaa", RepeatStr(4, "a"))
+    assertEqual(t, "abababab", RepeatStr(4, "ab"))
 }
 
-func TestBruteMD5Pin_99999(t *testing.T) {
-    input := "d3eb9a9233e52948740d7eb8c3062d14"
-    expected := "99999"
-    actual := BruteMD5Pin(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
+func Test_IsDivisible(t *testing.T) {
+    assertEqual(t, false, IsDivisible(3, 3, 4))
 }
 
-func Test_reverse_1(t *testing.T) {
-    input := "helloworld"
-    expected := "dlrowolleh"
-    actual := reverse(input)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: %s, got: %s,", expected, actual)
-    }
+func Test_listrange(t *testing.T) {
+    assertDeepEqual(t, []int {0,1,2,3}, listrange(0,4))
 }
 
-
-func TestRepeatStr_1(t *testing.T) {
-    expected := "aaaa"
-    actual := RepeatStr(4, "a") 
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
-}
-func TestRepeatStr_2(t *testing.T) {
-    expected := "abababab"
-    actual := RepeatStr(4, "ab") 
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", expected, actual)
-    }
-}
-
-func TestIsDivisible_1(t *testing.T) {
-    expected := false
-    actual := IsDivisible(3, 3, 4) 
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%s', got: '%s'", strconv.FormatBool(expected), strconv.FormatBool(actual))
-    }
-}
-
-func Test_listrange_1(t *testing.T) {
-    expected := []int {0,1,2,3}
-    actual := listrange(0,4)
-    fmt.Println(reflect.DeepEqual(actual, expected))
-
-    if !reflect.DeepEqual(actual, expected) {
-        t.Errorf("list range test failed!")
-    //    t.Errorf("Test failed! Expected: '%s', got: '%s'", formatlist(expected), formatlist(actual))
-    }
-}
-
-func Test_sum_1(t *testing.T){
-    expected := 6
-    actual := sum(listrange(0,4))
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
+func Test_sum(t *testing.T){
+    assertEqual(t, 6, sum(listrange(0,4)))
 }
 
 func Test_BecomeImmortal(t *testing.T){
-    expected := 5
-    actual := BecomeImmortal(8,5,1,100)
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
+    assertEqual(t, 5, BecomeImmortal(8,5,1,100))
 }
 
 //func Test_HugeExponent(t *testing.T){
@@ -141,11 +67,7 @@ func Test_BecomeImmortal(t *testing.T){
 //}
 
 func Test_ModExpGoBigInteger(t *testing.T){
-    expected := int64(4)
-    actual := ModExpGoBigInteger(int64(499942), int64(898102), int64(10))
-    if actual != expected {
-        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
-    }
+    assertEqual(t, int64(4), ModExpGoBigInteger(int64(499942), int64(898102), int64(10)))
 }
 
 func Test_LastDigit(t *testing.T){
