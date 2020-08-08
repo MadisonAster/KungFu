@@ -126,7 +126,25 @@ func Test_BecomeImmortal(t *testing.T){
     }
 }
 
-func Test_HugeNumber(t *testing.T){
-    number := HugeNumber(5, 20)
+func Test_HugeExponent(t *testing.T){
+    number := HugeExponent([]int {12, 30, 21})
     fmt.Println(number)
+}
+
+func Test_LastDigit_1(t *testing.T){
+    expected := 5
+    actual := LastDigit([]int {5, 20})
+    fmt.Println(actual)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
+}
+
+func Test_LastDigit_2(t *testing.T){
+    expected := 6
+    actual := LastDigit([]int {12, 30, 21})
+    fmt.Println(actual)
+    if actual != expected {
+        t.Errorf("Test failed! Expected: '%v', got: '%v'", expected, actual)
+    }
 }

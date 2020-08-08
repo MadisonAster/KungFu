@@ -4,7 +4,7 @@ import "fmt"
 import "crypto/md5"
 import "strings"
 import "math/big"
-//import "strconv"
+import "strconv"
 
 func main() {
     fmt.Println("hello world")
@@ -81,7 +81,26 @@ func BecomeImmortal(m int, n int, l int, t int) int {
     return total % 100
 }
 
-func HugeNumber(x int64, y int64) *big.Int{
-    result := new(big.Int).Exp(big.NewInt(x), big.NewInt(y), nil)
+//func HugeNumber(x int64, y int64) *big.Int{
+func HugeExponent(A []int) *big.Int{
+    exponent := big.NewInt(int64(A[0]))
+    //fmt.Println(exponent)
+    for i := 1; i < len(A); i++ {
+        exponent = new(big.Int).Exp(exponent, big.NewInt(int64(A[i])), nil)
+        //fmt.Println(exponent)
+    }
+    //result := new(big.Int).Exp(big.NewInt(x), big.NewInt(y), nil)
+    return exponent
+}
+
+func LastDigit(as []int) int {
+    exponent := big.NewInt(int64(as[0]))
+    for i := 1; i < len(as); i++ {
+        exponent = new(big.Int).Exp(exponent, big.NewInt(int64(as[i])), nil)
+    }
+    Sexponent := exponent.String()
+    newresult := Sexponent[len(Sexponent)-1:]
+    result, _ := strconv.Atoi(newresult)
     return result
 }
+
