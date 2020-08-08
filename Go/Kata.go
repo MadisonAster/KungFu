@@ -4,6 +4,7 @@ import "fmt"
 import "crypto/md5"
 import "strings"
 import "math/big"
+import "math"
 import "strconv"
 
 func main() {
@@ -111,11 +112,15 @@ func ModExpGoBigInteger(base, exponent, modulus int64) int64 {
 func ModExpGoBigIntegerExp(base, exponent, modulus int64) int64 {
     return new(big.Int).Exp(big.NewInt(base), big.NewInt(exponent), big.NewInt(modulus)).Int64()
 }
+func BigExp(base, exponent int64) *big.Int{
+    result := new(big.Int).Exp(big.NewInt(base), big.NewInt(exponent), nil)
+    return result
+}
 
 func LastDigit2(as []int) int {
     exponent := int64(as[0])
     for i := 1; i < len(as); i++ {
-        exponent = ModExpGoBigIntegerExp(exponent, int64(as[i]), int64(10))
+        exponent = ModExpGoBigIntegerExp(exponent, int64(as[i]), int64(4))
         fmt.Println(exponent)
     }
     fmt.Println("---")
@@ -126,16 +131,69 @@ func LastDigit2(as []int) int {
     return result
 }
 
-func LastDigit(as []int) int {
+func LastDigit3(as []int) int {
+    if len(as) == 0{
+        return 1
+    }
     exponent := int64(as[len(as)-1])
     for i := len(as)-2; i >= 0; i-- {
         exponent = ModExpGoBigIntegerExp(int64(as[i]), exponent, int64(100))
-        fmt.Println(exponent)
+        //fmt.Println(exponent)
     }
-    fmt.Println("---")
-    fmt.Println(exponent)
+    //fmt.Println("---")
+    //fmt.Println(exponent)
     Sexponent := strconv.FormatInt(exponent, 10)
     newresult := Sexponent[len(Sexponent)-1:]
     result, _ := strconv.Atoi(newresult)
     return result
 }
+
+/*
+def last_digit(lst):
+    if not lst:
+        return 1
+    else:
+        out = 1
+        for n in lst[len(lst):0:-1]:
+            out = n**out
+            if out > 2:
+                out -= 2
+                out %= 4
+                out += 2
+    return lst[0] ** out % 10
+*/
+
+/*
+def last_digit(lst):
+    n = 1
+    for x in reversed(lst):
+        n = x ** (n if n < 4 else n % 4 + 4)
+    return n % 10
+*/
+
+func LastDigit(as []int) int {
+    if len(as) == 0{
+        return 1
+    }
+    //out := 1
+    out := 1
+    for i := len(as)-1; i > 0; i-- {
+        n := as[i]
+        fmt.Println(n)
+        fmt.Println(out)
+        out = int(math.Pow(float64(n), float64(out)))
+        //out = BigExp(int64(n), int64(out))
+        fmt.Println(out)
+        if out > 2 {
+            out -= 2
+            out %= 4
+            out += 2
+        }
+        fmt.Println(out)
+        fmt.Println("---")
+    }
+    return int(math.Pow(float64(as[0]), float64(out))) % 10
+    //result := int64(BigExp(int64(as[0]), int64(out)))
+    //return result % 10
+}
+
