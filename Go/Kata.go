@@ -143,10 +143,29 @@ func ExpressionsMatter(a int, b int, c int) int {
 }
 
 func DirReduc(arr []string) []string {
+    opposite := map[string]string{
+        "NORTH": "SOUTH",
+        "SOUTH": "NORTH",
+        "EAST": "WEST",
+        "WEST": "EAST",
+    }
+    var last string
     result := []string {}
-
     for i := 0; i < len(arr); i++ {
-        result = append(result, arr[i])
+        if len(result) >= 1 {
+            last = result[len(result)-1]
+        } else {
+            last = ""
+        }
+        if len(arr) > 0 && arr[i] == opposite[last]{
+            if len(result) >= 1{
+                result = result[:len(result)-1]
+            } else{
+                result = []string {}
+            }
+        } else {
+            result = append(result, arr[i])
+        }
     }
     return result
 }

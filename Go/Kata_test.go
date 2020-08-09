@@ -108,9 +108,39 @@ func Test_ExpressionsMatter(t *testing.T){
     assertEqual(t, 12, ExpressionsMatter(1, 10, 1))
 }
 
+
+
 func Test_DirReduc(t *testing.T){
     assertDeepEqual(t, []string{"NORTH"}, DirReduc([]string{"NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "NORTH", "NORTH"}))
     assertDeepEqual(t, []string{"NORTH", "WEST", "SOUTH", "EAST"}, DirReduc([]string{"NORTH", "WEST", "SOUTH", "EAST"}))
     assertDeepEqual(t, []string{"WEST"}, DirReduc([]string{"NORTH", "SOUTH", "SOUTH", "EAST", "WEST", "NORTH", "WEST"}))
     assertDeepEqual(t, []string{}, DirReduc([]string{"NORTH", "SOUTH", "EAST", "WEST"}))
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
