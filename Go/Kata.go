@@ -6,6 +6,7 @@ import "strings"
 import "math/big"
 import "math"
 import "strconv"
+import "sort"
 
 func main() {
     fmt.Println("hello world")
@@ -157,4 +158,62 @@ func DirReduc(arr []string) (s []string) {
         }
     }
     return
+}
+
+func NextBigger(n int) int {
+    //rightward pressure algorithm
+    //zxywvut|r abcdefghijklmnops
+
+    //store all ints on left that are in perfect reversed order
+    //find first high > low from right side
+    // low is target. find next greater to the right of target, that is replacement (greater or equal would try unnecessary permutations)
+    // including target, sort remainder from low to high.
+    // result = stored + replacement + low>high
+    input := strconv.Itoa(n)
+    inputlist := strings.Split(input, "")
+
+    reversed := make([]string, len(inputlist))
+    copy(reversed, inputlist)
+    sort.Sort(sort.Reverse(sort.StringSlice(reversed)))
+    if input == strings.Join(reversed, ""){
+        return -1
+    }
+
+    stored := ""
+    var splitindex int
+    for i := 0; i <= len(inputlist); i++ {
+        if inputlist[i] != reversed[i] {
+            splitindex = i
+            break
+        } else {
+            stored += inputlist[i]
+        }
+    }
+    rightslice := inputlist[splitindex:]
+
+    var targetindex int
+    for i := len(rightslice)-2; i >= 0; i-- {
+        if rightslice[i] < rightslice[i+1]{
+            targetindex = i
+            break
+        }
+    }
+    left := strings.Join(rightslice[:targetindex], "")
+    target := rightslice[targetindex]
+
+    toright := make([]string, len(rightslice[targetindex+1:]))
+    copy(toright, rightslice[targetindex+1:])
+    sort.Sort(sort.StringSlice(toright))
+
+    var replacement string
+    for i := 0; i <= len(toright); i++ {
+        if toright[i] > target{
+            replacement = toright[i]
+            toright[i] = target
+            break
+        }
+    }
+    right := strings.Join(toright, "")
+    result, _ := strconv.Atoi(stored + left + replacement + right)
+    return int(result)
 }

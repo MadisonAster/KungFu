@@ -118,6 +118,23 @@ func Test_DirReduc(t *testing.T){
 }
 
 
+func Test_NextBigger(t *testing.T){
+    assertEqual(t, 9840127, NextBigger(9827410))
+    assertEqual(t, -1, NextBigger(4444444))
+    assertEqual(t, 2071, NextBigger(2017)) //cabd
+    assertEqual(t, 2107, NextBigger(2071)) //cadb
+    assertEqual(t, 2170, NextBigger(2107)) //cbad
+    assertEqual(t, 2701, NextBigger(2170)) //cbda
+    assertEqual(t, 2710, NextBigger(2701)) //cdab
+    assertEqual(t, 7012, NextBigger(2710)) //cdba
+    assertEqual(t, 7021, NextBigger(7012)) //dabc 
+    assertEqual(t, 7102, NextBigger(7021)) //dacb
+    assertEqual(t, 7120, NextBigger(7102)) //dbac
+    assertEqual(t, 7201, NextBigger(7120)) //dbca
+    assertEqual(t, 7210, NextBigger(7201)) //dcab
+    //assertEqual(t,7210,NextBigger(7210)) //dcba
+}
+
 
 
 
