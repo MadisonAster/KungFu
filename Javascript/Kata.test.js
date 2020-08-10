@@ -9,5 +9,12 @@ test('adds 1 + 2 to equal 3', () => {
 });
 
 test('Generate 8x8 shape', () => {
-	expect(Kata.GenerateShape(8)).toBe('++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++');
+    expect(Kata.GenerateShape(8)).toBe('++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++\n++++++++');
 });
+
+test('SnakeInTheSquare', () => {
+    expect(Kata.SnakeInTheSquare(5)).toEqual([[1, 0, 0], [1, 0, 0], [1, 1, 1]]);
+    expect(Kata.SnakeInTheSquare(8)).toEqual([[1, 0, 0, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 1, 0]]);
+    expect(Kata.SnakeInTheSquare(31)).toEqual([[1, 0, 1, 1, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 1, 1, 0, 1, 1, 1]]);
+});
+
