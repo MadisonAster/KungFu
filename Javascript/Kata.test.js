@@ -24,3 +24,9 @@ test('anagrams', () => {
     expect(Kata.anagrams('laser', ['lazing', 'lazy',  'lacer'])).toEqual([]);
 });
 
+test('getStarStrings', () => {
+    expect(Kata.getStarStrings('Chicago')).toEqual('c:**,h:*,i:*,a:*,g:*,o:*');
+    expect(Kata.getStarStrings('Bangkok')).toEqual('b:*,a:*,n:*,g:*,k:**,o:*');
+    expect(Kata.getStarStrings('Las Vegas')).toEqual('l:*,a:**,s:**,v:*,e:*,g:*');
+    expect(Kata.getStarStrings('New York City')).toEqual('n:*,e:*,w:*,y:**,o:*,r:*,k:*,c:*,i:*,t:*');
+});

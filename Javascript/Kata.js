@@ -67,5 +67,19 @@ class Kata{
         }
         return result;
     }
+    getStarStrings(city){
+        var letters = city.toLowerCase().replace(/[^a-z]/gi, '').split("");
+        var letterset = Array.from(new Set(letters));
+        var result = '';
+        for (var i = 0; i < letterset.length; i++){
+            let re = new RegExp(letterset[i],'g');
+            var count = (city.toLowerCase().match(re) || []).length;
+            result += letterset[i]+':'+'*'.repeat(count);
+            if (i < letterset.length-1){
+                result += ',';
+            }
+        }
+        return result;
+    }
 }
 module.exports = new Kata;
