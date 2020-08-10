@@ -18,3 +18,9 @@ test('SnakeInTheSquare', () => {
     expect(Kata.SnakeInTheSquare(31)).toEqual([[1, 0, 1, 1, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 0, 1, 0, 1, 0, 1], [1, 1, 1, 0, 1, 1, 1]]);
 });
 
+test('anagrams', () => {
+    expect(Kata.anagrams('abba', ['aabb', 'abcd', 'bbaa', 'dada'])).toEqual(['aabb', 'bbaa']);
+    expect(Kata.anagrams('racer', ['crazer', 'carer', 'racar', 'caers', 'racer'])).toEqual(['carer', 'racer']);
+    expect(Kata.anagrams('laser', ['lazing', 'lazy',  'lacer'])).toEqual([]);
+});
+

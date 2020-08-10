@@ -52,6 +52,20 @@ class Kata{
         };
         
         return result;
-    };
+    }
+
+    anagrams(word, words) {
+        var result = [];
+        var letterlist = word.split('');
+        letterlist.sort();
+        for (var i=0; i<words.length; ++i){
+            var comparelist = words[i].split('');
+            comparelist.sort();
+            if (letterlist.join('') == comparelist.join('')) {
+                result.push(words[i]);
+            }
+        }
+        return result;
+    }
 }
 module.exports = new Kata;
