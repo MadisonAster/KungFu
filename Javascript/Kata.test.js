@@ -30,3 +30,13 @@ test('getStarStrings', () => {
     expect(Kata.getStarStrings('Las Vegas')).toEqual('l:*,a:**,s:**,v:*,e:*,g:*');
     expect(Kata.getStarStrings('New York City')).toEqual('n:*,e:*,w:*,y:**,o:*,r:*,k:*,c:*,i:*,t:*');
 });
+
+
+test('DrivingSchool', () => {
+    expect(Kata.DrivingSchool(45)).toEqual(30);
+    expect(Kata.DrivingSchool(63)).toEqual(30);
+    expect(Kata.DrivingSchool(84)).toEqual(40);
+    expect(Kata.DrivingSchool(95)).toEqual(40);
+    expect(Kata.DrivingSchool(102)).toEqual(50);
+    expect(Kata.DrivingSchool(273)).toEqual(100);
+});

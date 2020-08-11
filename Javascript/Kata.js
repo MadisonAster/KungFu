@@ -67,7 +67,7 @@ class Kata{
         }
         return result;
     }
-    getStarStrings(city){
+    getStarStrings(city) {
         var letters = city.toLowerCase().replace(/[^a-z]/gi, '').split("");
         var letterset = Array.from(new Set(letters));
         var result = '';
@@ -80,6 +80,10 @@ class Kata{
             }
         }
         return result;
+    }
+
+    DrivingSchool(mins) {
+        return 30 + (mins > 65 ? Math.ceil((mins-60-5)/30) : 0)*10;
     }
 }
 module.exports = new Kata;
