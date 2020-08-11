@@ -9,13 +9,25 @@ Tree construction
 Traversal and Manipulation
 Link Lists
 
+
+
+	
+	
 Algorithms:
+	Depth First Search
+	 >Breadth First Search (just use a queue)
+	Matching Bracket problem
+	Hash Tables
+
+
+	dijkstras (Traveling Salesman)
+	AStar
+	Knapsack
+	Recursive algorithms
+
+	
 	Measure Space and Time Complexity
 
-	dijkstras
-	A*
-
-	Recursive algorithms
 
 
 Things to do in Go:
@@ -47,5 +59,3 @@ Math Problems:
 	P Space Problems
 
 	NP Complete
-		Traveling Salesman
-		Napsack
