@@ -12,6 +12,12 @@ def fibstring(n):
     else:
         return fibstring(n-1) + fibstring(n-2)
 
+def fibstring2(n):
+    a,b = '01'
+    print(a,b)
+    for _ in range(n): a,b = a+b,a
+    return a
+
 @lru_cache(None)
 def fibindex(n):
     if n in (0, 1):
@@ -56,6 +62,7 @@ class test_fibstring(unittest.TestCase):
     def test_4(self):
         self.assertEqual(fibstring(4), '01001010')
     def test_5(self):
+        print(fibstring2(10))
         self.assertEqual(fibstring(5), '0100101001001')
     def test_10(self):
         print(len(fibstring(10)))
