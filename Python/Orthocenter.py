@@ -4,9 +4,9 @@ from fractions import Fraction
 
 def OrthoCenter(A, B, C):
     ### m = (y2-y1) / (x2-x1) ###
-    Em = Fraction((B[1] - A[1]), (B[0]-A[0]))
-    Fm = Fraction((C[1] - B[1]) / (C[0]-B[0]))
-    #Gm = Fraction((A[1] - C[1]) / (A[0]-C[0]))
+    Em = Fraction((B[1] - A[1]), (B[0] - A[0]))
+    Fm = Fraction((C[1] - B[1]), (C[0] - B[0]))
+    #Gm = Fraction((A[1] - C[1]), (A[0] - C[0]))
 
     ### b = y - mx ###
     #Eb = B[1] - Em*B[0]
@@ -51,7 +51,7 @@ class test_OrthoCenter(unittest.TestCase):
         print(str(t), self.id())
 
     def test_1(self):
-        self.assertEqual(Orthocenter([3,9],[1,3],[10,2]), [2.5, 4.5])
+        self.assertEqual(OrthoCenter([3,9],[1,3],[10,2]), [2.5, 4.5])
 
 if __name__ == '__main__':
     unittest.main()
