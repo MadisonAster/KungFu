@@ -6,54 +6,35 @@ import copy
 def Dijkstras(Matrix):
     Points = sorted(list(set(list(''.join(Matrix.keys())))))
     Visited = []
-    print('Points', Points)
-    
-
-    #Result = {p: (math.inf, None) for p in Points} 
-    
     Shortest = [math.inf] * len(Points)
     Previous = [None] * len(Points)
-    
     p = Points[0]
     Shortest[0] = 0
     Previous[0] = ''
 
-    #for i, p in enumerate(Points):
     while len(Matrix.keys()) > 0:
-        print('p', p, Matrix.keys())
         for L in reversed(list(Matrix.keys())):
-            if p in L:
-                print('p', p)
-                print('L', L)
-                print('Matrix[L]', Matrix[L])
+            if p in L: #Calculate any line segment where p is a point.
                 p2 = L.replace(p, '')
-                i = Points.index(p2)
+                i = Points.index(p)
+                j = Points.index(p2)
                 if p == Points[0]:
-                    Shortest[i] = Matrix[L]
-                    Previous[i] = p
+                    Shortest[j] = Matrix[L]
+                    Previous[j] = p
                 else:
-                    s = Matrix[L]
-                    v = p2
-                    while v not in ['', None]:
-                        j = Points.index(v)
-                        s += Shortest[j]
-                        v = Previous[j]
-                    if s < Shortest[i]:
-                        Shortest[i] = Matrix[L]
-                        Previous[i] = p                
+                    if Shortest[i]+Matrix[L] < Shortest[j]:
+                        Previous[j] = p
+                        Shortest[j] = Shortest[i]+Matrix[L]
                 del Matrix[L]
-        else:
+        else: #Find next closest entry to try all neighbors on.
             Visited.append(p)
             newshortest = math.inf
-            for l, q in enumerate(list(set(Points) - set(Visited))):
-                if l == 0:
-                    p = q
+            for l, q in enumerate(list(set(Points[1:]) - set(Visited))):
                 k = Points.index(q)
                 if Shortest[k] < newshortest:
                     newshortest = Shortest[k]
                     p = q
     return list(zip(Points, Shortest, Previous))
-
 
 class test_Dijkstras(unittest.TestCase):
     def setUp(self):
