@@ -23,7 +23,7 @@ class test_SlidingWindow(unittest.TestCase):
 		result = list(SlidingWindow(A,2))
 		print(result)
 
-		self.assertEqual(SlidingWindow(A,2), [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7), (7, 8), (8, 9)])
+		self.assertEqual(list(SlidingWindow(A,2)), [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7), (7, 8), (8, 9)])
 
 if __name__ == '__main__':
 	unittest.main()
