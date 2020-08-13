@@ -21,9 +21,11 @@ class test_SlidingWindow(unittest.TestCase):
 	def test_1(self):
 		A = [0,1,2,3,4,5,6,7,8,9]
 		result = list(SlidingWindow(A,2))
-		print(result)
-
 		self.assertEqual(list(SlidingWindow(A,2)), [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7), (7, 8), (8, 9)])
+	def test_large_1(self):
+		A = range(1000000+1)
+		self.assertEqual(len(list(SlidingWindow(A,2))), 1000000)
+
 
 if __name__ == '__main__':
 	unittest.main()
