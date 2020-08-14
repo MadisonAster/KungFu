@@ -1,6 +1,6 @@
+import sys
 import unittest
 from datetime import datetime
-
 
 from Qt import QtCore, QtGui, QtWidgets
 
@@ -20,7 +20,7 @@ class SingletonApp(QtWidgets.QApplication):
         if sys.QApplication == None:
             print('Referencing Integrated QApplication')
             sys.QApplication = self
-            super(SingletonApp, self).__init__('')
+            super(SingletonApp, self).__init__()
 
 class TimedTest(unittest.TestCase):
     def setUp(self):
