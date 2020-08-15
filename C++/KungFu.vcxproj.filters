@@ -1,21 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="test_Kata.cpp" />
-    <ClCompile Include="Kata.cpp" />
     <ClCompile Include="Algorithms\Games\Bowling.cpp">
       <Filter>Algorithms\Games</Filter>
     </ClCompile>
-    <ClCompile Include="Algorithms\Games\test_Bowling.cpp">
-      <Filter>Algorithms\Games</Filter>
+    <ClCompile Include="Algorithms\Math.cpp">
+      <Filter>Algorithms</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="RunTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Kata.h" />
-    <ClInclude Include="pch.h" />
     <ClInclude Include="Algorithms\Games\Bowling.h">
       <Filter>Algorithms\Games</Filter>
     </ClInclude>
+    <ClInclude Include="Algorithms\Math.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
