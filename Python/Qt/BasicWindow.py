@@ -23,17 +23,17 @@ class BasicWindow(QtWidgets.QMainWindow):
         return QtCore.QSize(800,600)
 
 class test_BasicWindow(TestKit.TimedTest):
-    def test_1(self):
+    def test_1(self, SleepTime = 0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
-        time.sleep(0.5)
+        time.sleep(SleepTime)
 
-    def test_2(self):
+    def test_2(self, SleepTime = 0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         self.MainWindow.resize(self.MainWindow.QAvailableGeo.width()/2, self.MainWindow.QAvailableGeo.height()-self.MainWindow.QStartBarHeight)
         self.MainWindow.move(0,0)
-        time.sleep(0.5)
+        time.sleep(SleepTime)
 
 if __name__ == '__main__':
     unittest.main()
