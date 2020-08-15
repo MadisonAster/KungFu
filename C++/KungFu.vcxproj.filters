@@ -3,13 +3,19 @@
   <ItemGroup>
     <ClCompile Include="test_Kata.cpp" />
     <ClCompile Include="Kata.cpp" />
-    <ClCompile Include="Bowling.cpp" />
-    <ClCompile Include="test_Bowling.cpp" />
+    <ClCompile Include="Algorithms\Games\Bowling.cpp">
+      <Filter>Algorithms\Games</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithms\Games\test_Bowling.cpp">
+      <Filter>Algorithms\Games</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Kata.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Bowling.h" />
+    <ClInclude Include="Algorithms\Games\Bowling.h">
+      <Filter>Algorithms\Games</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

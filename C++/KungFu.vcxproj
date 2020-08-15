@@ -33,13 +33,13 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClInclude Include="Bowling.h" />
+    <ClInclude Include="Algorithms\Games\Bowling.h" />
     <ClInclude Include="Kata.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bowling.cpp" />
-    <ClCompile Include="test_Bowling.cpp" />
+    <ClCompile Include="Algorithms\Games\Bowling.cpp" />
+    <ClCompile Include="Algorithms\Games\test_Bowling.cpp" />
     <ClCompile Include="test_Kata.cpp" />
     <ClCompile Include="Kata.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -66,6 +66,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <ForcedIncludeFiles>pch.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

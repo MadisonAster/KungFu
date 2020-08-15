@@ -1,4 +1,3 @@
-#include "pch.h"
 
 TEST(pch, test_GameOfBowling) {
 	EXPECT_EQ(5, GameOfBowling(5));
