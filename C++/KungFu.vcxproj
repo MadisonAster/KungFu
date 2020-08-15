@@ -33,10 +33,13 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="Bowling.h" />
     <ClInclude Include="Kata.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bowling.cpp" />
+    <ClCompile Include="test_Bowling.cpp" />
     <ClCompile Include="test_Kata.cpp" />
     <ClCompile Include="Kata.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

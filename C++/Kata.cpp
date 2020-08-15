@@ -6,13 +6,6 @@
 #include "pch.h"
 #include <iostream>
 
-/*
-int main() {
-	std::cout << "Hello World!";
-	return 0;
-}
-*/
-
 int max(int a, int b) {
 	int result;
 	if (a > b)
