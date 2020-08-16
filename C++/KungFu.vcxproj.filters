@@ -12,6 +12,9 @@
     <ClCompile Include="Algorithms\_CodeWars\PlanetById.cpp">
       <Filter>Algorithms\_CodeWars</Filter>
     </ClCompile>
+    <ClCompile Include="Algorithms\_CodeWars\SakuraFall.cpp">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithms\Games\Bowling.h">
@@ -22,6 +25,9 @@
     </ClInclude>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Algorithms\_CodeWars\PlanetById.h">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithms\_CodeWars\SakuraFall.h">
       <Filter>Algorithms\_CodeWars</Filter>
     </ClInclude>
   </ItemGroup>
