@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\Algorithms\Math.cpp">
+      <Filter>Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="..\RunTests.cpp" />
+    <ClCompile Include="..\Algorithms\_CodeWars\PlanetById.cpp">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Algorithms\_CodeWars\SakuraFall.cpp">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Algorithms\Games\Bowling.cpp">
+      <Filter>Algorithms\Games</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="..\Algorithms\Math.h">
+      <Filter>Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Algorithms\_CodeWars\PlanetById.h">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Algorithms\_CodeWars\SakuraFall.h">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Algorithms\Games\Bowling.h">
+      <Filter>Algorithms\Games</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Algorithms">
+      <UniqueIdentifier>{4c8ea192-875c-4899-99f1-fb2712f7e4d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructures">
+      <UniqueIdentifier>{5b30e6da-3c46-4b63-91dd-5ba57a31ab86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\_CodeWars">
+      <UniqueIdentifier>{dd16ab73-c6aa-4f40-88cd-4a76516b07f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\_Codility">
+      <UniqueIdentifier>{13cfa3c2-4d05-403a-93f0-bd01c3ebccb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\Context">
+      <UniqueIdentifier>{4899827a-b53a-476a-9a3d-ae041f63eb8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\Games">
+      <UniqueIdentifier>{b96f95c6-8b4e-43e9-a2c5-733c2f60d813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\Geometry">
+      <UniqueIdentifier>{7f23ad5d-263d-42fd-a8a1-2c4f4a90da85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\LargeNumbers">
+      <UniqueIdentifier>{f9ef4cdc-493c-41b6-87db-116d1a4f3f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\Strings">
+      <UniqueIdentifier>{efffa2dd-6972-4986-acd8-6aacc7be97ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\Sorting">
+      <UniqueIdentifier>{58c92068-5f0c-47e8-aed2-e4bc3acaca26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithms\Searching">
+      <UniqueIdentifier>{477972fa-c378-4e08-a1b7-56b4937d0c25}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30406.217
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kata", "Kata\Kata.vcxproj", "{79BB94C3-E4AE-4AE8-A183-A55D6531F682}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtApp", "Qt\QtApp\QtApp.vcxproj", "{B763D1BE-837B-4153-98A4-100E6F99005C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Debug|x64.ActiveCfg = Debug|x64
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Debug|x64.Build.0 = Debug|x64
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Debug|x86.ActiveCfg = Debug|Win32
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Debug|x86.Build.0 = Debug|Win32
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Release|x64.ActiveCfg = Release|x64
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Release|x64.Build.0 = Release|x64
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Release|x86.ActiveCfg = Release|Win32
+		{79BB94C3-E4AE-4AE8-A183-A55D6531F682}.Release|x86.Build.0 = Release|Win32
+		{B763D1BE-837B-4153-98A4-100E6F99005C}.Debug|x64.ActiveCfg = Debug|x64
+		{B763D1BE-837B-4153-98A4-100E6F99005C}.Debug|x64.Build.0 = Debug|x64
+		{B763D1BE-837B-4153-98A4-100E6F99005C}.Debug|x86.ActiveCfg = Debug|x64
+		{B763D1BE-837B-4153-98A4-100E6F99005C}.Release|x64.ActiveCfg = Release|x64
+		{B763D1BE-837B-4153-98A4-100E6F99005C}.Release|x64.Build.0 = Release|x64
+		{B763D1BE-837B-4153-98A4-100E6F99005C}.Release|x86.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68394945-39B1-4C14-86C2-268CCADD3D4E}
+	EndGlobalSection
+EndGlobal

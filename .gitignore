@@ -11,3 +11,7 @@ Javascript/package-lock.json
 C++/.vs
 C++/Debug
 C++/packages
+C++/x64
+C++/Qt/QtApp/x64
+C++/Kata/x64
+C++/Kata/Debug
