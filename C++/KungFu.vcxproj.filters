@@ -9,6 +9,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="RunTests.cpp" />
+    <ClCompile Include="Algorithms\_CodeWars\PlanetById.cpp">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithms\Games\Bowling.h">
@@ -18,6 +21,9 @@
       <Filter>Algorithms</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Algorithms\_CodeWars\PlanetById.h">
+      <Filter>Algorithms\_CodeWars</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
