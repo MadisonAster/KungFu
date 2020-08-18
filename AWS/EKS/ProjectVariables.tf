@@ -1,14 +1,27 @@
 variable "cluster_name" {
   description = "Name of EKS Cluster"
   type        = string
-  default     = "KungFuCluster"
+  default     = "KungFu_Cluster"
 }
-
 variable "vpc_name" {
   description = "Name of VPC"
   type        = string
-  default     = "KungFuVPC"
+  default     = "KungFu_VPC"
 }
+variable "efs_mount_target_name" {
+  description = "Name of EFS Mount Target"
+  type        = string
+  default     = "KungFu_MountTargets"
+}
+variable "efs_name" {
+  description = "Name of EFS Mount Target"
+  type        = string
+  default     = "KungFu_FileSystem"
+}
+
+
+
+
 
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
@@ -111,18 +124,4 @@ variable "datascraper_instance_type" {
   type        = string
   //default     = "t3.medium"
   default     = "t3a.small"
-}
-
-
-variable "efs_mount_target_name" {
-  description = "Name of EFS Mount Target"
-  type        = string
-  default     = "KungFuMountTargets"
-}
-
-
-variable "efs_name" {
-  description = "Name of EFS Mount Target"
-  type        = string
-  default     = "KungFuFileSystem"
 }

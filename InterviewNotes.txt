@@ -59,3 +59,5 @@ Math Problems:
 	P Space Problems
 
 	NP Complete
+
+I have experience with gameplay programming (primarily for VR), incorporating expiramental hardware drivers, plugin development, environment modeling, level scripting, the new python api and how it gets generated from the system module, sequencer, and I'm really fast with blueprint.
