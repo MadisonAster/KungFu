@@ -1,33 +1,33 @@
 
-output "ResumePPFileSystem" {
-  value = aws_efs_file_system.ResumePPFileSystem.id
-}
-
-output "ResumePPFileSystemDNS" {
-  value = aws_efs_mount_target.ResumePPMountTargets[0].dns_name
-}
-
-//output "ResumePPGitControlID" {
-//  value = module.ec2_instances.ResumePPGitInstance.id
+//output "KungFu_FileSystem" {
+//  value = aws_efs_file_system.KungFu_FileSystem.id
 //}
 
-//output "ResumePPGitControlDNS" {
-//  value = module.ec2_instances.ResumePPGitInstance.dns
+//output "KungFu_FileSystemDNS" {
+//  value = aws_efs_mount_target.KungFu_MountTargets[0].dns_name
 //}
 
-output "WebserverSecurityGroup" {
-  value = aws_security_group.WebserverSecurityGroup.id
-}
+//output "KungFu_GitControlID" {
+//  value = module.ec2_instances.KungFu_GitInstance.id
+//}
 
-output "DataScraperSecurityGroup" {
-  value = aws_security_group.DataScraperSecurityGroup.id
-}
+//output "KungFu_GitControlDNS" {
+//  value = module.ec2_instances.KungFu_GitInstance.dns
+//}
 
-output "ResumePPVPC" {
+//output "WebserverSecurityGroup" {
+//  value = aws_security_group.WebserverSecurityGroup.id
+//}
+
+//output "DataScraperSecurityGroup" {
+//  value = aws_security_group.DataScraperSecurityGroup.id
+//}
+
+output "vpc_id" {
   value = module.vpc.vpc_id
 }
 
-output "DefaultSecurityGroup" {
+output "default_securitygroup" {
   value = module.vpc.default_security_group_id
 }
 
@@ -47,7 +47,6 @@ output "private_key_path" {
   value = var.private_key_path
 }
 
-
-//output "ResumePPCluster" {
-//  value       = module.eks.cluster_id
-//}
+output "cluster_id" {
+  value       = module.eks.cluster_id
+}

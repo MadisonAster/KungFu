@@ -15,3 +15,5 @@ C++/x64
 C++/Qt/QtApp/x64
 C++/Kata/x64
 C++/Kata/Debug
+*.tfstate
+.terraform
