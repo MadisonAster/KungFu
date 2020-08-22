@@ -16,4 +16,7 @@ C++/Qt/QtApp/x64
 C++/Kata/x64
 C++/Kata/Debug
 *.tfstate
+*.tfstate.backup
+
 .terraform
+kubeconfig_*
