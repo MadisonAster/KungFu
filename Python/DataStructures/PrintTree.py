@@ -2,12 +2,9 @@ import os, shutil
 import unittest
 from datetime import datetime
 
-
 def Solution(InputPath):
     InputPath = InputPath.replace('\\','/').rstrip('/')
     result = ''
-    #for subpath in os.walk(InputPath):
-    #    indent = '    ' * (len(root.replace(InputPath, '').split('/'))-1)
     for root, dirs, files in os.walk(InputPath):
         dirs.sort()
         files.sort()
@@ -17,8 +14,6 @@ def Solution(InputPath):
             result += indent+'    '+file+'\n'
     print(result)
     return result
-
-
 
 class test_Solution(unittest.TestCase):
     def setUp(self):
@@ -63,7 +58,6 @@ class test_Solution(unittest.TestCase):
             else:
                 os.makedirs(path)
     
-    
     def test_1(self):
         ExpectedResult = """mock1
     folder1
@@ -74,7 +68,6 @@ class test_Solution(unittest.TestCase):
         file2.txt
     folder3
 """
-
         self.assertEqual(Solution(self.mock1path), ExpectedResult)
         
     def test_2(self):
@@ -86,7 +79,6 @@ class test_Solution(unittest.TestCase):
     folder3
 """
         self.assertEqual(Solution(self.mock2path), ExpectedResult)
-
 
 if __name__ == '__main__':
     unittest.main()
