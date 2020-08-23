@@ -2,7 +2,7 @@ import os, shutil
 import unittest
 from datetime import datetime
 
-def Solution(InputPath):
+def PrintTree(InputPath):
     InputPath = InputPath.replace('\\','/').rstrip('/')
     result = ''
     for root, dirs, files in os.walk(InputPath):
@@ -15,7 +15,7 @@ def Solution(InputPath):
     print(result)
     return result
 
-class test_Solution(unittest.TestCase):
+class test_PrintTree(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
         self.FolderPath = os.path.dirname(os.path.abspath(__file__))
@@ -68,7 +68,7 @@ class test_Solution(unittest.TestCase):
         file2.txt
     folder3
 """
-        self.assertEqual(Solution(self.mock1path), ExpectedResult)
+        self.assertEqual(PrintTree(self.mock1path), ExpectedResult)
         
     def test_2(self):
         ExpectedResult = """mock2
@@ -78,7 +78,7 @@ class test_Solution(unittest.TestCase):
         file2.txt
     folder3
 """
-        self.assertEqual(Solution(self.mock2path), ExpectedResult)
+        self.assertEqual(PrintTree(self.mock2path), ExpectedResult)
 
 if __name__ == '__main__':
     unittest.main()
