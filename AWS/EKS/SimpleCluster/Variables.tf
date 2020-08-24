@@ -107,7 +107,6 @@ variable "bg_fork" {
   default     = "https://github.com/MadisonAster/Windows95Maze.git"
 }
 
-
 variable "ec2_instance_type" {
   type        = string
   //default     = "t2.micro"
