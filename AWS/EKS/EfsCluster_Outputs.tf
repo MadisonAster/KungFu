@@ -50,3 +50,7 @@ output "private_key_path" {
 output "cluster_id" {
   value       = module.eks.cluster_id
 }
+
+output "cluster_name" {
+  value       = var.cluster_name
+}
