@@ -9,7 +9,7 @@ class SimpleCluster():
     def __init__(self):
         super(SimpleCluster, self).__init__()
         run_command('terraform init')
-        #run_command('terraform plan')
+        run_command('terraform plan -out=KungFu.plan')
         #run_command('terraform plan -target=SimpleCluster.tf')
         
 
