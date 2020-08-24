@@ -64,10 +64,10 @@ if __name__ == '__main__':
             SleepTime = float(sys.argv[2])
             print('SleepTime', SleepTime)
         if len(sys.argv) >= 4:
-            SleepTime = float(sys.argv[2])
+            Create = sys.argv[3] == 'True'
             print('Create', Create)
         if len(sys.argv) >= 5:
-            SleepTime = float(sys.argv[2])
+            Destroy = sys.argv[4] == 'True'
             print('Destroy', Destroy)
         TestInstance.RecursiveImport(SkipCount=SkipCount, SleepTime=SleepTime, Create=Create, Destroy=Destroy)
     del sys.argv[1:]
