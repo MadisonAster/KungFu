@@ -1,3 +1,5 @@
+import os
+
 import unittest
 from datetime import datetime
 
@@ -8,33 +10,37 @@ import shlex
 class SimpleCluster():
     def __init__(self):
         super(SimpleCluster, self).__init__()
+        self.cwd = os.path.dirname(os.path.abspath(__file__))
     def init(self):
-        return run_command('terraform init')
+        return self.run_command('terraform init')
     def plan(self):
-        return run_command('terraform plan -out=KungFu.tfplan')
+        return self.run_command('terraform plan -out=KungFu.tfplan')
     def plan_destroy(self):
-        return run_command('terraform plan -destroy -out=KungFu_destroy.tfplan')
+        return self.run_command('terraform plan -destroy -out=KungFu_destroy.tfplan')
     def apply(self):
-        return run_command('terraform apply "KungFu.tfplan"')
+        return self.run_command('terraform apply "KungFu.tfplan"')
     def destroy(self):
-        return run_command('terraform apply "KungFu_destroy.tfplan"')
+        return self.run_command('terraform apply "KungFu_destroy.tfplan"')
 
-def run_command(CommandString):
-    print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    print('run_command', CommandString)
-    result = u""
-    with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE) as proc:
-        while True:
-            stdout = proc.stdout.readline()
-            if stdout:
-                result += stdout.decode('utf8')
-                print(stdout.decode('utf8'))
-            if proc.poll() is not None:
-                break
-        returncode = proc.poll()
-    print('returncode', returncode)
-    print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    return result, returncode
+    def run_command(self, CommandString, printout=True):
+        if printout:
+            print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
+            print('run_command', CommandString)
+        result = u""
+        with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=self.cwd) as proc:
+            while True:
+                stdout = proc.stdout.readline()
+                if stdout:
+                    result += stdout.decode('utf8')
+                    if printout:
+                        print(stdout.decode('utf8'))
+                if proc.poll() is not None:
+                    break
+            returncode = proc.poll()
+        if printout:
+            print('returncode', returncode)
+            print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        return result, returncode
 
 class test_SimpleCluster(unittest.TestCase):
     TestCluster = SimpleCluster()
@@ -53,12 +59,18 @@ class test_SimpleCluster(unittest.TestCase):
     def test_03_plan_destroy(self):
         result, returncode = self.__class__.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
-    #def test_04_apply(self):
-    #    result, returncode = self.__class__.TestCluster.apply()
-    #    self.assertEqual(returncode, 0)
-    #def test_05_destroy(self):
-    #    result, returncode = self.__class__.TestCluster.destroy()
-    #    self.assertEqual(returncode, 0)
+    def test_04_apply(self, Create=False):
+        if Create:
+            result, returncode = self.__class__.TestCluster.apply()
+            self.assertEqual(returncode, 0)
+        else:
+            print('Skipping Create test')
+    def test_05_destroy(self, Destroy=False):
+        if Destroy:
+            result, returncode = self.__class__.TestCluster.destroy()
+            self.assertEqual(returncode, 0)
+        else:
+            print('Skipping Destroy test')
 
 if __name__ == '__main__':
     unittest.main()

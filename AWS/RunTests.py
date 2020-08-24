@@ -8,13 +8,13 @@ import importlib.util
 
 class TestRunner():
     SkippedCount = 0
-    def RecursiveImport(self, SkipCount = 0, SleepTime = None):
+    def RecursiveImport(self, SkipCount=0, SleepTime=None, Create=False, Destroy=False):
         wd = os.path.dirname(os.path.abspath(__file__))
         for root, dirs, files in os.walk(wd):
             for file in files:
                 if file.rsplit('.',1)[-1] == 'py':
-                    self.ImportTests(root.replace('\\','/')+'/'+file, SkipCount=SkipCount, SleepTime=SleepTime)
-    def ImportTests(self, ModulePath, SkipCount = 0, SleepTime = None):
+                    self.ImportTests(root.replace('\\','/')+'/'+file, SkipCount=SkipCount, SleepTime=SleepTime, Create=Create, Destroy=Destroy)
+    def ImportTests(self, ModulePath, SkipCount=0, SleepTime=None, Create=False, Destroy=False):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
         if ModuleName in globals().keys():
             raise Exception('Namespace conflict found. Module name already in use, pick another.', ModuleName)
@@ -31,6 +31,16 @@ class TestRunner():
                             arglist = list(Function.__defaults__)
                             arglist[i-1] = SleepTime
                             Function.__defaults__ = tuple(arglist)
+                        if Create and 'Create' in Function.__code__.co_varnames:
+                            i = Function.__code__.co_varnames.index('Create')
+                            arglist = list(Function.__defaults__)
+                            arglist[i-1] = Create
+                            Function.__defaults__ = tuple(arglist)
+                        if Destroy and 'Destroy' in Function.__code__.co_varnames:
+                            i = Function.__code__.co_varnames.index('Destroy')
+                            arglist = list(Function.__defaults__)
+                            arglist[i-1] = Destroy
+                            Function.__defaults__ = tuple(arglist)
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 if self.SkippedCount >= SkipCount:
@@ -45,12 +55,20 @@ if __name__ == '__main__':
     else:
         SkipCount = 0
         SleepTime = None
+        Create = False
+        Destroy = False
         if len(sys.argv) >= 2:
             SkipCount = int(sys.argv[1])
             print('SkipCount', SkipCount)
         if len(sys.argv) >= 3:
             SleepTime = float(sys.argv[2])
             print('SleepTime', SleepTime)
-        TestInstance.RecursiveImport(SkipCount = SkipCount, SleepTime = SleepTime)
+        if len(sys.argv) >= 4:
+            SleepTime = float(sys.argv[2])
+            print('Create', Create)
+        if len(sys.argv) >= 5:
+            SleepTime = float(sys.argv[2])
+            print('Destroy', Destroy)
+        TestInstance.RecursiveImport(SkipCount=SkipCount, SleepTime=SleepTime, Create=Create, Destroy=Destroy)
     del sys.argv[1:]
     unittest.main()
