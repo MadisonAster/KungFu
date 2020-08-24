@@ -17,7 +17,8 @@ C++/Kata/x64
 C++/Kata/Debug
 *.tfstate
 *.tfstate.backup
+*.tfplan
 
 .terraform
 kubeconfig_*
-KungFu.plan
+
