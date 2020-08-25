@@ -14,8 +14,10 @@ class TestRunner():
             for file in files:
                 if file.rsplit('.',1)[-1] == 'py':
                     self.ImportTests(root.replace('\\','/')+'/'+file, SkipCount=SkipCount, SleepTime=SleepTime, Create=Create, Destroy=Destroy)
-    def ImportTests(self, ModulePath, SkipCount=0, SleepTime=None, Create=False, Destroy=False):
+    def ImportTests(self, ModulePath, SkipCount=0, SleepTime=None, Create=False, Destroy=False, BlackList=['TestKit']):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
+        if ModuleName in BlackList:
+            return
         if ModuleName in globals().keys():
             raise Exception('Namespace conflict found. Module name already in use, pick another.', ModuleName)
         ModuleSpec = importlib.util.spec_from_file_location("module.name", ModulePath)
