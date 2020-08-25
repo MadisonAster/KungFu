@@ -1,8 +1,4 @@
 
 ##############terraform destroy###############
-awskubectl delete service loadbalancer-service
-
-cd ../_specs/terraform
-terraform destroy -auto-approve
-cd ../../_setup
+python3 SimpleCluster.py 0 0 False True
 ##############################################

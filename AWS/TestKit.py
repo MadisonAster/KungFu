@@ -1,10 +1,22 @@
-import sys
+import sys, inspect
 import unittest
 from datetime import datetime
 import subprocess, shlex
+from pprint import pprint
 
 
 class TimedTest(unittest.TestCase):
+    def __init__(self, *args):
+        super(TimedTest, self).__init__(*args)
+        for FunctionName, Function in inspect.getmembers(self.__class__):
+            if 'test_' in FunctionName and Function.__defaults__ != None:
+                arglist = list(Function.__defaults__)
+                for varname in sys.TestVars.keys():
+                    if varname in Function.__code__.co_varnames:
+                        i = Function.__code__.co_varnames.index(varname)
+                        arglist[i-1] = sys.TestVars[varname]
+                Function.__defaults__ = tuple(arglist)
+
     def setUp(self):
         self.starttime = datetime.now()
     def tearDown(self):
@@ -62,6 +74,7 @@ class test_EKSCluster(TimedTest):
     def test_01_init(self):
         result, returncode = self.__class__.TestCluster.init()
         self.assertEqual(returncode, 0)
+    
     def test_02_plan(self):
         result, returncode = self.__class__.TestCluster.plan()
         self.assertEqual(returncode, 0)
@@ -87,6 +100,17 @@ class test_EKSCluster(TimedTest):
             self.assertEqual(returncode, 0)
         else:
             print('Skipping Destroy test')
+    
+
+def LoadTestVars():
+    T = {}
+    T['SkipCount'], T['SleepTime'], T['Create'], T['Destroy'] = 0, 0, False, False
+    if len(sys.argv) >= 2:
+        T['SkipCount'], T['SleepTime'], T['Create'], T['Destroy'] = int(sys.argv[1]), float(sys.argv[2]), (sys.argv[3]=='True'), (sys.argv[4]=='True')
+    print('TestVars', T)
+    sys.TestVars = T
+    del sys.argv[1:]
 
 if __name__ == '__main__':
+    LoadTestVars()
     unittest.main()

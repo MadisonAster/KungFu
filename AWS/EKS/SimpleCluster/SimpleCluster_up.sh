@@ -1,20 +1,6 @@
-##############Read UserConfig#################
-eval $(python3 ../_py/ReadConfig.py)
-##############################################
-
-
-
-##############docker build####################
-#./myimage_build.sh
-#./ecr_push.sh
-##############################################
-
-
-
 ##############terraform apply##################
-terraform init
-terraform apply -target=SimpleCluster.tf -var-file=SimpleCluster_Variables.tf
-eval $(terraform output | sed 's/^/export /; s/ = /="/g; s/$/"/')
+python3 SimpleCluster.sh 0 0 True False
+#eval $(terraform output | sed 's/^/export /; s/ = /="/g; s/$/"/')
 ##############################################
 
 

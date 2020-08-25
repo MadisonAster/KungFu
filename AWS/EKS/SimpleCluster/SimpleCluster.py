@@ -17,4 +17,5 @@ class test_SimpleCluster(TestKit.test_EKSCluster):
         self.assertEqual(returncode, 0)
 
 if __name__ == '__main__':
+    TestKit.LoadTestVars()
     unittest.main()
