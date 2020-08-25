@@ -7,7 +7,7 @@ import subprocess
 import shlex
 
 
-class SimpleCluster():
+class SimpleCluster(dict):
     def __init__(self):
         super(SimpleCluster, self).__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__))
@@ -21,6 +21,13 @@ class SimpleCluster():
         return self.run_command('terraform apply "KungFu.tfplan"')
     def destroy(self):
         return self.run_command('terraform apply "KungFu_destroy.tfplan"')
+
+    def output(self):
+        result, returncode = self.run_command('terraform output')
+        for line in result.rstrip().split('\n'):
+            (var, val) = line.replace(' = ','=').split('=',1)
+            self[var] = val
+        return result, returncode
 
     def run_command(self, CommandString, printout=True):
         if printout:
@@ -65,7 +72,14 @@ class test_SimpleCluster(unittest.TestCase):
             self.assertEqual(returncode, 0)
         else:
             print('Skipping Create test')
-    def test_05_destroy(self, Destroy=False):
+    def test_05_output(self, Create=False):
+        if Create:
+            result, returncode = self.__class__.TestCluster.output()
+            print('vpc_id', self.__class__.TestCluster['vpc_id'])
+            self.assertEqual(returncode, 0)
+        else:
+            print('Skipping Output test')    
+    def test_06_destroy(self, Destroy=False):
         if Destroy:
             result, returncode = self.__class__.TestCluster.destroy()
             self.assertEqual(returncode, 0)
