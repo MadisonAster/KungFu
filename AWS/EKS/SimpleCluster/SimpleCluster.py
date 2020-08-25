@@ -1,5 +1,7 @@
-import os
+import os, sys, imp, unittest
 
+if 'TestKit' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['TestKit'] = imp.load_source('TestKit', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/TestKit.py')
 import TestKit
 
 class SimpleCluster(TestKit.EKSCluster):
