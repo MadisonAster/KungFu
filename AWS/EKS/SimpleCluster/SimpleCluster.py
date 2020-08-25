@@ -12,7 +12,7 @@ class SimpleCluster(TestKit.EKSCluster):
 class test_SimpleCluster(TestKit.test_EKSCluster):
     TestCluster = SimpleCluster()
     
-    def test_11_SimpleCLuster_init(self):
+    def test_11_SimpleCLuster_init(self): #REPLACEME: Just leaving this as an example for now
         result, returncode = self.__class__.TestCluster.init()
         self.assertEqual(returncode, 0)
 

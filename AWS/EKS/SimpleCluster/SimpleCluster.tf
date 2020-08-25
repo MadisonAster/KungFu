@@ -46,7 +46,6 @@ resource "aws_security_group" "ControlPlaneSecurityGroup" {
   name_prefix   = "ControlPlaneSG"
   vpc_id        = module.vpc.vpc_id
 
-  
   ingress {
     from_port   = 22
     to_port     = 22
@@ -79,8 +78,8 @@ resource "aws_security_group" "ControlPlaneSecurityGroup" {
   }
 }
 
-resource "aws_security_group" "WebserverSecurityGroup" {
-  name_prefix   = "WebserverSG"
+resource "aws_security_group" "KubeNodeSecurityGroup" {
+  name_prefix   = "KubeNodeSG"
   vpc_id        = module.vpc.vpc_id
   ingress {
     from_port   = 80
@@ -136,15 +135,15 @@ module "eks" {
   
   node_groups = {
     
-    WebserverGroup = {
-      instance_type                 = var.webserver_instance_type
+    KubeNodeGroup = {
+      instance_type                 = var.kubenode_instance_type
       //additional_userdata           = ""
       asg_desired_capacity          = 1
       asg_max_size                  = 1
       additional_security_group_ids = [
         module.vpc.default_security_group_id,
         aws_security_group.ControlPlaneSecurityGroup.id,
-        aws_security_group.WebserverSecurityGroup.id
+        aws_security_group.KubeNodeSecurityGroup.id
       ]
       ssh = {
         allow = true
@@ -152,14 +151,14 @@ module "eks" {
         sourceSecurityGroupIds = [
           module.vpc.default_security_group_id,
           aws_security_group.ControlPlaneSecurityGroup.id,
-          aws_security_group.WebserverSecurityGroup.id
+          aws_security_group.KubeNodeSecurityGroup.id
         ]
       }
       labels = {
-        app = "webserver"
+        app = "KubeNode"
       }
       tags = {
-        app = "webserver"
+        app = "KubeNode"
       }
     }
   }
