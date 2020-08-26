@@ -8,7 +8,7 @@ sys.argv[5] = Destroy #Takes bool as argument, displays gui during unit tests. T
 '''
 import sys, os
 import unittest, inspect
-import importlib
+from importlib import util
 from datetime import datetime
 import subprocess, shlex
 from pprint import pprint
@@ -45,8 +45,8 @@ class TestRunner():
             return
         if ModuleName in globals().keys():
             raise Exception('Namespace conflict found. Module name already in use, pick another.', ModuleName)
-        ModuleSpec = importlib.util.spec_from_file_location("module.name", ModulePath)
-        Module = importlib.util.module_from_spec(ModuleSpec)
+        ModuleSpec = util.spec_from_file_location("module.name", ModulePath)
+        Module = util.module_from_spec(ModuleSpec)
         ModuleSpec.loader.exec_module(Module)
         inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
