@@ -44,7 +44,8 @@ class test_PrintTree(unittest.TestCase):
             '/folder3',
         ])
 
-        ExpectedResult = """
+        ExpectedResult = \
+"""
 mock
     folder1
         file1.txt
@@ -65,7 +66,8 @@ mock
             '/folder3',
         ])
 
-        ExpectedResult = """
+        ExpectedResult = \
+"""
 mock
     folder1
     folder2
