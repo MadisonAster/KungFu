@@ -2,11 +2,6 @@ import sys, os, shutil, re
 import itertools
 import operator
 
-import folderStructure
-import safeRun
-#import dataTypeFolderArray
-import projectData
-
 def mirrorFolder(templateFolder, targetFolder):
     #Takes: Str, Str   as valid paths
     #for each templateFolde not found to exist in target folder, makes an empty folder
@@ -480,57 +475,8 @@ def setFromList(inputList):
     retList = list(set(inputList))
     retList.sort()
     return retList
-    
-def getFrameRanges(filesPath):
-    #Takes: filesPath as str
-    #Returns: list of ranges matching pattern
-    filePattern = filesPath.rsplit('/',1)[-1]
-    filesList = os.listdir(filesPath.rsplit('/',1)[0])
-    for a in reversed(filesList):
-        matchStr = replaceFrameNumbers(a)
-        if matchStr != filePattern:
-            filesList.remove(a)
-    framesList = []
-    for a in filesList:
-        b = getPatternParts(a)
-        framesList.append(int(b[1]))
-    framesList = getIntRanges(framesList)
-    return framesList
 
-def getPatternParts(filePath):
-    #Takse: filePath as str
-    #Returns: [filename, framepadding, ext]
-    try:
-        frameDelimiter = folderStructure._FRAMEDELIMITER
-    except:
-        frameDelimiter = '.'
-    a = [
-    filePath.rsplit('.',1)[0].rsplit(frameDelimiter,1)[0],
-    filePath.rsplit('.',1)[0].rsplit(frameDelimiter,1)[1],
-    filePath.rsplit('.',1)[1]
-    ]
-    return a
-    
-def getIntRanges(intList):
-    #Takes: list of ints
-    #Returns: array of int ranges
-    intList = intList[:]
-    output = []
-    for i, a in itertools.groupby(enumerate(intList), lambda (b,c):b-c):
-        d = map(operator.itemgetter(1), a)
-        if len(d) > 1:
-            output.append([min(d),max(d)])
-        else:
-            output.append(d)
-    return output
-    
-    #alternate method
-    #retList = []
-    #for a, b in itertools.groupby(enumerate(intList), lambda (c, d): d - c):
-    #    b = list(b)
-    #    retList.append([b[0][1], b[-1][1]])
-    #return retList
-    
+
 def makePathDynamic(pathString, multiSearch = False):
     #Takes: pathString as str
     #Returns: str containing  ' marks with variable names from folderStructure.py
