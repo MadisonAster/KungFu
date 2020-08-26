@@ -3,8 +3,11 @@ import time
 
 from Qt import QtCore, QtGui, QtWidgets
 
+if 'PythonBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['PythonBaseClasses'] = importlib.machinery.SourceFileLoader('PythonBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/PythonBaseClasses.py').load_module()
 if 'TestKit' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['TestKit'] = importlib.machinery.SourceFileLoader('TestKit', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/TestKit.py').load_module()
+    sys.modules['TestKit'] = importlib.machinery.SourceFileLoader('TestKit', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/TestKit.py').load_module()
+import PythonBaseClasses
 import TestKit
 
 
@@ -25,8 +28,8 @@ class BasicWindow(QtWidgets.QMainWindow):
 class test_BasicWindow(TestKit.TimedTest):
     def __init__(self, *args):
         super(test_BasicWindow, self).__init__(*args)
-        if TestKit.TestVars['GUI']:
-            TestKit.SingletonApp() #Global because it QApplication must be a singleton
+        if sys.TestVars['GUI']:
+            PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, SleepTime=0.5, GUI=True):
         if not GUI:
@@ -48,5 +51,4 @@ class test_BasicWindow(TestKit.TimedTest):
 
 if __name__ == '__main__':
     TestKit.LoadTestVars()
-    print(sys.argv)
     unittest.main()
