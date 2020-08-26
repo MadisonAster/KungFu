@@ -30,6 +30,8 @@ Write an efficient algorithm for the following assumptions:
 N is an integer within the range [0..100,000];
 each element of array A is an integer within the range [0..2,147,483,647].
 '''
+
+'''
 import TestKit
 from datetime import datetime
 
@@ -85,3 +87,4 @@ class test_NumberOfDiscIntersections(TestKit.TimedTest):
 
 if __name__ == '__main__':
     unittest.main()
+'''

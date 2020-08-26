@@ -69,7 +69,7 @@ def MaxProfit(A):
     p1 = max(A[minindex+1:])-minprice
     p2 = maxprice-min(A[:maxindex]) 
     if minindex > maxindex:
-        p3 = solution(A[maxindex:minindex])
+        p3 = MaxProfit(A[maxindex:minindex])
     else:
         p3 = 0
     return max(0,p1,p2,p3)

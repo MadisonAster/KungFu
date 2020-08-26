@@ -38,11 +38,11 @@ class test_fibonacci(unittest.TestCase):
         print(str(t), self.id())
     
     def test_1(self):
-        self.assertEquals(fibonacci(10), 55)
+        self.assertEqual(fibonacci(10), 55)
     def test_2(self):
-        self.assertEquals(fibonacci(100), 354224848179261915075)
+        self.assertEqual(fibonacci(100), 354224848179261915075)
     def test_3(self):
-        self.assertEquals(fibonacci(3), 2)
+        self.assertEqual(fibonacci(3), 2)
 
 class test_fibstring(unittest.TestCase):
     def setUp(self):
