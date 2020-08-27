@@ -1,13 +1,18 @@
 import unittest
 from datetime import datetime
 
-def SelectionSort(Array):
-    for i in range(len(Array)):
-        j = Array.index(min(Array[i:]))
-        Array[i], Array[j] = Array[j], Array[i]
+def InsertionSort(Array):
+    for i in range(1, len(Array)): 
+        key = Array[i]
+
+        j = i-1
+        while j >= 0 and key < Array[j] : 
+                Array[j + 1] = Array[j] 
+                j -= 1
+        Array[j + 1] = key
     return Array
 
-class test_SelectionSort(unittest.TestCase):
+class test_InsertionSort(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
     def tearDown(self):
@@ -16,7 +21,7 @@ class test_SelectionSort(unittest.TestCase):
 
     def test_1(self):
         Array = list(reversed(range(1000)))
-        self.assertEqual(SelectionSort(Array), list(range(1000)))
+        self.assertEqual(InsertionSort(Array), list(range(1000)))
 
 if __name__ == '__main__':
     unittest.main()
