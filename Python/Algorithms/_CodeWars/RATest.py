@@ -31,7 +31,6 @@ def calculator(operator, tape):
         '*' : multiply,
     }
     return operator_map[operator]
-
 class test_calculator(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -50,6 +49,36 @@ class test_calculator(unittest.TestCase):
         self.assertEqual(func2(4,6), '4-6=-2')
         self.assertEqual(func2(8,3), '8-3=5')
         self.assertEqual(tape, ['10+20=30', '4-6=-2', '8-3=5'])
+
+def words(filepath):
+    with open(filepath, 'r') as file:
+        filetext = file.read()
+    buffer = ''
+    for a in filetext:
+        if a.isalpha():
+            buffer += a
+        else:
+            if buffer != '':
+                yield buffer
+            buffer = ''
+
+class test_words(unittest.TestCase):
+    def setUp(self):
+        self.starttime = datetime.now()
+        self.mock_path = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')+'/mock.txt'
+
+    def tearDown(self):
+        t = datetime.now() - self.starttime
+        print(str(t), self.id())
+        os.remove(self.mock_path)
+
+    def test_1(self):
+        mocktext = 'abcde abcde/abcde-abcde,abcde1abcde'
+        with open(self.mock_path, 'w') as file:
+            file.write(mocktext)
+        self.assertEqual(list(words(self.mock_path)), ['abcde']*5)
+
+
 
 if __name__ == '__main__':
     unittest.main()
