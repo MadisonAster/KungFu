@@ -42,5 +42,11 @@ class test_QuickSort(unittest.TestCase):
         random.shuffle(Array)
         self.assertEqual(QuickSort(Array), list(range(100000)))
 
+    def test_std_sort(self):
+        Array = list(range(100000))
+        random.shuffle(Array)
+        self.assertEqual(sorted(Array), list(range(100000)))
+
+
 if __name__ == '__main__':
     unittest.main()
