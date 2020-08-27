@@ -65,15 +65,15 @@ import unittest
 from datetime import datetime
 import math
 
-def CodilityFlags(N):
-    if len(N) < 3:
+def CodilityFlags(A):
+    if len(A) < 3:
         return 0
 
     peaks = []
-    for i, n in enumerate(N):
-        if i == 0 or i == len(N)-1:
+    for i, n in enumerate(A):
+        if i == 0 or i == len(A)-1:
             continue
-        if n > N[i-1] and n > N[i+1]:
+        if n > A[i-1] and n > A[i+1]:
             peaks.append(i)
     count = len(peaks)
     lastcounted = -math.inf
