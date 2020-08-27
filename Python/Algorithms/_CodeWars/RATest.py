@@ -50,6 +50,20 @@ class test_calculator(unittest.TestCase):
         self.assertEqual(func2(8,3), '8-3=5')
         self.assertEqual(tape, ['10+20=30', '4-6=-2', '8-3=5'])
 
+
+def decorator(left, right):
+    return None
+class test_decorator(unittest.TestCase):
+    def setUp(self):
+        self.starttime = datetime.now()
+    def tearDown(self):
+        t = datetime.now() - self.starttime
+        print(str(t), self.id())
+
+    def test_1(self):
+        self.assertEqual(decorator(None, None), None)
+
+
 def words(filepath):
     with open(filepath, 'r') as file:
         filetext = file.read()
@@ -93,8 +107,6 @@ def find(nums, target):
     for val in recurse_find(nums, ibuffer=ibuffer):
         if val == target:
             return ibuffer
-
-
 class test_find(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -112,6 +124,18 @@ class test_find(unittest.TestCase):
             target = target[i]
         self.assertEqual(target, 101)
 
+
+def mult(left, right):
+    return None
+class test_mult(unittest.TestCase):
+    def setUp(self):
+        self.starttime = datetime.now()
+    def tearDown(self):
+        t = datetime.now() - self.starttime
+        print(str(t), self.id())
+
+    def test_1(self):
+        self.assertEqual(mult(None, None), None)
 
 
 if __name__ == '__main__':
