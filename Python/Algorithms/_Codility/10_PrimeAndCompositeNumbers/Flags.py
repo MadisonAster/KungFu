@@ -60,12 +60,29 @@ N is an integer within the range [1..400,000];
 each element of array A is an integer within the range [0..1,000,000,000].
 '''
 
-'''
+
 import unittest
 from datetime import datetime
+import math
 
 def CodilityFlags(N):
-    return 0
+    if len(N) < 3:
+        return 0
+
+    peaks = []
+    for i, n in enumerate(N):
+        if i == 0 or i == len(N)-1:
+            continue
+        if n > N[i-1] and n > N[i+1]:
+            peaks.append(i)
+    count = len(peaks)
+    lastcounted = -math.inf
+    for i in peaks:
+        if i-lastcounted < count:
+            count -= 1
+        else:
+            lastcounted = i
+    return count
 
 class test_CodilityFlags(unittest.TestCase):
     def setUp(self):
@@ -74,51 +91,32 @@ class test_CodilityFlags(unittest.TestCase):
         t = datetime.now() - self.starttime
         print(str(t), self.id())
 
-    def test_0(self):
-        N = 0
+    def test_empty(self):
+        A = []
         output = 0
-        self.assertEqual(CodilityFlags(N), output)
+        self.assertEqual(CodilityFlags(A), output)
     def test_1(self):
-        N = 1
+        A = [5]
+        output = 0
+        self.assertEqual(CodilityFlags(A), output)
+    def test_2(self):
+        A = [0,5]
+        output = 0
+        self.assertEqual(CodilityFlags(A), output)
+    def test_3(self):
+        A = [0,5,1]
         output = 1
-        self.assertEqual(CodilityFlags(N), output)
-    def test_17(self):
-        N = 17
-        output = 2
-        self.assertEqual(CodilityFlags(N), output)
-    def test_9(self):
-        N = 9
+        self.assertEqual(CodilityFlags(A), output)
+    def test_4(self):
+        A = [2,0,1]
+        output = 0
+        self.assertEqual(CodilityFlags(A), output)
+    def test_5(self):
+        A = [1,5,3,4,3,4,1,2,3,4,6,2]
         output = 3
-        self.assertEqual(CodilityFlags(N), output)
-    def test_24(self):
-        N = 24
-        output = 8
-        self.assertEqual(CodilityFlags(N), output)
-    def test_long1(self):
-        N = 1000000000
-        output = 100
-        self.assertEqual(CodilityFlags(N), output)
-    def test_long2(self):
-        N = 10000000000
-        output = 121
-        self.assertEqual(CodilityFlags(N), output)
-    def test_long3(self):
-        N = 2147483646
-        output = 192
-        self.assertEqual(CodilityFlags(N), output)
-    def test_long4(self):
-        N = 2147483648
-        output = 32
-        self.assertEqual(CodilityFlags(N), output)
-    def test_long5(self):
-        N = 2147483647
-        output = 2
-        self.assertEqual(CodilityFlags(N), output)
-    def test_long6(self):
-        N = 780291637
-        output = 2
-        self.assertEqual(CodilityFlags(N), output)
+        self.assertEqual(CodilityFlags(A), output)
+
+
 
 if __name__ == '__main__':
     unittest.main()
-'''
