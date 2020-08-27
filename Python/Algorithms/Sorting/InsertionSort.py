@@ -1,4 +1,5 @@
 import unittest
+import random
 from datetime import datetime
 
 def InsertionSort(Array):
@@ -21,6 +22,11 @@ class test_InsertionSort(unittest.TestCase):
 
     def test_1(self):
         Array = list(reversed(range(1000)))
+        self.assertEqual(InsertionSort(Array), list(range(1000)))
+
+    def test_2(self):
+        Array = list(range(1000))
+        random.shuffle(Array)
         self.assertEqual(InsertionSort(Array), list(range(1000)))
 
 if __name__ == '__main__':

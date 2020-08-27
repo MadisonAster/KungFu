@@ -1,4 +1,5 @@
 import unittest
+import random
 from datetime import datetime
 
 def SelectionSort(Array):
@@ -17,6 +18,12 @@ class test_SelectionSort(unittest.TestCase):
     def test_1(self):
         Array = list(reversed(range(1000)))
         self.assertEqual(SelectionSort(Array), list(range(1000)))
+
+    def test_2(self):
+        Array = list(range(1000))
+        random.shuffle(Array)
+        self.assertEqual(SelectionSort(Array), list(range(1000)))
+
 
 if __name__ == '__main__':
     unittest.main()

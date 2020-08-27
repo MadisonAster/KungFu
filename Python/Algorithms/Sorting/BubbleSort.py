@@ -1,4 +1,5 @@
 import unittest
+import random
 from datetime import datetime
 
 def BubbleSort(Array):
@@ -17,6 +18,11 @@ class test_BubbleSort(unittest.TestCase):
 
     def test_1(self):
         Array = list(reversed(range(1000)))
+        self.assertEqual(BubbleSort(Array), list(range(1000)))
+
+    def test_2(self):
+        Array = list(range(1000))
+        random.shuffle(Array)
         self.assertEqual(BubbleSort(Array), list(range(1000)))
 
 if __name__ == '__main__':
