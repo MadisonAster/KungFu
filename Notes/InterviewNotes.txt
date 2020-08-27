@@ -24,6 +24,9 @@ Algorithms:
 	AStar
 	Knapsack
 	Recursive algorithms
+    Kruskals
+    Bit Manip
+    Merge Sort
 
 	
 	Measure Space and Time Complexity
