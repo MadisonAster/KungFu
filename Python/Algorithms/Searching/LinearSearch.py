@@ -18,13 +18,18 @@ class test_LinearSearch(unittest.TestCase):
 
     def test_1(self):
         Array = list(reversed(range(10000)))
-        self.assertEqual(LinearSearch(Array, 50), 949)
-
+        Array[len(Array)-1] = -5
+        self.assertEqual(LinearSearch(Array, -5), len(Array)-1)
+        Array[500] = -5
+        self.assertEqual(LinearSearch(Array, -5), 500)
+        
     def test_2(self):
         Array = list(range(10000))
         random.shuffle(Array)
-        Array[500] = 1000
-        self.assertEqual(LinearSearch(Array, 1000), 500)
+        Array[len(Array)-1] = -5
+        self.assertEqual(LinearSearch(Array, -5), len(Array)-1)
+        Array[500] = -5
+        self.assertEqual(LinearSearch(Array, -5), 500)
 
 if __name__ == '__main__':
     unittest.main()
