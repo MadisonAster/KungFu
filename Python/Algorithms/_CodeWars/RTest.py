@@ -50,9 +50,21 @@ class test_calculator(unittest.TestCase):
         self.assertEqual(func2(8,3), '8-3=5')
         self.assertEqual(tape, ['10+20=30', '4-6=-2', '8-3=5'])
 
+'''
+def compose(func, *args):
+    #result = func
+    result = 10
+    for f in args:
+        result = f(result)
+    return result
 
-def decorator(left, right):
-    return None
+def func1(param):
+    return param*2
+
+#@compose(func1)
+def func0(param):
+    return param*10
+'''
 class test_decorator(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -61,7 +73,8 @@ class test_decorator(unittest.TestCase):
         print(str(t), self.id())
 
     def test_1(self):
-        self.assertEqual(decorator(None, None), None)
+        pass
+        #self.assertEqual(decorator(200), 200)
 
 
 def words(filepath):
