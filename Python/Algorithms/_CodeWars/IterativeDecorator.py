@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 import functools
 
-def OperationList(*args):
+def IterativeDecorator(*args):
     functionlist = args
     def wrapper_factory(original_function):
         @functools.wraps(original_function)
@@ -14,7 +14,7 @@ def OperationList(*args):
         return wrapper
     return wrapper_factory
 
-class test_OperationList(unittest.TestCase):
+class test_IterativeDecorator(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
     def tearDown(self):
@@ -25,7 +25,7 @@ class test_OperationList(unittest.TestCase):
         def f2(N): return N*2
         def f1(N): return N*10
 
-        @OperationList(f1, f2)
+        @IterativeDecorator(f1, f2)
         def f0(N): return N*10
 
         self.assertEqual(f0(10), 2000)
