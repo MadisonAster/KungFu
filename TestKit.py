@@ -5,6 +5,15 @@ sys.argv[2] = SleepTime #Takes float as argument, sets all sleep times to n. Use
 sys.argv[3] = Create #Takes bool as argument, creates cloud resources. This will cost money!
 sys.argv[4] = Destroy #Takes bool as argument, destroys cloud resources. This can do damage!
 sys.argv[5] = Destroy #Takes bool as argument, displays gui during unit tests. Turn this False to run tests without an X server.
+
+examples:
+python3 TestKit.py 0 0.5 False False True   #default mode: run all tests including GUI, and keep each test on screen for 0.5 seconds
+python3 TestKit.py                          #same
+
+python3 TestKit.py 0 0 False False False    #run all non-GUI tests as fast as possible, but don't create or destroy any cloud resources
+python3 TestKit.py 0 0 True False False     #run all tests including those that create real cloud resources, but don't run the destruction tests
+python3 TestKit.py 0 0 False True False     #run all tests including destruction tests if any tests resources still exist
+python3 TestKit.py 0 0 True True True       #run all tests including GUIs, and the creation and destruction of cloud resources. This might cost you a couple dollars!
 '''
 import sys, os
 import unittest, inspect

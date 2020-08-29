@@ -1,5 +1,15 @@
+#Install these packages if you would like to run the entire suite of unittests via TestKit.py 
+#Each template module in this library is individually testable as well.
+#
+#Please also note this particular shell script is currently untested, and installation processes are subject to change.
+#Double check the installation instructions from each individual vendor.
+#
+#I test all of this code on both Windows and Ubuntu, but be aware that future modules I will add to this library will be windows only.
+#e.g. unreal
+
 pip3 install pyside2
 pip3 install qt.py
+pip3 install pandas
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
