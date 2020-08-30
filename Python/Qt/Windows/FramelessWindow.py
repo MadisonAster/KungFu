@@ -25,12 +25,12 @@ class FramelessWindow(PythonBaseClasses.BasicWindow):
 class test_FramelessWindow(TestKit.TimedTest):
     def __init__(self, *args):
         super(test_FramelessWindow, self).__init__(*args)
-        if sys.TestVars['GUI']:
+        if sys.TestArgs.gui:
             PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
-    def test_1(self, SleepTime=0.5, GUI=True):
-        if not GUI:
-            print('Skipping GUI Test')
+    def test_1(self, SleepTime=0.5, gui=True):
+        if not gui:
+            print('Skipping gui Test')
             return
         self.MainWindow = FramelessWindow()
         self.MainWindow.show()
