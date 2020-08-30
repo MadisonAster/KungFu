@@ -11,23 +11,20 @@ import PythonBaseClasses
 import TestKit
 
 
-class BasicWindow(QtWidgets.QMainWindow):
+class TranslucentWindow(PythonBaseClasses.BasicWindow):
     def __init__(self, *args, **kwargs):
-        super(BasicWindow, self).__init__(*args, **kwargs)
-        self.setWindowTitle('Basic Window')
-        self.QAvailableGeo = QtWidgets.QDesktopWidget().availableGeometry()
-        self.QStartBarHeight = QtWidgets.QDesktopWidget().screenGeometry(0).height()-self.QAvailableGeo.height()
+        super(TranslucentWindow, self).__init__(*args, **kwargs)
+        self.setWindowTitle('Translucent Window')
         
-        #self.setDockOptions(False)
-        #self.setDockNestingEnabled(True)
+        #self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-        
     def sizeHint(self):
         return QtCore.QSize(800,600)
 
-class test_BasicWindow(TestKit.TimedTest):
+class test_TranslucentWindow(TestKit.TimedTest):
     def __init__(self, *args):
-        super(test_BasicWindow, self).__init__(*args)
+        super(test_TranslucentWindow, self).__init__(*args)
         if sys.TestVars['GUI']:
             PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
@@ -35,18 +32,8 @@ class test_BasicWindow(TestKit.TimedTest):
         if not GUI:
             print('Skipping GUI Test')
             return
-        self.MainWindow = BasicWindow()
+        self.MainWindow = TranslucentWindow()
         self.MainWindow.show()
-        time.sleep(SleepTime)
-
-    def test_2(self, SleepTime=0.5, GUI=True):
-        if not GUI:
-            print('Skipping GUI Test')
-            return
-        self.MainWindow = BasicWindow()
-        self.MainWindow.show()
-        self.MainWindow.resize(self.MainWindow.QAvailableGeo.width()/2, self.MainWindow.QAvailableGeo.height()-self.MainWindow.QStartBarHeight)
-        self.MainWindow.move(0,0)
         time.sleep(SleepTime)
 
 if __name__ == '__main__':
