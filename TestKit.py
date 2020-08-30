@@ -60,6 +60,7 @@ class TestRunner():
             for file in files:
                 if file.rsplit('.',1)[-1] == 'py':
                     self.ImportTests(root.replace('\\','/')+'/'+file, SkipCount=SkipCount)
+    
     def ImportTests(self, ModulePath, SkipCount=0):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
         if ModuleName in ['TestKit'] or 'BaseClasses' in ModuleName:
