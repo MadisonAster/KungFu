@@ -42,6 +42,18 @@ class TimedTest(unittest.TestCase):
 
 class TestRunner():
     SkippedCount = 0
+    def __init__(self):
+        super(TestRunner, self).__init__()
+        print('TestRunner init!')
+        self.TestSuite = unittest.TestSuite()
+        self.TestVars = self.LoadTestVars()
+        self.RecursiveImport(SkipCount=self.TestVars['SkipCount'])
+
+    def main(self):
+        print('TestRunner main!')
+        self.Runner = unittest.TextTestRunner()
+        self.Runner.run(self.TestSuite)
+
     def RecursiveImport(self, SkipCount=0):
         wd = os.path.dirname(os.path.abspath(__file__))
         for root, dirs, files in os.walk(wd):
@@ -63,26 +75,25 @@ class TestRunner():
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 if self.SkippedCount >= SkipCount:
-                    globals()[ClassName] = Class
+                    self.TestSuite.addTest(unittest.makeSuite(Class))
                 else:
                     self.SkippedCount += 1
 
-def LoadTestVars():
-    T = {}
-    T['SkipCount'], T['SleepTime'], T['Create'], T['Destroy'], T['GUI'] = 0, 0.5, False, False, True
-    if len(sys.argv) >= 2:
-        T['SkipCount'], T['SleepTime'], T['Create'], T['Destroy'], T['GUI'] = int(sys.argv[1]), float(sys.argv[2]), (sys.argv[3]=='True'), (sys.argv[4]=='True'), (sys.argv[5]=='True')
-    
-    global TestVars
-    TestVars = T
-    print('TestVars', TestVars)
+    def LoadTestVars(self):
+        T = {}
+        T['SkipCount'], T['SleepTime'], T['Create'], T['Destroy'], T['GUI'] = 0, 0.5, False, False, True
+        if len(sys.argv) >= 2:
+            T['SkipCount'], T['SleepTime'], T['Create'], T['Destroy'], T['GUI'] = int(sys.argv[1]), float(sys.argv[2]), (sys.argv[3]=='True'), (sys.argv[4]=='True'), (sys.argv[5]=='True')
+        global TestVars
+        TestVars      = T
+        self.TestVars = T        
+        sys.TestVars  = T
+        print('TestVars', TestVars)
 
-    sys.TestVars = TestVars
-    del sys.argv[1:]
-    return TestVars
+        del sys.argv[1:]
+        return TestVars
 
 if __name__ == '__main__':
-    TestVars = LoadTestVars()
     TestInstance = TestRunner()
-    TestInstance.RecursiveImport(SkipCount=TestVars['SkipCount'])
-    unittest.main()
+    TestInstance.main()
+    #unittest.main()
