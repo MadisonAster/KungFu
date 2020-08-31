@@ -36,6 +36,18 @@ def gui(func):
         return None
     else:
         return func
+def create(func):
+    if not sys.TestArgs.create:
+        print('Skipping create Test')
+        return None
+    else:
+        return func
+def destroy(func):
+    if not sys.TestArgs.destroy:
+        print('Skipping destroy Test')
+        return None
+    else:
+        return func
 
 
 class TimedTest(unittest.TestCase):

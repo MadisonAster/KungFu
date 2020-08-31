@@ -65,22 +65,19 @@ class test_EKSCluster(TestKit.TimedTest):
     def test_03_plan_destroy(self):
         result, returncode = self.__class__.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
-    def test_04_apply(self, Create=False):
-        if Create:
-            result, returncode = self.__class__.TestCluster.apply()
-            self.assertEqual(returncode, 0)
-        else:
-            print('Skipping Create test')
-    def test_05_output(self, Create=False):
-        if Create:
-            result, returncode = self.__class__.TestCluster.output()
-            print('vpc_id', self.__class__.TestCluster['vpc_id'])
-            self.assertEqual(returncode, 0)
-        else:
-            print('Skipping Output test')    
-    def test_06_destroy(self, Destroy=False):
-        if Destroy:
-            result, returncode = self.__class__.TestCluster.destroy()
-            self.assertEqual(returncode, 0)
-        else:
-            print('Skipping Destroy test')
+
+    @TestKit.create
+    def test_04_apply(self):
+        result, returncode = self.__class__.TestCluster.apply()
+        self.assertEqual(returncode, 0)
+
+    @TestKit.create
+    def test_05_output(self):
+        result, returncode = self.__class__.TestCluster.output()
+        print('vpc_id', self.__class__.TestCluster['vpc_id'])
+        self.assertEqual(returncode, 0)
+
+    @TestKit.destroy
+    def test_06_destroy(self):
+        result, returncode = self.__class__.TestCluster.destroy()
+        self.assertEqual(returncode, 0)
