@@ -21,35 +21,72 @@ from datetime import datetime
 import io
 import contextlib
 
-@contextlib.contextmanager
-def stderrIO(stderr=None):
-    old = sys.stderr
-    if stderr is None:
-        stderr = io.StringIO()
-    sys.stderr = stderr
-    yield stderr
-    sys.stderr = old
-
+#####Test Type Decorators#####
 def gui(func):
     if not sys.TestArgs.gui:
         print('Skipping gui Test')
         return None
     else:
         return func
+
 def create(func):
     if not sys.TestArgs.create:
         print('Skipping create Test')
         return None
     else:
         return func
+
 def destroy(func):
     if not sys.TestArgs.destroy:
         print('Skipping destroy Test')
         return None
     else:
         return func
+##############################
 
+###Software Type Decorators###
+def terraform(func):
+    installed = True
+    if not installed:
+        print('Skipping terraform test')
+        return None
+    else:
+        return func
 
+def aws(func):
+    installed = True
+    if not installed:
+        print('Skipping aws test')
+        return None
+    else:
+        return func
+
+def kubectl(func):
+    installed = True
+    if not installed:
+        print('Skipping kubectl test')
+        return None
+    else:
+        return func
+
+def qt(func):
+    installed = True
+    if not installed:
+        print('Skipping qt test')
+        return None
+    else:
+        return func
+
+def docker(func):
+    installed = True
+    if not installed:
+        print('Skipping docker test')
+        return None
+    else:
+        return func
+##############################
+
+#########Base Classes#########
 class TimedTest(unittest.TestCase):
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
@@ -65,10 +102,13 @@ class TimedTest(unittest.TestCase):
 
     def setUp(self):
         self.starttime = datetime.now()
+
     def tearDown(self):
         t = datetime.now() - self.starttime
         print(str(t), self.id())
+##############################
 
+#############Main#############
 class TestRunner():
     SkippedCount = 0
     def __init__(self):
@@ -111,8 +151,18 @@ class TestRunner():
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 self.TestSuite.addTest(unittest.makeSuite(Class))
-
+    
+    @contextlib.contextmanager
+    def GetStderrIO(self, stderr=None):
+        old = sys.stderr
+        if stderr is None:
+            stderr = io.StringIO()
+        sys.stderr = stderr
+        yield stderr
+        sys.stderr = old
+    
     def LoadTestVars(self):
+
         parser = argparse.ArgumentParser()
         def csv(val): return val.split(',')
         parser.add_argument("-folders", help="Specify a list of test folders to run.", type=csv)
@@ -128,7 +178,7 @@ class TestRunner():
             self.TestArgs.folders = [self.TestArgs.folder]
         if self.TestArgs.gui == None:
             try:
-                with stderrIO() as stderr:
+                with self.GetStderrIO() as stderr:
                     exec("from Qt import QtCore")
                 if stderr.getvalue() == '':
                     self.TestArgs.gui = True
@@ -145,3 +195,4 @@ if __name__ == '__main__':
     TestInstance = TestRunner()
     TestInstance.main()
     #unittest.main()
+##############################

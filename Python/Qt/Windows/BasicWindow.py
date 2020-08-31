@@ -32,12 +32,14 @@ class test_BasicWindow(TestKit.TimedTest):
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
     @TestKit.gui
+    @TestKit.qt
     def test_1(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         time.sleep(SleepTime)
 
     @TestKit.gui
+    @TestKit.qt
     def test_2(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
