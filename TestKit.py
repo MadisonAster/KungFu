@@ -17,11 +17,28 @@ import sys, os
 import unittest, inspect, argparse
 from importlib import util
 from datetime import datetime
+import subprocess, shlex
 
 import io
 import contextlib
 
-#####Test Type Decorators#####
+######TestArg Decorators######
+'''
+def TestArgDecorator(func):
+    print(inspect.currentframe().f_code.co_name)
+    print(inspect.currentframe().f_trace)
+    print(dir(inspect.currentframe()))
+    if not getattr(sys.TestArgs, func.__name__):
+        print('Skipping '+func.__name__+' Test')
+        return None
+    else:
+        return func
+
+globals()['gui'] = TestArgDecorator
+globals()['create'] = TestArgDecorator
+globals()['destroy'] = TestArgDecorator
+'''
+
 def gui(func):
     if not sys.TestArgs.gui:
         print('Skipping gui Test')
@@ -44,46 +61,230 @@ def destroy(func):
         return func
 ##############################
 
-###Software Type Decorators###
+#####Software Decorators######
+'''
+def SoftwareDecorator(func):
+    print(inspect.currentframe().f_code.co_name)
+    print(inspect.currentframe().f_trace)
+    print(dir(inspect.currentframe()))
+    if not DependencyHandler().check(func.__name__):
+        print('Skipping '+func.__name__+' test')
+        return None
+    else:
+        return func
+
+globals()['qt'] = SoftwareDecorator
+globals()['terraform'] = SoftwareDecorator
+globals()['aws'] = SoftwareDecorator
+globals()['kubectl'] = SoftwareDecorator
+globals()['docker'] = SoftwareDecorator
+globals()['pandas'] = SoftwareDecorator
+'''
 def terraform(func):
-    installed = True
-    if not installed:
+    if not DependencyHandler().check('terraform'):
         print('Skipping terraform test')
         return None
     else:
         return func
 
 def aws(func):
-    installed = True
-    if not installed:
+    if not DependencyHandler().check('aws'):
         print('Skipping aws test')
         return None
     else:
         return func
 
 def kubectl(func):
-    installed = True
-    if not installed:
+    if not DependencyHandler().check('kubectl'):
         print('Skipping kubectl test')
         return None
     else:
         return func
 
 def qt(func):
-    installed = True
-    if not installed:
+    if not DependencyHandler().check('qt'):
         print('Skipping qt test')
         return None
     else:
         return func
 
 def docker(func):
-    installed = True
-    if not installed:
+    if not DependencyHandler().check('docker'):
         print('Skipping docker test')
         return None
     else:
         return func
+##############################
+
+#####Dependency Handling######
+class DependencyHandler():
+    cwd = os.path.dirname(os.path.abspath(__file__))
+    Installed = []
+    NotInstalled = {}
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(sys, 'DependencyHandler'): #Global Singleton
+            sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
+        return sys.DependencyHandler
+    def __init__(self):
+        if len(self.Installed) == 0:
+            self.check_dependencies()
+
+    def check(self, name):
+        if name in self.Installed:
+            return True
+        elif name in self.NotInstalled.keys():
+            return False
+
+    def check_dependencies(self):
+        print('DependencyHandler.check_dependencies')
+        for FunctionName, Function in inspect.getmembers(self.__class__):
+            if Function:
+                if 'check_' in FunctionName and FunctionName != 'check_dependencies':
+                    Function(self)
+
+    def run_installers(self):
+        if len(self.NotInstalled.keys()) == 0:
+            return
+        else:
+            print("Some tests couldn't run because the following tools were not found on your system:")
+            for key in self.NotInstalled.keys():
+                print(key)
+            print('Would you like to try installing them automatically?')
+            print('(THESE ARE 3RD PARTY TOOLS AND THIS IS STILL UNTESTED! RUN AT YOUR OWN RISK!)')
+            
+            try_installers = False
+            if try_installers:
+                for function in self.NotInstalled.values():
+                    function()
+    
+    @contextlib.contextmanager
+    def GetStderrIO(self, stderr=None):
+        old = sys.stderr
+        if stderr is None:
+            stderr = io.StringIO()
+        sys.stderr = stderr
+        yield stderr
+        sys.stderr = old
+
+    def run_command(self, CommandString, printout=True):
+        if printout:
+            print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
+            print('run_command', CommandString)
+        result = u""
+        with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=self.cwd) as proc:
+            while True:
+                stdout = proc.stdout.readline()
+                if stdout:
+                    result += stdout.decode('utf8')
+                    if printout:
+                        print(stdout.decode('utf8'))
+                if proc.poll() is not None:
+                    break
+            returncode = proc.poll()
+        if printout:
+            print('returncode', returncode)
+            print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        return result, returncode
+
+    def check_terraform(self):
+        print('check_terraform')
+        #self.run_command('terraform -help')
+        installed = True
+        if installed:
+            self.Installed.append('terraform')
+        else:
+            self.NotInstalled['terraform'] = self.install_terraform
+        return installed
+    def install_terraform(self):
+        print('install_terraform')
+        self.run_command('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
+        self.run_command('sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"')
+        self.run_command('sudo apt-get update && sudo apt-get install terraform')
+        self.run_command('terraform -help')
+
+    def check_aws(self):
+        print('check_aws')
+        #self.run_command('aws --version')
+        installed = True
+        if installed:
+            self.Installed.append('aws')
+        else:
+            self.NotInstalled['aws'] = self.install_aws
+        return installed
+    def install_aws(self):
+        print('install_aws')
+        self.run_command('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
+        self.run_command('unzip awscliv2.zip')
+        self.run_command('sudo ./aws/install')
+        self.run_command('aws --version')
+
+    def check_kubectl(self):
+        print('check_kubectl')
+        #self.run_command('kubectl version --short --client')
+        installed = True
+        if installed:
+            self.Installed.append('kubectl')
+        else:
+            self.NotInstalled['kubectl'] = self.install_kubectl
+        return installed
+    def install_kubectl(self):
+        print('install_kubectl')
+        self.run_command('curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/kubectl')
+        self.run_command('chmod +x ./kubectl')
+        self.run_command('mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/awskubectl && export PATH=$PATH:$HOME/bin') #naming kubectl binary awskubectl to avoid potential WSL2 conflicts
+        #self.run_command('echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc')
+        self.run_command('kubectl version --short --client')
+
+    def check_qt(self):
+        print('check_qt')
+        try:
+            with self.GetStderrIO() as stderr:
+                exec("from Qt import QtCore")
+            if stderr.getvalue() == '':
+                self.Installed.append('gui')
+                installed = True
+            else:
+                print('X server not available! Disabling gui tests!')
+                self.NotInstalled['gui'] = None
+                installed = True
+        except ImportError as exception:
+            installed = False
+        if installed:
+            self.Installed.append('qt')
+        else:
+            self.NotInstalled['qt'] = self.install_qt
+        return installed
+    def install_qt(self):
+        print('install_qt')
+        self.run_command('pip3 install pyside2')
+        self.run_command('pip3 install qt.py')
+
+    def check_docker(self):
+        print('check_docker')
+        installed = True
+        if installed:
+            self.Installed.append('docker')
+        else:
+            self.NotInstalled['docker'] = self.install_docker
+        return installed
+    def install_docker(self):
+        print('install_docker')
+
+    def check_pandas(self):
+        print('check_pandas')
+        try:
+            import pandas    
+            installed = True
+        except ImportError as exception:
+            installed = False
+        if installed:
+            self.Installed.append('pandas')
+        else:
+            self.NotInstalled['pandas'] = self.install_pandas
+        return installed
+    def install_pandas(self):
+        print('install_pandas')
+        self.run_command('pip3 install pandas')
 ##############################
 
 #########Base Classes#########
@@ -152,17 +353,7 @@ class TestRunner():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 self.TestSuite.addTest(unittest.makeSuite(Class))
     
-    @contextlib.contextmanager
-    def GetStderrIO(self, stderr=None):
-        old = sys.stderr
-        if stderr is None:
-            stderr = io.StringIO()
-        sys.stderr = stderr
-        yield stderr
-        sys.stderr = old
-    
     def LoadTestVars(self):
-
         parser = argparse.ArgumentParser()
         def csv(val): return val.split(',')
         parser.add_argument("-folders", help="Specify a list of test folders to run.", type=csv)
@@ -177,22 +368,15 @@ class TestRunner():
         if self.TestArgs.folder != None:
             self.TestArgs.folders = [self.TestArgs.folder]
         if self.TestArgs.gui == None:
-            try:
-                with self.GetStderrIO() as stderr:
-                    exec("from Qt import QtCore")
-                if stderr.getvalue() == '':
-                    self.TestArgs.gui = True
-                else:
-                    print('X server not available! Disabling gui tests!')
-                    self.TestArgs.gui = False
-            except ImportError as exception:
-                raise exception
+            self.TestArgs.gui = DependencyHandler().check('gui')
         print(self.TestArgs)
         sys.TestArgs = self.TestArgs
         return self.TestArgs
 
 if __name__ == '__main__':
+    Dependencies = DependencyHandler()
     TestInstance = TestRunner()
     TestInstance.main()
+    Dependencies.run_installers()
     #unittest.main()
 ##############################
