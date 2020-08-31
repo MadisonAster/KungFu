@@ -25,13 +25,10 @@ class TranslucentWindow(PythonBaseClasses.BasicWindow):
 class test_TranslucentWindow(TestKit.TimedTest):
     def __init__(self, *args):
         super(test_TranslucentWindow, self).__init__(*args)
-        if sys.TestArgs.gui:
-            PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
-
-    def test_1(self, SleepTime=0.5, gui=True):
-        if not gui:
-            print('Skipping gui Test')
-            return
+        PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
+    
+    @TestKit.gui
+    def test_1(self, SleepTime=0.5):
         self.MainWindow = TranslucentWindow()
         self.MainWindow.show()
         time.sleep(SleepTime)

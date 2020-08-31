@@ -17,8 +17,6 @@ import sys, os
 import unittest, inspect, argparse
 from importlib import util
 from datetime import datetime
-import warnings
-import traceback
 
 import io
 import contextlib
@@ -32,17 +30,26 @@ def stderrIO(stderr=None):
     yield stderr
     sys.stderr = old
 
+def gui(func):
+    if not sys.TestArgs.gui:
+        print('Skipping gui Test')
+        return None
+    else:
+        return func
+
+
 class TimedTest(unittest.TestCase):
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
         for FunctionName, Function in inspect.getmembers(self.__class__):
-            if 'test_' in FunctionName and Function.__defaults__ != None:
-                arglist = list(Function.__defaults__)
-                for (key, value) in sys.TestArgs._get_kwargs():
-                    if key in Function.__code__.co_varnames:
-                        i = Function.__code__.co_varnames.index(key)
-                        arglist[i-1] = value
-                Function.__defaults__ = tuple(arglist)
+            if Function:
+                if 'test_' in FunctionName and Function.__defaults__ != None:
+                    arglist = list(Function.__defaults__)
+                    for (key, value) in sys.TestArgs._get_kwargs():
+                        if key in Function.__code__.co_varnames:
+                            i = Function.__code__.co_varnames.index(key)
+                            arglist[i-1] = value
+                    Function.__defaults__ = tuple(arglist)
 
     def setUp(self):
         self.starttime = datetime.now()

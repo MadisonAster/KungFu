@@ -29,21 +29,16 @@ class test_BasicWindow(TestKit.TimedTest):
     def __init__(self, *args):
         super(test_BasicWindow, self).__init__(*args)
         print('test_BasicWindow')
-        if sys.TestArgs.gui:
-            PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
+        PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
-    def test_1(self, SleepTime=0.5, gui=True):
-        if not gui:
-            print('Skipping gui Test')
-            return
+    @TestKit.gui
+    def test_1(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         time.sleep(SleepTime)
 
-    def test_2(self, SleepTime=0.5, gui=True):
-        if not gui:
-            print('Skipping gui Test')
-            return
+    @TestKit.gui
+    def test_2(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         self.MainWindow.resize(self.MainWindow.QAvailableGeo.width()/2, self.MainWindow.QAvailableGeo.height()-self.MainWindow.QStartBarHeight)
