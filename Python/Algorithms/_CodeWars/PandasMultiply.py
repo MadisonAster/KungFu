@@ -12,15 +12,15 @@ import TestKit
 
 #Test#############################################
 class test_PandasMult(TestKit.TimedTest):
-    @TestKit.pandas
+    @TestKit.depends('pandas')
     def test_1(self):
         PandasMult('a', 'b')
 
-    @TestKit.pandas
+    @TestKit.depends('pandas')
     def test_2(self):
         PandasMult('a', 'c')
 
-    @TestKit.pandas
+    @TestKit.depends('pandas')
     def test_3(self):
         PandasMult('b', 'c')
 ##################################################
@@ -33,7 +33,6 @@ if not TestKit.DependencyHandler().check('pandas'):
 #Code#############################################
 import pandas
 def PandasMult(left, right):
-
     a = pandas.Series((100, 1, 10, 65), dtype=object)
     b = pandas.Series((-85, -234, 32, 104), dtype=int)
     c = pandas.Series((205.3, 3.5, 234.3, 8403.32), dtype=float)

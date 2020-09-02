@@ -55,28 +55,35 @@ class test_EKSCluster(TestKit.TimedTest):
         t = datetime.now() - self.starttime
         print(str(t), self.id())
 
+    @TestKit.depends('terraform', 'aws')
     def test_01_init(self):
         result, returncode = self.__class__.TestCluster.init()
         self.assertEqual(returncode, 0)
     
+    @TestKit.depends('terraform', 'aws')
     def test_02_plan(self):
         result, returncode = self.__class__.TestCluster.plan()
         self.assertEqual(returncode, 0)
+
+    @TestKit.depends('terraform', 'aws')
     def test_03_plan_destroy(self):
         result, returncode = self.__class__.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
 
+    @TestKit.depends('terraform', 'aws')
     @TestKit.create
     def test_04_apply(self):
         result, returncode = self.__class__.TestCluster.apply()
         self.assertEqual(returncode, 0)
 
+    @TestKit.depends('terraform', 'aws')
     @TestKit.create
     def test_05_output(self):
         result, returncode = self.__class__.TestCluster.output()
         print('vpc_id', self.__class__.TestCluster['vpc_id'])
         self.assertEqual(returncode, 0)
 
+    @TestKit.depends('terraform', 'aws')
     @TestKit.destroy
     def test_06_destroy(self):
         result, returncode = self.__class__.TestCluster.destroy()

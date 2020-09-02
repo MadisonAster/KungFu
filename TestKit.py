@@ -13,42 +13,19 @@ python3 TestKit.py -gui False               #Force gui tests not to run.
 python3 TestKit.py --create                 #Run tests that provision real cloud resources. THIS WILL COST MONEY!
 python3 TestKit.py --destroy                #Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!
 '''
+#Standard Imports#################################
 import sys, os
 import unittest, inspect, argparse
 from importlib import util
 from datetime import datetime
 import subprocess, shlex
 import traceback
-
+import functools
 import io
 import contextlib
+##################################################
 
-######TestArg Decorators######
-'''
-def TestArgDecorator(func):
-    print(inspect.currentframe().f_code.co_name)
-    print(inspect.currentframe().f_trace)
-    print(dir(inspect.currentframe()))
-    if not getattr(sys.TestArgs, func.__name__):
-        print('Skipping '+func.__name__+' Test')
-        return None
-    else:
-        return func
-
-globals()['gui'] = TestArgDecorator
-globals()['create'] = TestArgDecorator
-globals()['destroy'] = TestArgDecorator
-'''
-
-def gui(func):
-    if sys.TestArgs.gui == None:
-        qt(func)
-    if not sys.TestArgs.gui:
-        print('Skipping gui Test')
-        return None
-    else:
-        return func
-
+#Decorators#######################################
 def create(func):
     if not sys.TestArgs.create:
         print('Skipping create Test')
@@ -62,83 +39,25 @@ def destroy(func):
         return None
     else:
         return func
-##############################
 
-#####Software Decorators######
-'''
-def SoftwareDecorator(func):
-    print(inspect.currentframe().f_code.co_name)
-    print(inspect.currentframe().f_trace)
-    print(dir(inspect.currentframe()))
-    if not DependencyHandler().check(func.__name__):
-        print('Skipping '+func.__name__+' test')
-        return None
-    else:
-        return func
+def depends(*args):
+    dependencylist = args
+    def actual_decorator(func):
+        for dependency in dependencylist:
+            if not DependencyHandler().check(dependency):
+                print('Skipping '+dependency+' test.')
+                DependencyHandler().SkipCount += 1
+                return None
+        else:
+            if func:
+                @functools.wraps(func)
+                def wrapper(*args, **kwargs):
+                    return func(*args, **kwargs)
+                return wrapper
+    return actual_decorator
+##################################################
 
-globals()['qt'] = SoftwareDecorator
-globals()['terraform'] = SoftwareDecorator
-globals()['aws'] = SoftwareDecorator
-globals()['kubectl'] = SoftwareDecorator
-globals()['docker'] = SoftwareDecorator
-globals()['pandas'] = SoftwareDecorator
-'''
-def terraform(func):
-    if not DependencyHandler().check('terraform'):
-        print('Skipping terraform test')
-        if func != None:
-            DependencyHandler().SkipCount += 1
-        return None
-    else:
-        return func
-
-def aws(func):
-    if not DependencyHandler().check('aws'):
-        print('Skipping aws test')
-        if func != None:
-            DependencyHandler().SkipCount += 1
-        return None
-    else:
-        return func
-
-def kubectl(func):
-    if not DependencyHandler().check('kubectl'):
-        print('Skipping kubectl test')
-        if func != None:
-            DependencyHandler().SkipCount += 1
-        return None
-    else:
-        return func
-
-def qt(func):
-    if not DependencyHandler().check('qt'):
-        print('Skipping qt test')
-        if func != None:
-            DependencyHandler().SkipCount += 1
-        return None
-    else:
-        return func
-
-def docker(func):
-    if not DependencyHandler().check('docker'):
-        print('Skipping docker test')
-        if func != None:
-            DependencyHandler().SkipCount += 1
-        return None
-    else:
-        return func
-
-def pandas(func):
-    if not DependencyHandler().check('pandas'):
-        print('Skipping pandas test')
-        if func != None:
-            DependencyHandler().SkipCount += 1
-        return None
-    else:
-        return func
-##############################
-
-#####Dependency Handling######
+#Dependency Handling##############################
 class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
@@ -260,30 +179,33 @@ class DependencyHandler():
         self.run_command('kubectl version --short --client')
 
     def check_gui(self):
-        installed = self.check_qt() and 'gui' in self.Installed
-        return installed
-    def check_qt(self):
-        print('check_qt')
+        print('check_gui')
         try:
             with self.GetStderrIO() as stderr:
                 exec("from Qt import QtCore")
             if stderr.getvalue() == '':
-                print('installed')
                 self.Installed.append('gui')
                 installed = True
             else:
                 print('X server not available! Disabling gui tests!')
                 self.NotInstalled['gui'] = None
-                installed = True
+                installed = False
         except ImportError as exception:
-            print('exception')
+            print('Qt not available! Disabling gui tests!')
+            self.NotInstalled['gui'] = None
             installed = False
-        print('installed', installed)
+        return installed
+    def check_qt(self):
+        print('check_qt')
+        try:
+            exec("from Qt import QtCore")
+            installed = True
+        except ImportError as exception:
+            installed = False
         if installed:
             self.Installed.append('qt')
         else:
             self.NotInstalled['qt'] = self.install_qt
-        print('qt installed', installed)
         return installed
     def install_qt(self):
         print('install_qt')
@@ -317,9 +239,9 @@ class DependencyHandler():
     def install_pandas(self):
         print('install_pandas')
         self.run_command('pip3 install pandas')
-##############################
+##################################################
 
-#########Base Classes#########
+#Base Classes#####################################
 class TimedTest(unittest.TestCase):
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
@@ -339,9 +261,9 @@ class TimedTest(unittest.TestCase):
     def tearDown(self):
         t = datetime.now() - self.starttime
         print(str(t), self.id())
-##############################
+##################################################
 
-#############Main#############
+#Main#############################################
 class TestRunner():
     SkippedCount = 0
     def __init__(self):
@@ -351,7 +273,6 @@ class TestRunner():
         self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
-        print('TestRunner.main')
         self.Runner = unittest.TextTestRunner()
         self.Runner.run(self.TestSuite)
 
@@ -372,7 +293,6 @@ class TestRunner():
 
     def ImportTests(self, ModulePath):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
-        print('ImportTests', ModuleName)
         if ModuleName in ['TestKit'] or 'BaseClasses' in ModuleName:
             return
         if ModuleName in globals().keys():
@@ -383,8 +303,7 @@ class TestRunner():
             ModuleSpec.loader.exec_module(Module)
         except Exception as e: #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
             if str(e) == 'return':
-                print(traceback.format_exc())
-                #pass
+                pass
             else:
                 print(traceback.format_exc())
                 raise e            
@@ -423,4 +342,4 @@ if __name__ == '__main__':
     TestInstance.main()
     Dependencies.run_installers()
     #unittest.main()
-##############################
+##################################################

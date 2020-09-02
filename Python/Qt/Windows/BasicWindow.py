@@ -20,15 +20,13 @@ class test_BasicWindow(TestKit.TimedTest):
         print('test_BasicWindow')
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
-    @TestKit.gui
-    @TestKit.qt
+    @TestKit.depends('qt', 'gui')
     def test_1(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         time.sleep(SleepTime)
 
-    @TestKit.gui
-    @TestKit.qt
+    @TestKit.depends('qt', 'gui')
     def test_2(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
@@ -44,7 +42,6 @@ if not TestKit.DependencyHandler().check('qt'):
 
 #Code#############################################
 from Qt import QtCore, QtGui, QtWidgets
-@TestKit.qt
 class BasicWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super(BasicWindow, self).__init__(*args, **kwargs)

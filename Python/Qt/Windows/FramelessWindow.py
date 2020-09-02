@@ -19,8 +19,7 @@ class test_FramelessWindow(TestKit.TimedTest):
         super(test_FramelessWindow, self).__init__(*args)
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
-    @TestKit.gui
-    @TestKit.qt
+    @TestKit.depends('qt', 'gui')
     def test_1(self, SleepTime=0.5):
         self.MainWindow = FramelessWindow()
         self.MainWindow.show()
