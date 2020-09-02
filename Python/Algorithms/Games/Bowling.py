@@ -1,4 +1,4 @@
-import TestKit
+import KungFu
 
 class Game():
     def __init__(self):
@@ -32,7 +32,7 @@ class Game():
                 roll += 2
         return score
 
-class BowlingGameTest(TestKit.TimedTest):
+class BowlingGameTest(KungFu.TimedTest):
     def rollMany(self, rolls, pins):
         for i in range(rolls):
             self.game.roll(pins)

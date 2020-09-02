@@ -3,9 +3,9 @@ import os, sys, importlib
 ##################################################
 
 #Relative Imports#################################
-if 'TestKit' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['TestKit'] = importlib.machinery.SourceFileLoader('TestKit', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/TestKit.py').load_module()
-import TestKit
+if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/KungFu.py').load_module()
+import KungFu
 ##################################################
 
 #Test#############################################
@@ -13,7 +13,7 @@ import TestKit
 ##################################################
 
 #3rd Party Inheritance Check######################
-if not TestKit.DependencyHandler().check('qt'):
+if not KungFu.DependencyHandler().check('qt'):
     raise Exception('return')
 ##################################################
 

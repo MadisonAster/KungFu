@@ -3,15 +3,15 @@ Recursively searches folders below the location of this file.
 Runs any unittest class that begins with test_
 
 examples:
-python3 TestKit.py                          #run all tests, automatically decide if gui is available
+python3 KungFu.py                          #run all tests, automatically decide if gui is available
 
-python3 TestKit.py -sleep 1.0               #run tests with a sleeptime of 1.0 seconds
-python3 TestKit.py -folder Python/Qt        #run all tests in the Python/Qt folder
-python3 TestKit.py -folders Python,AWS      #run all tests in the Python and AWS folders
-python3 TestKit.py -gui True                #Force gui tests to run.
-python3 TestKit.py -gui False               #Force gui tests not to run.
-python3 TestKit.py --create                 #Run tests that provision real cloud resources. THIS WILL COST MONEY!
-python3 TestKit.py --destroy                #Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!
+python3 KungFu.py -sleep 1.0               #run tests with a sleeptime of 1.0 seconds
+python3 KungFu.py -folder Python/Qt        #run all tests in the Python/Qt folder
+python3 KungFu.py -folders Python,AWS      #run all tests in the Python and AWS folders
+python3 KungFu.py -gui True                #Force gui tests to run.
+python3 KungFu.py -gui False               #Force gui tests not to run.
+python3 KungFu.py --create                 #Run tests that provision real cloud resources. THIS WILL COST MONEY!
+python3 KungFu.py --destroy                #Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!
 '''
 #Standard Imports#################################
 import sys, os
@@ -293,7 +293,7 @@ class TestRunner():
 
     def ImportTests(self, ModulePath):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
-        if ModuleName in ['TestKit'] or 'BaseClasses' in ModuleName:
+        if ModuleName in ['KungFu'] or 'BaseClasses' in ModuleName:
             return
         if ModuleName in globals().keys():
             raise Exception('Namespace conflict found. Module name already in use, pick another.', ModuleName)

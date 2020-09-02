@@ -2,10 +2,10 @@ import os, sys, importlib, unittest
 
 if 'AWSBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
     sys.modules['AWSBaseClasses'] = importlib.machinery.SourceFileLoader('AWSBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/AWSBaseClasses.py').load_module()
-if 'TestKit' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['TestKit'] = importlib.machinery.SourceFileLoader('TestKit', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/TestKit.py').load_module()
+if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/TestKit.py').load_module()
 import AWSBaseClasses
-import TestKit
+import KungFu
 
 class SimpleCluster(AWSBaseClasses.EKSCluster):
     def __init__(self):

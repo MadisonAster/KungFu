@@ -5,28 +5,28 @@ import functools
 ##################################################
 
 #Relative Imports#################################
-if 'TestKit' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['TestKit'] = importlib.machinery.SourceFileLoader('TestKit', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/TestKit.py').load_module()
-import TestKit
+if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
+import KungFu
 ##################################################
 
 #Test#############################################
-class test_PandasMult(TestKit.TimedTest):
-    @TestKit.depends('pandas')
+class test_PandasMult(KungFu.TimedTest):
+    @KungFu.depends('pandas')
     def test_1(self):
         PandasMult('a', 'b')
 
-    @TestKit.depends('pandas')
+    @KungFu.depends('pandas')
     def test_2(self):
         PandasMult('a', 'c')
 
-    @TestKit.depends('pandas')
+    @KungFu.depends('pandas')
     def test_3(self):
         PandasMult('b', 'c')
 ##################################################
 
 #Inheritance Check################################
-if not TestKit.DependencyHandler().check('pandas'):
+if not KungFu.DependencyHandler().check('pandas'):
     raise Exception('return') #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
 ##################################################
 
@@ -43,6 +43,6 @@ def PandasMult(left, right):
 
 #Main#############################################
 if __name__ == '__main__':
-    TestKit.LoadTestVars()
+    KungFu.LoadTestVars()
     unittest.main()
 ##################################################
