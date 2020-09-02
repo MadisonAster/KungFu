@@ -41,6 +41,9 @@ globals()['destroy'] = TestArgDecorator
 '''
 
 def gui(func):
+    print('gui decorator')
+    if sys.TestArgs.gui == None:
+        qt(func)
     if not sys.TestArgs.gui:
         print('Skipping gui Test')
         return None
@@ -103,6 +106,7 @@ def kubectl(func):
         return func
 
 def qt(func):
+    print('qt decorator')
     if not DependencyHandler().check('qt'):
         print('Skipping qt test')
         return None
@@ -126,23 +130,26 @@ class DependencyHandler():
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
         return sys.DependencyHandler
-    def __init__(self):
-        if len(self.Installed) == 0:
-            self.check_dependencies()
 
     def check(self, name):
         if name in self.Installed:
             return True
         elif name in self.NotInstalled.keys():
             return False
+        else:
+            for FunctionName, Function in inspect.getmembers(self.__class__):
+                if FunctionName == 'check_'+name:
+                    Function(self)
+                    return self.check(name)
 
-    def check_dependencies(self):
-        print('DependencyHandler.check_dependencies')
+    '''
+    def check_all_dependencies(self): #UNUSED
         for FunctionName, Function in inspect.getmembers(self.__class__):
             if Function:
-                if 'check_' in FunctionName and FunctionName != 'check_dependencies':
+                if 'check_' in FunctionName and FunctionName != 'check_all_dependencies':
                     Function(self)
-
+    '''
+    
     def run_installers(self):
         if len(self.NotInstalled.keys()) == 0:
             return
@@ -241,12 +248,15 @@ class DependencyHandler():
         #self.run_command('echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc')
         self.run_command('kubectl version --short --client')
 
+    def check_gui(self):
+        self.check_qt()
     def check_qt(self):
         print('check_qt')
         try:
             with self.GetStderrIO() as stderr:
                 exec("from Qt import QtCore")
             if stderr.getvalue() == '':
+                print('installed')
                 self.Installed.append('gui')
                 installed = True
             else:
@@ -254,7 +264,9 @@ class DependencyHandler():
                 self.NotInstalled['gui'] = None
                 installed = True
         except ImportError as exception:
+            print('exception')
             installed = False
+        print('installed', installed)
         if installed:
             self.Installed.append('qt')
         else:
