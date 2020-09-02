@@ -87,6 +87,8 @@ globals()['pandas'] = SoftwareDecorator
 def terraform(func):
     if not DependencyHandler().check('terraform'):
         print('Skipping terraform test')
+        if func != None:
+            DependencyHandler().SkipCount += 1
         return None
     else:
         return func
@@ -94,6 +96,8 @@ def terraform(func):
 def aws(func):
     if not DependencyHandler().check('aws'):
         print('Skipping aws test')
+        if func != None:
+            DependencyHandler().SkipCount += 1
         return None
     else:
         return func
@@ -101,6 +105,8 @@ def aws(func):
 def kubectl(func):
     if not DependencyHandler().check('kubectl'):
         print('Skipping kubectl test')
+        if func != None:
+            DependencyHandler().SkipCount += 1
         return None
     else:
         return func
@@ -109,6 +115,8 @@ def qt(func):
     print('qt decorator')
     if not DependencyHandler().check('qt'):
         print('Skipping qt test')
+        if func != None:
+            DependencyHandler().SkipCount += 1
         return None
     else:
         return func
@@ -116,6 +124,8 @@ def qt(func):
 def docker(func):
     if not DependencyHandler().check('docker'):
         print('Skipping docker test')
+        if func != None:
+            DependencyHandler().SkipCount += 1
         return None
     else:
         return func
@@ -126,6 +136,7 @@ class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
     NotInstalled = {}
+    SkipCount = 0
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
@@ -139,22 +150,15 @@ class DependencyHandler():
         else:
             for FunctionName, Function in inspect.getmembers(self.__class__):
                 if FunctionName == 'check_'+name:
-                    Function(self)
-                    return self.check(name)
+                    return Function(self)
 
-    '''
-    def check_all_dependencies(self): #UNUSED
-        for FunctionName, Function in inspect.getmembers(self.__class__):
-            if Function:
-                if 'check_' in FunctionName and FunctionName != 'check_all_dependencies':
-                    Function(self)
-    '''
-    
     def run_installers(self):
+        if 'gui' in self.NotInstalled.keys():
+            del self.NotInstalled['gui']
         if len(self.NotInstalled.keys()) == 0:
             return
         else:
-            print("Some tests couldn't run because the following tools were not found on your system:")
+            print(str(self.SkipCount)+" tests couldn't run because the following tools were not found on your system:")
             for key in self.NotInstalled.keys():
                 print(key)
             print('Would you like to try installing them automatically?')
