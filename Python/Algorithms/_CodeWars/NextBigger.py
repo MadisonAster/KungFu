@@ -31,7 +31,7 @@ def next_bigger(n):
 
 
 
-class next_bigger_test(unittest.TestCase):
+class test_next_bigger(unittest.TestCase):
     def startUp(self):
         pass
     def tearDown(self):

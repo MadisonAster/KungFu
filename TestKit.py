@@ -362,6 +362,7 @@ class TestRunner():
 
     def ImportTests(self, ModulePath):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
+        print('ImportTests', ModuleName)
         if ModuleName in ['TestKit'] or 'BaseClasses' in ModuleName:
             return
         if ModuleName in globals().keys():
@@ -374,6 +375,7 @@ class TestRunner():
             if 'test_' in ClassName:
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
+                globals()[ClassName] = Class
                 self.TestSuite.addTest(unittest.makeSuite(Class))
     
     def LoadTestVars(self):
