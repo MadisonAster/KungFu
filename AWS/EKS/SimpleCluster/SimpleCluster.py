@@ -20,5 +20,4 @@ class test_SimpleCluster(AWSBaseClasses.test_EKSCluster):
         self.assertEqual(returncode, 0)
 
 if __name__ == '__main__':
-    TestKit.LoadTestVars()
-    unittest.main()
+    KungFu.main(__file__)

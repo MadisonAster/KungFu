@@ -60,6 +60,5 @@ class BasicWindow(QtWidgets.QMainWindow):
 
 #Main#############################################
 if __name__ == '__main__':
-    KungFu.LoadTestVars()
-    unittest.main()
+    KungFu.main(__file__)
 ##################################################

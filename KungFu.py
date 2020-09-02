@@ -266,15 +266,20 @@ class TimedTest(unittest.TestCase):
 #Main#############################################
 class TestRunner():
     SkippedCount = 0
-    def __init__(self):
+    def __init__(self, *args):
         super(TestRunner, self).__init__()
         self.TestSuite = unittest.TestSuite()
         self.TestArgs = self.LoadTestVars()
-        self.RecursiveImport(folders=self.TestArgs.folders)
+        if len(args) > 0:
+            for filepath in args:
+                self.ImportTests(os.path.abspath(filepath))
+        else:
+            self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
         self.Runner = unittest.TextTestRunner()
         self.Runner.run(self.TestSuite)
+
 
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
@@ -336,10 +341,12 @@ class TestRunner():
         sys.TestArgs = self.TestArgs
         return self.TestArgs
 
-if __name__ == '__main__':
+def main(*args):
     Dependencies = DependencyHandler()
-    TestInstance = TestRunner()
+    TestInstance = TestRunner(*args)
     TestInstance.main()
     Dependencies.run_installers()
-    #unittest.main()
+
+if __name__ == '__main__':
+    main()
 ##################################################
