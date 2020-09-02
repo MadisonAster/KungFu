@@ -18,6 +18,7 @@ import unittest, inspect, argparse
 from importlib import util
 from datetime import datetime
 import subprocess, shlex
+import traceback
 
 import io
 import contextlib
@@ -166,35 +167,40 @@ class DependencyHandler():
         yield stderr
         sys.stderr = old
 
-    def run_command(self, CommandString, printout=True):
-        if printout:
+    def run_command(self, CommandString, silent=True):
+        if not silent:
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('run_command', CommandString)
         result = u""
-        with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=self.cwd) as proc:
-            while True:
-                stdout = proc.stdout.readline()
-                if stdout:
-                    result += stdout.decode('utf8')
-                    if printout:
-                        print(stdout.decode('utf8'))
-                if proc.poll() is not None:
-                    break
-            returncode = proc.poll()
-        if printout:
+        try:
+            with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=self.cwd) as proc:
+                while True:
+                    stdout = proc.stdout.readline()
+                    if stdout:
+                        result += stdout.decode('utf8')
+                        if not silent:
+                            print(stdout.decode('utf8'))
+                    if proc.poll() is not None:
+                        break
+                returncode = proc.poll()
+        except:
+            result += traceback.format_exc()
+            returncode = 1
+        if not silent:
             print('returncode', returncode)
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         return result, returncode
 
     def check_terraform(self):
         print('check_terraform')
-        #self.run_command('terraform -help')
-        installed = True
-        if installed:
+        result, returncode = self.run_command('terraform -help')
+        returncode = not bool(returncode)
+        returncode = True
+        if returncode:
             self.Installed.append('terraform')
         else:
             self.NotInstalled['terraform'] = self.install_terraform
-        return installed
+        return returncode
     def install_terraform(self):
         print('install_terraform')
         self.run_command('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
@@ -204,13 +210,13 @@ class DependencyHandler():
 
     def check_aws(self):
         print('check_aws')
-        #self.run_command('aws --version')
-        installed = True
-        if installed:
+        result, returncode = self.run_command('aws --version')
+        returncode = not bool(returncode)
+        if returncode:
             self.Installed.append('aws')
         else:
             self.NotInstalled['aws'] = self.install_aws
-        return installed
+        return returncode
     def install_aws(self):
         print('install_aws')
         self.run_command('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
@@ -220,13 +226,13 @@ class DependencyHandler():
 
     def check_kubectl(self):
         print('check_kubectl')
-        #self.run_command('kubectl version --short --client')
-        installed = True
-        if installed:
+        result, returncode = self.run_command('kubectl version --short --client')
+        returncode = not bool(returncode)
+        if returncode:
             self.Installed.append('kubectl')
         else:
             self.NotInstalled['kubectl'] = self.install_kubectl
-        return installed
+        return returncode
     def install_kubectl(self):
         print('install_kubectl')
         self.run_command('curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/kubectl')
@@ -261,12 +267,13 @@ class DependencyHandler():
 
     def check_docker(self):
         print('check_docker')
-        installed = True
-        if installed:
+        result, returncode = self.run_command('docker --version')
+        returncode = not bool(returncode)
+        if returncode:
             self.Installed.append('docker')
         else:
             self.NotInstalled['docker'] = self.install_docker
-        return installed
+        return returncode
     def install_docker(self):
         print('install_docker')
 
