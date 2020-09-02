@@ -41,7 +41,6 @@ globals()['destroy'] = TestArgDecorator
 '''
 
 def gui(func):
-    print('gui decorator')
     if sys.TestArgs.gui == None:
         qt(func)
     if not sys.TestArgs.gui:
@@ -112,7 +111,6 @@ def kubectl(func):
         return func
 
 def qt(func):
-    print('qt decorator')
     if not DependencyHandler().check('qt'):
         print('Skipping qt test')
         if func != None:
@@ -124,6 +122,15 @@ def qt(func):
 def docker(func):
     if not DependencyHandler().check('docker'):
         print('Skipping docker test')
+        if func != None:
+            DependencyHandler().SkipCount += 1
+        return None
+    else:
+        return func
+
+def pandas(func):
+    if not DependencyHandler().check('pandas'):
+        print('Skipping pandas test')
         if func != None:
             DependencyHandler().SkipCount += 1
         return None
@@ -253,7 +260,8 @@ class DependencyHandler():
         self.run_command('kubectl version --short --client')
 
     def check_gui(self):
-        self.check_qt()
+        installed = self.check_qt() and 'gui' in self.Installed
+        return installed
     def check_qt(self):
         print('check_qt')
         try:
@@ -275,6 +283,7 @@ class DependencyHandler():
             self.Installed.append('qt')
         else:
             self.NotInstalled['qt'] = self.install_qt
+        print('qt installed', installed)
         return installed
     def install_qt(self):
         print('install_qt')
@@ -342,6 +351,7 @@ class TestRunner():
         self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
+        print('TestRunner.main')
         self.Runner = unittest.TextTestRunner()
         self.Runner.run(self.TestSuite)
 
@@ -369,7 +379,16 @@ class TestRunner():
             raise Exception('Namespace conflict found. Module name already in use, pick another.', ModuleName)
         ModuleSpec = util.spec_from_file_location("module.name", ModulePath)
         Module = util.module_from_spec(ModuleSpec)
-        ModuleSpec.loader.exec_module(Module)
+        try:
+            ModuleSpec.loader.exec_module(Module)
+        except Exception as e: #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
+            if str(e) == 'return':
+                print(traceback.format_exc())
+                #pass
+            else:
+                print(traceback.format_exc())
+                raise e            
+
         inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
             if 'test_' in ClassName:
