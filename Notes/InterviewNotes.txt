@@ -78,3 +78,7 @@ Physical keyboard alignment via OpenCV
 
 Twitch donation integration, better streaming widgets
 
+TODO:
+    closures
+    partials (I think he read my code and is telling me how to make it better)
+    doubly linked lists
