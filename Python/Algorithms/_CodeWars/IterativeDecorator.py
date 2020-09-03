@@ -1,19 +1,10 @@
+#Standard Imports#################################
 import unittest
 from datetime import datetime
 import functools
+##################################################
 
-def IterativeDecorator(*args):
-    functionlist = args
-    def wrapper_factory(original_function):
-        @functools.wraps(original_function)
-        def wrapper(N):
-            result = original_function(N)
-            for f in functionlist:
-                result = f(result)
-            return result
-        return wrapper
-    return wrapper_factory
-
+#Test#############################################
 class test_IterativeDecorator(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -29,6 +20,23 @@ class test_IterativeDecorator(unittest.TestCase):
         def f0(N): return N*10
 
         self.assertEqual(f0(10), 2000)
+##################################################
 
+#Code############################################
+def IterativeDecorator(*args):
+    functionlist = args
+    def wrapper_factory(original_function):
+        @functools.wraps(original_function)
+        def wrapper(N):
+            result = original_function(N)
+            for f in functionlist:
+                result = f(result)
+            return result
+        return wrapper
+    return wrapper_factory
+##################################################
+
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
+##################################################
