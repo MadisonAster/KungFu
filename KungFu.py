@@ -64,15 +64,6 @@ def depends(*args):
 ##################################################
 
 #Dependency Handling##############################
-'''
-def AssertInstalled(*args):
-    throw = False
-    for dependency in args:
-        if not DependencyHandler().check(dependency):
-            throw = True
-    raise Exception('return') #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
-'''
-
 class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
