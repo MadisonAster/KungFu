@@ -103,6 +103,8 @@ class DependencyHandler():
                         answer = answer.lower() in ['y', 'yes', 'true']
                         if answer == True:
                             function()
+        else:
+            print('Everything OK!')
         print('----------------------------------------------------------------------')
         print('Goodbye!')
         
