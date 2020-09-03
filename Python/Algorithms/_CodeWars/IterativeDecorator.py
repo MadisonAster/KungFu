@@ -22,7 +22,7 @@ class test_IterativeDecorator(unittest.TestCase):
         self.assertEqual(f0(10), 2000)
 ##################################################
 
-#Code############################################
+#Code#############################################
 def IterativeDecorator(*args):
     functionlist = args
     def wrapper_factory(original_function):
