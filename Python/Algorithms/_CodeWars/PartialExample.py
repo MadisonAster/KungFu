@@ -23,7 +23,15 @@ class test_PartialExample(KungFu.TimedTest):
 #Code#############################################
 def PartialExample(y, d = 1):
     return y/d
-DividePartial = functools.partial(PartialExample,d=2)
+
+def wrapper(func, *args, **kwargs):
+    new_kwargs = {}
+    for kwarg in kwargs.keys():
+        if kwarg in func.__code__.co_varnames:
+            new_kwargs[kwarg] = kwargs[kwarg]
+    return func(*args, **new_kwargs)
+
+DividePartial = functools.partial(wrapper, PartialExample, d=2, SleepTime=1000)
 ##################################################
 
 #Main#############################################

@@ -17,10 +17,11 @@ class test_TranslucentWindow(KungFu.TimedTest):
         super(test_TranslucentWindow, self).__init__(*args)
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
     
-    def test_1(self, SleepTime=0.5):
+    def test_1(self, sleep=0.5):
         self.MainWindow = TranslucentWindow()
         self.MainWindow.show()
-        time.sleep(SleepTime)
+        time.sleep(sleep)
+        self.MainWindow.hide()
 ##################################################
 
 #Inheritance Check################################

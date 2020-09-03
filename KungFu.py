@@ -238,18 +238,25 @@ class DependencyHandler():
 ##################################################
 
 #Base Classes#####################################
+def PartialWrapper(func, self, **kwargs):
+    if type(func)==functools.partial:
+        return func(**kwargs)
+    new_kwargs = {}
+    arglist = list(func.__defaults__)
+    for key in kwargs:
+        if key in func.__code__.co_varnames:
+            i = func.__code__.co_varnames.index(key)
+            arglist[i-1] = kwargs[key]
+    func.__defaults__ = tuple(arglist)
+    return func(self)
+
 class TimedTest(unittest.TestCase):
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
         for FunctionName, Function in inspect.getmembers(self.__class__):
-            if Function:
-                if 'test_' in FunctionName and Function.__defaults__ != None:
-                    arglist = list(Function.__defaults__)
-                    for (key, value) in sys.TestArgs._get_kwargs():
-                        if key in Function.__code__.co_varnames:
-                            i = Function.__code__.co_varnames.index(key)
-                            arglist[i-1] = value
-                    Function.__defaults__ = tuple(arglist)
+            if Function and 'test_' in FunctionName:
+                partial = functools.partial(PartialWrapper, Function, self, **sys.TestArgs.kwargs)
+                setattr(self.__class__, FunctionName, partial)
 
     def setUp(self):
         self.starttime = datetime.now()
@@ -331,6 +338,7 @@ class TestRunner():
         parser.add_argument("--create", help="provision cloud resources, (this will cost money!)", action="store_true")
         parser.add_argument("--destroy", help="destroy cloud resources, (this will destory resouces!)", action="store_true")
         self.TestArgs = parser.parse_args()
+        print(dir(self.TestArgs))
         if self.TestArgs.sleep == None:
             self.TestArgs.sleep = 0.5
         if self.TestArgs.folder != None:
@@ -338,6 +346,12 @@ class TestRunner():
         if self.TestArgs.gui == None:
             print('testargs check gui!')
             self.TestArgs.gui = DependencyHandler().check('gui')
+
+        self.TestArgs.kwargs = {}
+        for (key, value) in self.TestArgs._get_kwargs():
+            if key != 'kwargs':
+                self.TestArgs.kwargs[key] = value
+
         print(self.TestArgs)
         sys.TestArgs = self.TestArgs
         return self.TestArgs

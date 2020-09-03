@@ -18,17 +18,21 @@ class test_BasicWindow(KungFu.TimedTest):
         print('test_BasicWindow')
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
-    def test_1(self, SleepTime=0.5):
+    def test_1(self, sleep=0.5):
+        print('self', self)
+        print('sleep', sleep)
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
-        time.sleep(SleepTime)
+        time.sleep(sleep)
+        self.MainWindow.hide()
 
-    def test_2(self, SleepTime=0.5):
+    def test_2(self, sleep=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         self.MainWindow.resize(self.MainWindow.QAvailableGeo.width()/2, self.MainWindow.QAvailableGeo.height()-self.MainWindow.QStartBarHeight)
         self.MainWindow.move(0,0)
-        time.sleep(SleepTime)
+        time.sleep(sleep)
+        self.MainWindow.hide()
 ##################################################
 
 #Inheritance Check################################
