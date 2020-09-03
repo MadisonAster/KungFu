@@ -86,9 +86,7 @@ class DependencyHandler():
                     return Function(self)
 
     def run_installers(self):
-        if len(self.NotInstalled.keys()) == 0:
-            return
-        else:
+        if len(self.NotInstalled.keys()) != 0:
             print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
             for key in self.NotInstalled.keys():
                 print('    '+key)
@@ -105,8 +103,8 @@ class DependencyHandler():
                         answer = answer.lower() in ['y', 'yes', 'true']
                         if answer == True:
                             function()
-            print('----------------------------------------------------------------------')
-            print('Goodbye!')
+        print('----------------------------------------------------------------------')
+        print('Goodbye!')
         
     @contextlib.contextmanager
     def GetStderrIO(self, stderr=None):
@@ -288,7 +286,7 @@ class TestRunner():
 
     def main(self):
         start = datetime.now()
-        self.Runner = unittest.TextTestRunner(descriptions=0)
+        self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
         result = self.Runner.run(self.TestSuite)
         print('----------------------------------------------------------------------')
         t = datetime.now()-start
@@ -310,7 +308,6 @@ class TestRunner():
 
     def ImportTests(self, ModulePath):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
-        print('ImportTests', ModuleName)
         if ModuleName in ['KungFu'] or 'BaseClasses' in ModuleName:
             return
         if ModuleName in globals().keys():
@@ -325,7 +322,6 @@ class TestRunner():
             else:
                 print(traceback.format_exc())
                 raise e
-
         inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
             if 'test_' in ClassName and Class != None:
