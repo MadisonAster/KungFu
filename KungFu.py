@@ -92,18 +92,19 @@ class DependencyHandler():
             print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
             for key in self.NotInstalled.keys():
                 print('    '+key)
-            print('----------------------------------------------------------------------')
-            print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
-            print('Automated Dependency Installers:')
             if 'gui' in self.NotInstalled.keys():
                 del self.NotInstalled['gui']
-            for key in self.NotInstalled.keys():
-                function = self.NotInstalled[key]
-                if function:
-                    answer = input('    Would you like to try installing '+key+'? ')
-                    answer = answer.lower() in ['y', 'yes', 'true']
-                    if answer == True:
-                        function()
+            if len(self.NotInstalled.keys()) != 0:
+                print('----------------------------------------------------------------------')
+                print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
+                print('Automated Dependency Installers:')
+                for key in self.NotInstalled.keys():
+                    function = self.NotInstalled[key]
+                    if function:
+                        answer = input('    Would you like to try installing '+key+'? ')
+                        answer = answer.lower() in ['y', 'yes', 'true']
+                        if answer == True:
+                            function()
             print('----------------------------------------------------------------------')
             print('Goodbye!')
         
