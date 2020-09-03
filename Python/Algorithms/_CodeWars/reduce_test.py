@@ -1,6 +1,9 @@
+#Standard Imports#################################
 import operator
 from functools import reduce
+##################################################
 
+#Code#############################################
 def find_it_a(xs):
     current = 0
     for i in range(len(xs)):
@@ -15,10 +18,10 @@ def find_it_b(xs):
     
 def find_it_c(xs):
     return reduce(operator.xor, xs)
+##################################################
 
-
+#Test#############################################
 '''
-
 def c_function(fnc, xs):
     #long ret
     
@@ -39,3 +42,9 @@ def c_function(fnc, xs):
 [a, b, c, d, e, f]
 xor(xor(xor(xor(a, b), c), d), e), f)
 '''
+##################################################
+
+#Main#############################################
+if __name__ == '__main__':
+    KungFu.main(__file__)
+##################################################

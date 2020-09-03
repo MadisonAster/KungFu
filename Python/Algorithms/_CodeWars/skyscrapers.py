@@ -20,17 +20,15 @@
            3
 '''
 
-
-#######################Globals############################
+#Standard Imports#################################
 import unittest
 from datetime import datetime
 from copy import copy
+##################################################
 
+#Code#############################################
 _DIMENSIONS = 4 #Global because the Kata does not supply it as an argument, overridden in unit tests
-##########################################################
 
-
-#####################Business Logic#######################
 def SkyScrapers(clues, aslists=False, printgrids=False):
     grid = CreateGrid(_DIMENSIONS)
     if printgrids:
@@ -50,10 +48,7 @@ def SkyScrapers(clues, aslists=False, printgrids=False):
         if printgrids:
             PrintGrid(grid, clues)
     return CollapseResult(grid, aslists)
-##########################################################
 
-
-####################Helper Functions######################
 def CreateGrid(d): #Create grid according to dimensions
     grid = []
     for row in list(range(d)):
@@ -241,11 +236,10 @@ def CollapseResult(grid, aslists): #Final Result
                 newrow += (subset[0],)
             result += (newrow,)
         return result
-##########################################################
+##################################################
 
+#Test#############################################
 
-###################Unit Tests#############################
-'''
 class test_SkyScrapers(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -531,7 +525,7 @@ class test_SkyScrapers(unittest.TestCase):
                     [6, 5, 4, 7, 2, 1, 3], 
                     [3, 4, 7, 5, 1, 6, 2]]
         self.assertEqual(SkyScrapers(clues, aslists=True), expected)
-    
+    '''
     def test_7x7_14(self):
         #return
         global _DIMENSIONS
@@ -548,6 +542,7 @@ class test_SkyScrapers(unittest.TestCase):
                     [7, 6, 2, 5, 1, 3, 4], 
                     [3, 5, 1, 4, 7, 2, 6]]
         self.assertEqual(SkyScrapers(clues, aslists=True, printgrids=True), expected)
+    '''
 class test_CheckLengths(unittest.TestCase):
     def setUp(self):
         pass
@@ -764,10 +759,10 @@ class test_CollapseResult(unittest.TestCase):
         pass
     def tearDown(self):
         pass
-##########################################################
+##################################################
 
 
+#Main#############################################
 if __name__ == '__main__':
-    unittest.main()
-'''
-    
+    KungFu.main(__file__)
+##################################################
