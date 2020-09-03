@@ -1,36 +1,12 @@
+#Standard Imports#################################
 import unittest
 from datetime import datetime
 import json
 from pprint import pprint
+##################################################
     
-class UserData(dict):
-    def __init__(self):
-        super(UserData, self).__init__()
-            
-    
-def JsonObjectGenerator(jsonstr):
-    jsondata = json.loads(jsonstr)
-    print('jsondata', jsondata)
-    user = UserData()
-    
-    def setattributes(user, jsondata, parent=None):
-        for key in jsondata.keys():
-            if type(jsondata[key]) == dict:
-                newobject = UserData()
-                setattr(user, key, newobject)
-                user[key] = newobject
-                setattributes(user, jsondata[key], parent=newobject)
-            else:
-                if parent == None:
-                    parent = user
-                setattr(parent, key, jsondata[key])
-                parent[key] = jsondata[key]
-    setattributes(user, jsondata)
-    
-    return user
-
-    
-class test_Solution(unittest.TestCase):
+#Test#############################################
+class test_JsonObjectGenerator(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
     def tearDown(self):
@@ -76,7 +52,35 @@ class test_Solution(unittest.TestCase):
         self.assertEqual(result.fav_tech,"servicemesh")
         self.assertEqual(result.favorites.other_tech1,"kubernetes")
         pprint(result)
+##################################################
 
-        
+#Code#############################################
+class UserData(dict):
+    def __init__(self):
+        super(UserData, self).__init__()
+
+def JsonObjectGenerator(jsonstr):
+    jsondata = json.loads(jsonstr)
+    print('jsondata', jsondata)
+    user = UserData()
+    
+    def setattributes(user, jsondata, parent=None):
+        for key in jsondata.keys():
+            if type(jsondata[key]) == dict:
+                newobject = UserData()
+                setattr(user, key, newobject)
+                user[key] = newobject
+                setattributes(user, jsondata[key], parent=newobject)
+            else:
+                if parent == None:
+                    parent = user
+                setattr(parent, key, jsondata[key])
+                parent[key] = jsondata[key]
+    setattributes(user, jsondata)
+    return user
+##################################################
+
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
+##################################################

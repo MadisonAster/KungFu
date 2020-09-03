@@ -1,18 +1,10 @@
+#Standard Imports#################################
 import unittest, datetime, time
-
 from pprint import pprint
-def longest_consec(strarr, k):
-    result = ''
-    if len(strarr) == 0 or k > len(strarr) or k<= 0:
-        return result
-    
-    for i in range(len(strarr)-(k-1)):
-        c = ''.join(strarr[i:i+k])
-        if len(c) > len(result):
-            result = c
-    return result
-    
-class longest_consec_test(unittest.TestCase):
+##################################################
+
+#Test#############################################
+class test_longest_consec(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.datetime.now()
     def tearDown(self):
@@ -108,5 +100,22 @@ class longest_consec_test(unittest.TestCase):
          'fffyyymmmxxf', 'jgggannjjjqqooyy', 'hmmlrrrzz', 'ucfkkjggfffcc', 'bbgggddzzggg', 'kkkccdwwwnnbbbw',
          'iidddczzdddee', 'qqhhhdddpppb', 'eeekdddwwwkfsooo', 'mmuf', 'oyyyqqquuiijkkuuu', 'wwwxpppytii']
          , 1), 'iiiyyygggnnnhdddkkkp')
+##################################################
+
+#Code#############################################
+def longest_consec(strarr, k):
+    result = ''
+    if len(strarr) == 0 or k > len(strarr) or k<= 0:
+        return result
+    
+    for i in range(len(strarr)-(k-1)):
+        c = ''.join(strarr[i:i+k])
+        if len(c) > len(result):
+            result = c
+    return result
+##################################################
+
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
+##################################################
