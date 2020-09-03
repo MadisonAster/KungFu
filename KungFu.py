@@ -45,6 +45,7 @@ def depends(*args):
     def actual_decorator(cls):
         if 'base' in dependencylist:
             return cls
+        rNone = False
         for dependency in dependencylist:
             if not DependencyHandler().check(dependency):
                 count = 0
@@ -53,8 +54,10 @@ def depends(*args):
                         count += 1
                 print('Skipping '+str(count)+' '+dependency+' test(s).')
                 DependencyHandler().SkipCount += count
-                return None
+                rNone = True
         else:
+            if rNone:
+                return None
             if cls:
                 return cls
     return actual_decorator
@@ -142,7 +145,6 @@ class DependencyHandler():
     def check_terraform(self):
         result, returncode = self.run_command('terraform -help')
         returncode = not bool(returncode)
-        returncode = True
         if returncode:
             self.Installed.append('terraform')
         else:
