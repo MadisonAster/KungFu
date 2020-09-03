@@ -89,25 +89,23 @@ class DependencyHandler():
         if len(self.NotInstalled.keys()) == 0:
             return
         else:
-            print(str(self.SkipCount)+" tests couldn't run because the following tools were not found on your system:\n")
+            print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
             for key in self.NotInstalled.keys():
-                print(key)
-            print('\n')
-
+                print('    '+key)
             print('----------------------------------------------------------------------')
+            print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
             print('Automated Dependency Installers:')
-            print('\n')
-            print('THIS CODE IS STILL UNTESTED! RUN AT YOUR OWN RISK!')
-
             if 'gui' in self.NotInstalled.keys():
                 del self.NotInstalled['gui']
             for key in self.NotInstalled.keys():
                 function = self.NotInstalled[key]
                 if function:
-                    answer = input('Would you like to try installing '+key+'? ')
+                    answer = input('    Would you like to try installing '+key+'? ')
                     answer = answer.lower() in ['y', 'yes', 'true']
                     if answer == True:
                         function()
+            print('----------------------------------------------------------------------')
+            print('Goodbye!')
         
     @contextlib.contextmanager
     def GetStderrIO(self, stderr=None):
@@ -291,9 +289,7 @@ class TestRunner():
         self.Runner = unittest.TextTestRunner(descriptions=0)
         result = self.Runner.run(self.TestSuite)
         print('----------------------------------------------------------------------')
-        print('Ran '+str(result.testsRun)+' tests.')
-        print('\n')
-
+        print('KungFu ran '+str(result.testsRun)+' tests.')
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
         if folders == None:
