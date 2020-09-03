@@ -20,7 +20,7 @@ class test_array_diff(unittest.TestCase):
         self.assertEqual(array_diff([], [1,2]), [])
 ##################################################
 
-#Code############################################
+#Code#############################################
 def array_diff(a, b):
     result = []
     for aa in a:

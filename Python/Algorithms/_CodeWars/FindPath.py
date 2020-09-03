@@ -1,20 +1,9 @@
+#Standard Imports#################################
 import unittest
 from datetime import datetime
+##################################################
 
-def FindPath(nums, target):
-    ibuffer = []
-    def recurse_find(nums, ibuffer=None):
-        for i, a in enumerate(nums):
-            ibuffer.append(i)
-            if type(a) == list:
-                for b in recurse_find(a, ibuffer=ibuffer):
-                    yield b
-            else:
-                yield a
-            ibuffer.pop(-1)
-    for val in recurse_find(nums, ibuffer=ibuffer):
-        if val == target:
-            return ibuffer
+#Test#############################################
 class test_FindPath(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -31,6 +20,26 @@ class test_FindPath(unittest.TestCase):
         for i in expected:
             target = target[i]
         self.assertEqual(target, 101)
+##################################################
 
+#Code#############################################
+def FindPath(nums, target):
+    ibuffer = []
+    def recurse_find(nums, ibuffer=None):
+        for i, a in enumerate(nums):
+            ibuffer.append(i)
+            if type(a) == list:
+                for b in recurse_find(a, ibuffer=ibuffer):
+                    yield b
+            else:
+                yield a
+            ibuffer.pop(-1)
+    for val in recurse_find(nums, ibuffer=ibuffer):
+        if val == target:
+            return ibuffer
+##################################################
+
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
+##################################################
