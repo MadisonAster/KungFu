@@ -1,26 +1,23 @@
 #Standard Imports#################################
-import sys, os, unittest, importlib
-from datetime import datetime
-import functools
+import sys, os
+from importlib import machinery
 ##################################################
 
 #Relative Imports#################################
 if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
+    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
 import KungFu
 ##################################################
 
 #Test#############################################
+@KungFu.depends('pandas')
 class test_PandasMult(KungFu.TimedTest):
-    @KungFu.depends('pandas')
     def test_1(self):
         PandasMult('a', 'b')
 
-    @KungFu.depends('pandas')
     def test_2(self):
         PandasMult('a', 'c')
 
-    @KungFu.depends('pandas')
     def test_3(self):
         PandasMult('b', 'c')
 ##################################################

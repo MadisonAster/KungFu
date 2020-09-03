@@ -1,17 +1,20 @@
-import os, sys, importlib, unittest
+import os, sys, unittest
+from importlib import machinery
 
-if 'AWSBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['AWSBaseClasses'] = importlib.machinery.SourceFileLoader('AWSBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/AWSBaseClasses.py').load_module()
+
 if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/TestKit.py').load_module()
-import AWSBaseClasses
+    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/TestKit.py').load_module()
 import KungFu
+if 'AWSBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['AWSBaseClasses'] = machinery.SourceFileLoader('AWSBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/AWSBaseClasses.py').load_module()
+import AWSBaseClasses
 
 class SimpleCluster(AWSBaseClasses.EKSCluster):
     def __init__(self):
         super(SimpleCluster, self).__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__))
 
+@KungFu.depends('terraform', 'aws')
 class test_SimpleCluster(AWSBaseClasses.test_EKSCluster):
     TestCluster = SimpleCluster()
     

@@ -42,18 +42,19 @@ def destroy(func):
 
 def depends(*args):
     dependencylist = args
-    def actual_decorator(func):
+    def actual_decorator(cls):
         for dependency in dependencylist:
             if not DependencyHandler().check(dependency):
-                print('Skipping '+dependency+' test.')
-                DependencyHandler().SkipCount += 1
+                count = 0
+                for FunctionName, Function in inspect.getmembers(cls):
+                    if 'test_' in FunctionName:
+                        count += 1
+                print('Skipping '+str(count)+' '+dependency+' test(s).')
+                DependencyHandler().SkipCount += count
                 return None
         else:
-            if func:
-                @functools.wraps(func)
-                def wrapper(*args, **kwargs):
-                    return func(*args, **kwargs)
-                return wrapper
+            if cls:
+                return cls
     return actual_decorator
 ##################################################
 
@@ -76,6 +77,7 @@ class DependencyHandler():
         else:
             for FunctionName, Function in inspect.getmembers(self.__class__):
                 if FunctionName == 'check_'+name:
+                    print('check_'+name)
                     return Function(self)
 
     def run_installers(self):
@@ -93,6 +95,7 @@ class DependencyHandler():
             try_installers = False
             if try_installers:
                 for function in self.NotInstalled.values():
+                    print(function.__name__)
                     function()
     
     @contextlib.contextmanager
@@ -129,7 +132,6 @@ class DependencyHandler():
         return result, returncode
 
     def check_terraform(self):
-        print('check_terraform')
         result, returncode = self.run_command('terraform -help')
         returncode = not bool(returncode)
         returncode = True
@@ -139,14 +141,12 @@ class DependencyHandler():
             self.NotInstalled['terraform'] = self.install_terraform
         return returncode
     def install_terraform(self):
-        print('install_terraform')
         self.run_command('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
         self.run_command('sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"')
         self.run_command('sudo apt-get update && sudo apt-get install terraform')
         self.run_command('terraform -help')
 
     def check_aws(self):
-        print('check_aws')
         result, returncode = self.run_command('aws --version')
         returncode = not bool(returncode)
         if returncode:
@@ -155,14 +155,12 @@ class DependencyHandler():
             self.NotInstalled['aws'] = self.install_aws
         return returncode
     def install_aws(self):
-        print('install_aws')
         self.run_command('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
         self.run_command('unzip awscliv2.zip')
         self.run_command('sudo ./aws/install')
         self.run_command('aws --version')
 
     def check_kubectl(self):
-        print('check_kubectl')
         result, returncode = self.run_command('kubectl version --short --client')
         returncode = not bool(returncode)
         if returncode:
@@ -171,7 +169,6 @@ class DependencyHandler():
             self.NotInstalled['kubectl'] = self.install_kubectl
         return returncode
     def install_kubectl(self):
-        print('install_kubectl')
         self.run_command('curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/kubectl')
         self.run_command('chmod +x ./kubectl')
         self.run_command('mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/awskubectl && export PATH=$PATH:$HOME/bin') #naming kubectl binary awskubectl to avoid potential WSL2 conflicts
@@ -179,7 +176,6 @@ class DependencyHandler():
         self.run_command('kubectl version --short --client')
 
     def check_gui(self):
-        print('check_gui')
         try:
             with self.GetStderrIO() as stderr:
                 exec("from Qt import QtCore")
@@ -196,7 +192,6 @@ class DependencyHandler():
             installed = False
         return installed
     def check_qt(self):
-        print('check_qt')
         try:
             exec("from Qt import QtCore")
             installed = True
@@ -208,12 +203,10 @@ class DependencyHandler():
             self.NotInstalled['qt'] = self.install_qt
         return installed
     def install_qt(self):
-        print('install_qt')
         self.run_command('pip3 install pyside2')
         self.run_command('pip3 install qt.py')
 
     def check_docker(self):
-        print('check_docker')
         result, returncode = self.run_command('docker --version')
         returncode = not bool(returncode)
         if returncode:
@@ -222,10 +215,9 @@ class DependencyHandler():
             self.NotInstalled['docker'] = self.install_docker
         return returncode
     def install_docker(self):
-        print('install_docker')
+        pass
 
     def check_pandas(self):
-        print('check_pandas')
         try:
             import pandas    
             installed = True
@@ -237,7 +229,6 @@ class DependencyHandler():
             self.NotInstalled['pandas'] = self.install_pandas
         return installed
     def install_pandas(self):
-        print('install_pandas')
         self.run_command('pip3 install pandas')
 ##################################################
 
@@ -272,6 +263,7 @@ class TestRunner():
         self.TestArgs = self.LoadTestVars()
         if len(args) > 0:
             for filepath in args:
+                print('ImportTests!', filepath)
                 self.ImportTests(os.path.abspath(filepath))
         else:
             self.RecursiveImport(folders=self.TestArgs.folders)
@@ -315,7 +307,7 @@ class TestRunner():
 
         inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
-            if 'test_' in ClassName:
+            if 'test_' in ClassName and Class != None:
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 globals()[ClassName] = Class

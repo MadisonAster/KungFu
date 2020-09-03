@@ -1,32 +1,32 @@
 #Standard Imports#################################
-import sys, os, unittest, importlib
+import sys, os
+from importlib import machinery
 import time
 ##################################################
 
 #Relative Imports#################################
 if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
+    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
 import KungFu
 
 if 'PythonBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['PythonBaseClasses'] = importlib.machinery.SourceFileLoader('PythonBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/PythonBaseClasses.py').load_module()
+    sys.modules['PythonBaseClasses'] = machinery.SourceFileLoader('PythonBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/PythonBaseClasses.py').load_module()
 import PythonBaseClasses
 ##################################################
 
 #Test#############################################
+@KungFu.depends('qt', 'gui')
 class test_BasicWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_BasicWindow, self).__init__(*args)
         print('test_BasicWindow')
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
-    @KungFu.depends('qt', 'gui')
     def test_1(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         time.sleep(SleepTime)
 
-    @KungFu.depends('qt', 'gui')
     def test_2(self, SleepTime=0.5):
         self.MainWindow = BasicWindow()
         self.MainWindow.show()

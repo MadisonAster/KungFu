@@ -1,10 +1,11 @@
 import sys, os
-import unittest, importlib
+import unittest
+from importlib import machinery
 from datetime import datetime
 import subprocess, shlex
 
 if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = importlib.machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',1)[0]+'/KungFu.py').load_module()
+    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',1)[0]+'/KungFu.py').load_module()
 import KungFu
 
 class EKSCluster(dict):
@@ -48,6 +49,7 @@ class EKSCluster(dict):
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         return result, returncode
 
+@KungFu.depends('terraform', 'aws')
 class test_EKSCluster(KungFu.TimedTest):
     def setUp(self):
         self.starttime = datetime.now()
@@ -55,35 +57,29 @@ class test_EKSCluster(KungFu.TimedTest):
         t = datetime.now() - self.starttime
         print(str(t), self.id())
 
-    @KungFu.depends('terraform', 'aws')
     def test_01_init(self):
         result, returncode = self.__class__.TestCluster.init()
         self.assertEqual(returncode, 0)
     
-    @KungFu.depends('terraform', 'aws')
     def test_02_plan(self):
         result, returncode = self.__class__.TestCluster.plan()
         self.assertEqual(returncode, 0)
 
-    @KungFu.depends('terraform', 'aws')
     def test_03_plan_destroy(self):
         result, returncode = self.__class__.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
 
-    @KungFu.depends('terraform', 'aws')
     @KungFu.create
     def test_04_apply(self):
         result, returncode = self.__class__.TestCluster.apply()
         self.assertEqual(returncode, 0)
 
-    @KungFu.depends('terraform', 'aws')
     @KungFu.create
     def test_05_output(self):
         result, returncode = self.__class__.TestCluster.output()
         print('vpc_id', self.__class__.TestCluster['vpc_id'])
         self.assertEqual(returncode, 0)
 
-    @KungFu.depends('terraform', 'aws')
     @KungFu.destroy
     def test_06_destroy(self):
         result, returncode = self.__class__.TestCluster.destroy()
