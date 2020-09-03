@@ -287,10 +287,12 @@ class TestRunner():
             self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
+        start = datetime.now()
         self.Runner = unittest.TextTestRunner(descriptions=0)
         result = self.Runner.run(self.TestSuite)
         print('----------------------------------------------------------------------')
-        print('KungFu ran '+str(result.testsRun)+' tests.')
+        t = datetime.now()-start
+        print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
         if folders == None:
