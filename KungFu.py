@@ -83,8 +83,6 @@ class DependencyHandler():
                     return Function(self)
 
     def run_installers(self):
-        #if 'gui' in self.NotInstalled.keys():
-        #    del self.NotInstalled['gui']
         if len(self.NotInstalled.keys()) == 0:
             return
         else:
@@ -92,15 +90,22 @@ class DependencyHandler():
             for key in self.NotInstalled.keys():
                 print(key)
             print('\n')
-            print('Would you like to try installing them automatically?')
-            print('(THESE ARE 3RD PARTY TOOLS AND THIS IS STILL UNTESTED! RUN AT YOUR OWN RISK!)')
-            
-            try_installers = False
-            if try_installers:
-                for function in self.NotInstalled.values():
-                    print(function.__name__)
-                    function()
-    
+
+            print('----------------------------------------------------------------------')
+            print('Automated Dependency Installers:')
+            print('\n')
+            print('THIS CODE IS STILL UNTESTED! RUN AT YOUR OWN RISK!')
+
+            if 'gui' in self.NotInstalled.keys():
+                del self.NotInstalled['gui']
+            for key in self.NotInstalled.keys():
+                function = self.NotInstalled[key]
+                if function:
+                    answer = input('Would you like to try installing '+key+'? ')
+                    answer = answer.lower() in ['y', 'yes', 'true']
+                    if answer == True:
+                        function()
+        
     @contextlib.contextmanager
     def GetStderrIO(self, stderr=None):
         old = sys.stderr
