@@ -13,12 +13,6 @@ import KungFu
 #TODO
 ##################################################
 
-#Inheritance Check################################
-print('pbc check qt')
-if not KungFu.DependencyHandler().check('qt'):
-    raise Exception('return')
-##################################################
-
 #Code#############################################
 from Qt import QtCore, QtGui, QtWidgets
 class SingletonApp(QtWidgets.QApplication):

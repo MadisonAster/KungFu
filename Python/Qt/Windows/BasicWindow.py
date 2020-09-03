@@ -33,11 +33,6 @@ class test_BasicWindow(KungFu.TimedTest):
         self.MainWindow.hide()
 ##################################################
 
-#Inheritance Check################################
-if not KungFu.DependencyHandler().check('qt'):
-    raise Exception('return') #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
-##################################################
-
 #Relative Imports#################################
 if 'PythonBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
     sys.modules['PythonBaseClasses'] = machinery.SourceFileLoader('PythonBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/PythonBaseClasses.py').load_module()

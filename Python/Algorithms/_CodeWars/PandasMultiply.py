@@ -22,11 +22,6 @@ class test_PandasMult(KungFu.TimedTest):
         PandasMult('b', 'c')
 ##################################################
 
-#Inheritance Check################################
-if not KungFu.DependencyHandler().check('pandas'):
-    raise Exception('return') #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
-##################################################
-
 #Code#############################################
 import pandas
 def PandasMult(left, right):

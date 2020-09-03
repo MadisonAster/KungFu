@@ -64,6 +64,15 @@ def depends(*args):
 ##################################################
 
 #Dependency Handling##############################
+'''
+def AssertInstalled(*args):
+    throw = False
+    for dependency in args:
+        if not DependencyHandler().check(dependency):
+            throw = True
+    raise Exception('return') #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
+'''
+
 class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
@@ -293,6 +302,7 @@ class TestRunner():
         print('----------------------------------------------------------------------')
         t = datetime.now()-start
         print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
+
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
         if folders == None:
@@ -318,12 +328,8 @@ class TestRunner():
         Module = util.module_from_spec(ModuleSpec)
         try:
             ModuleSpec.loader.exec_module(Module)
-        except Exception as e: #Module level return doesn't exist. This is a compelling use case. Maybe a PEP?
-            if str(e) == 'return':
-                pass
-            else:
-                print(traceback.format_exc())
-                raise e
+        except ImportError as exception:
+            pass
         inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
             if 'test_' in ClassName and Class != None:
