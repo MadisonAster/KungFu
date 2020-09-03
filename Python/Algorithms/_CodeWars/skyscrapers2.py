@@ -1,5 +1,16 @@
-import unittest
+#Standard Imports#################################
+import sys, os, unittest
+from importlib import machinery
 from itertools import permutations, chain
+##################################################
+
+#Relative Imports#################################
+if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
+    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
+import KungFu
+##################################################
+
+#Code#############################################
 _DIMENSIONS = 4
 def SkyScrapers2(clues):
     global _DIMENSIONS
@@ -23,7 +34,9 @@ def SkyScrapers2(clues):
                     break
             else:
                 return poss
-'''
+##################################################
+
+#Test#############################################
 class test_SkyScrapers2(unittest.TestCase):
     def setUp(self):
         pass
@@ -53,7 +66,7 @@ class test_SkyScrapers2(unittest.TestCase):
                                               (4,2,1,3),
                                               (3,4,2,1),
                                               (2,1,3,4)))
-    
+    '''
     def test_6x6_1(self):
         #return
         global _DIMENSIONS
@@ -101,8 +114,10 @@ class test_SkyScrapers2(unittest.TestCase):
                     ( 4, 3, 2, 6, 1, 5 ), 
                     ( 1, 5, 4, 3, 2, 6 ))
         self.assertEqual(SkyScrapers2(clues), expected)
+    '''
+##################################################
 
-
+#Main#############################################
 if __name__ == '__main__':
-    unittest.main()
-'''
+    KungFu.main(__file__)
+##################################################
