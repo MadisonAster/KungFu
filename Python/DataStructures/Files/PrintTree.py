@@ -1,20 +1,10 @@
+#Standard Imports#################################
 import os, shutil
 import unittest
 from datetime import datetime
+##################################################
 
-def PrintTree(InputPath):
-    InputPath = InputPath.replace('\\','/').rstrip('/')
-    result = '\n'
-    for root, dirs, files in os.walk(InputPath):
-        dirs.sort() #Linux listdir may not come pre-sorted
-        files.sort()
-        root = root.replace('\\','/') #Windows path sanitization
-        indent = '    ' * (len(root.replace(InputPath, '').split('/'))-1)
-        result += indent+root.rsplit('/',1)[-1]+'\n'
-        for file in files:
-            result += indent+'    '+file+'\n'
-    return result
-
+#Test#############################################
 class test_PrintTree(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -75,7 +65,24 @@ mock
     folder3
 """
         self.assertEqual(PrintTree(self.mock_path), ExpectedResult)
-        
+##################################################
 
+#Code#############################################
+def PrintTree(InputPath):
+    InputPath = InputPath.replace('\\','/').rstrip('/')
+    result = '\n'
+    for root, dirs, files in os.walk(InputPath):
+        dirs.sort() #Linux listdir may not come pre-sorted
+        files.sort()
+        root = root.replace('\\','/') #Windows path sanitization
+        indent = '    ' * (len(root.replace(InputPath, '').split('/'))-1)
+        result += indent+root.rsplit('/',1)[-1]+'\n'
+        for file in files:
+            result += indent+'    '+file+'\n'
+    return result
+##################################################
+
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
+##################################################
