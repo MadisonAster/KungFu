@@ -83,14 +83,15 @@ class DependencyHandler():
                     return Function(self)
 
     def run_installers(self):
-        if 'gui' in self.NotInstalled.keys():
-            del self.NotInstalled['gui']
+        #if 'gui' in self.NotInstalled.keys():
+        #    del self.NotInstalled['gui']
         if len(self.NotInstalled.keys()) == 0:
             return
         else:
-            print(str(self.SkipCount)+" tests couldn't run because the following tools were not found on your system:")
+            print(str(self.SkipCount)+" tests couldn't run because the following tools were not found on your system:\n")
             for key in self.NotInstalled.keys():
                 print(key)
+            print('\n')
             print('Would you like to try installing them automatically?')
             print('(THESE ARE 3RD PARTY TOOLS AND THIS IS STILL UNTESTED! RUN AT YOUR OWN RISK!)')
             
@@ -180,7 +181,7 @@ class DependencyHandler():
     def check_gui(self):
         try:
             with self.GetStderrIO() as stderr:
-                exec("from Qt import QtCore")
+                from Qt import QtCore
             if stderr.getvalue() == '':
                 self.Installed.append('gui')
                 installed = True
@@ -192,10 +193,11 @@ class DependencyHandler():
             print('Qt not available! Disabling gui tests!')
             self.NotInstalled['gui'] = None
             installed = False
+        print('gui installed', installed)
         return installed
     def check_qt(self):
         try:
-            exec("from Qt import QtCore")
+            from Qt import QtCore
             installed = True
         except ImportError as exception:
             installed = False
@@ -203,6 +205,7 @@ class DependencyHandler():
             self.Installed.append('qt')
         else:
             self.NotInstalled['qt'] = self.install_qt
+        print('qt installed', installed)
         return installed
     def install_qt(self):
         self.run_command('pip3 install pyside2')
@@ -271,9 +274,11 @@ class TestRunner():
             self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
-        self.Runner = unittest.TextTestRunner()
-        self.Runner.run(self.TestSuite)
-
+        self.Runner = unittest.TextTestRunner(descriptions=0)
+        result = self.Runner.run(self.TestSuite)
+        print('----------------------------------------------------------------------')
+        print('Ran '+str(result.testsRun)+' tests.')
+        print('\n')
 
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
@@ -292,6 +297,7 @@ class TestRunner():
 
     def ImportTests(self, ModulePath):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
+        print('ImportTests', ModuleName)
         if ModuleName in ['KungFu'] or 'BaseClasses' in ModuleName:
             return
         if ModuleName in globals().keys():
@@ -330,6 +336,7 @@ class TestRunner():
         if self.TestArgs.folder != None:
             self.TestArgs.folders = [self.TestArgs.folder]
         if self.TestArgs.gui == None:
+            print('testargs check gui!')
             self.TestArgs.gui = DependencyHandler().check('gui')
         print(self.TestArgs)
         sys.TestArgs = self.TestArgs

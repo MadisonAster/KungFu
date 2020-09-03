@@ -13,7 +13,6 @@ def PrintTree(InputPath):
         result += indent+root.rsplit('/',1)[-1]+'\n'
         for file in files:
             result += indent+'    '+file+'\n'
-    print(result)
     return result
 
 class test_PrintTree(unittest.TestCase):

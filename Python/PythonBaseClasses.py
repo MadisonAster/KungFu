@@ -14,6 +14,7 @@ import KungFu
 ##################################################
 
 #Inheritance Check################################
+print('pbc check qt')
 if not KungFu.DependencyHandler().check('qt'):
     raise Exception('return')
 ##################################################
