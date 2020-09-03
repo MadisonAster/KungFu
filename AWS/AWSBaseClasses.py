@@ -1,13 +1,18 @@
+#Standard Imports#################################
 import sys, os
 import unittest
 from importlib import machinery
 from datetime import datetime
 import subprocess, shlex
+##################################################
 
+#Relative Imports#################################
 if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
     sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',1)[0]+'/KungFu.py').load_module()
 import KungFu
+##################################################
 
+#Code#############################################
 class EKSCluster(dict):
     def __init__(self):
         super(EKSCluster, self).__init__()
@@ -48,15 +53,11 @@ class EKSCluster(dict):
             print('returncode', returncode)
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         return result, returncode
+##################################################
 
-@KungFu.depends('terraform', 'aws')
+#Test#############################################
+@KungFu.depends('base', 'terraform', 'aws')
 class test_EKSCluster(KungFu.TimedTest):
-    def setUp(self):
-        self.starttime = datetime.now()
-    def tearDown(self):
-        t = datetime.now() - self.starttime
-        print(str(t), self.id())
-
     def test_01_init(self):
         result, returncode = self.__class__.TestCluster.init()
         self.assertEqual(returncode, 0)
@@ -84,3 +85,10 @@ class test_EKSCluster(KungFu.TimedTest):
     def test_06_destroy(self):
         result, returncode = self.__class__.TestCluster.destroy()
         self.assertEqual(returncode, 0)
+##################################################
+
+#Main#############################################
+if __name__ == '__main__':
+    KungFu.main(__file__)
+##################################################
+

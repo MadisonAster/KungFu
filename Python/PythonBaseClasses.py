@@ -13,7 +13,7 @@ import KungFu
 #TODO
 ##################################################
 
-#3rd Party Inheritance Check######################
+#Inheritance Check################################
 if not KungFu.DependencyHandler().check('qt'):
     raise Exception('return')
 ##################################################

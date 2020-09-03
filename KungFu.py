@@ -43,6 +43,8 @@ def destroy(func):
 def depends(*args):
     dependencylist = args
     def actual_decorator(cls):
+        if 'base' in dependencylist:
+            return cls
         for dependency in dependencylist:
             if not DependencyHandler().check(dependency):
                 count = 0
@@ -303,7 +305,7 @@ class TestRunner():
                 pass
             else:
                 print(traceback.format_exc())
-                raise e            
+                raise e
 
         inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
