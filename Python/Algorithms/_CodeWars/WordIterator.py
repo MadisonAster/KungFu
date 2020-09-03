@@ -1,19 +1,10 @@
+#Standard Imports#################################
 import os
 import unittest
 from datetime import datetime
+##################################################
 
-
-def WordIterator(filepath):
-    with open(filepath, 'r') as file:
-        filetext = file.read()
-    buffer = ''
-    for a in filetext:
-        if a.isalpha():
-            buffer += a
-        else:
-            if buffer != '':
-                yield buffer
-            buffer = ''
+#Test#############################################
 class test_WordIterator(unittest.TestCase):
     def setUp(self):
         self.starttime = datetime.now()
@@ -29,8 +20,23 @@ class test_WordIterator(unittest.TestCase):
         with open(self.mock_path, 'w') as file:
             file.write(mocktext)
         self.assertEqual(list(WordIterator(self.mock_path)), ['abcde']*5)
+##################################################
 
+#Code#############################################
+def WordIterator(filepath):
+    with open(filepath, 'r') as file:
+        filetext = file.read()
+    buffer = ''
+    for a in filetext:
+        if a.isalpha():
+            buffer += a
+        else:
+            if buffer != '':
+                yield buffer
+            buffer = ''
+##################################################
 
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
-
+##################################################

@@ -1,5 +1,17 @@
+#Standard Imports#################################
 import unittest
+##################################################
 
+#Test#############################################
+class test_next_bigger(unittest.TestCase):
+    def test_1(self):
+        self.assertEqual(next_bigger(9827410), 9840127)
+        self.assertEqual(next_bigger(4444444), -1)
+        self.assertEqual(next_bigger(2017), 2071)
+        self.assertEqual(next_bigger(2710), 7012)
+##################################################
+
+#Code#############################################
 def next_bigger(n):
     if str(n) == ''.join(list(reversed(sorted(str(n))))):
         return -1
@@ -28,21 +40,9 @@ def next_bigger(n):
     right = ''.join(sorted(right))
 
     return int(stored + left + replacement + right)
+##################################################
 
-
-
-class test_next_bigger(unittest.TestCase):
-    def startUp(self):
-        pass
-    def tearDown(self):
-        pass
-        
-    def test_1(self):
-        self.assertEqual(next_bigger(9827410), 9840127)
-        self.assertEqual(next_bigger(4444444), -1)
-        self.assertEqual(next_bigger(2017), 2071)
-        self.assertEqual(next_bigger(2710), 7012)
-        
+#Main#############################################
 if __name__ == '__main__':
     unittest.main()
-
+##################################################
