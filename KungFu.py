@@ -337,8 +337,8 @@ class TestRunner():
         parser.add_argument("-gui", help="Specify whether or not to run GUI tests.", type=bool)
         parser.add_argument("--create", help="provision cloud resources, (this will cost money!)", action="store_true")
         parser.add_argument("--destroy", help="destroy cloud resources, (this will destory resouces!)", action="store_true")
-        self.TestArgs = parser.parse_args()
-        print(dir(self.TestArgs))
+
+        self.TestArgs, unknown = parser.parse_known_args()
         if self.TestArgs.sleep == None:
             self.TestArgs.sleep = 0.5
         if self.TestArgs.folder != None:
@@ -346,11 +346,16 @@ class TestRunner():
         if self.TestArgs.gui == None:
             print('testargs check gui!')
             self.TestArgs.gui = DependencyHandler().check('gui')
-
         self.TestArgs.kwargs = {}
         for (key, value) in self.TestArgs._get_kwargs():
             if key != 'kwargs':
                 self.TestArgs.kwargs[key] = value
+
+        #arbitrary keyword parsing
+        for i in range(0, len(unknown), 2):
+            key = unknown[i].replace('-','')
+            value = unknown[i+1]
+            self.TestArgs.kwargs[key] = value
 
         print(self.TestArgs)
         sys.TestArgs = self.TestArgs

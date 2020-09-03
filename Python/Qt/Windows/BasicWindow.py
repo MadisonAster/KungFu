@@ -19,8 +19,6 @@ class test_BasicWindow(KungFu.TimedTest):
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, sleep=0.5):
-        print('self', self)
-        print('sleep', sleep)
         self.MainWindow = BasicWindow()
         self.MainWindow.show()
         time.sleep(sleep)
