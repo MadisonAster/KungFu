@@ -14,6 +14,16 @@
     <ClCompile Include="..\Algorithms\Games\Bowling.cpp">
       <Filter>Algorithms\Games</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="DoublyLinkedList.cpp">
+      <Filter>DataStructures</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Algorithms\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedList.cpp">
+      <Filter>DataStructures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
