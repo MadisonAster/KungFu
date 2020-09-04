@@ -67,55 +67,12 @@ def depends(*args):
 class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
-    NotInstalled = {}
+    NotInstalled = []
     SkipCount = 0
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
         return sys.DependencyHandler
-
-    def check(self, name):
-        if name in self.Installed:
-            return True
-        elif name in self.NotInstalled.keys():
-            return False
-        else:
-            for FunctionName, Function in inspect.getmembers(self.__class__):
-                if FunctionName == 'check_'+name:
-                    print('check_'+name)
-                    return Function(self)
-
-    def run_installers(self):
-        if len(self.NotInstalled.keys()) != 0:
-            print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
-            for key in self.NotInstalled.keys():
-                print('    '+key)
-            if 'gui' in self.NotInstalled.keys():
-                del self.NotInstalled['gui']
-            if len(self.NotInstalled.keys()) != 0:
-                print('----------------------------------------------------------------------')
-                print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
-                print('Automated Dependency Installers:')
-                for key in self.NotInstalled.keys():
-                    function = self.NotInstalled[key]
-                    if function:
-                        answer = input('    Would you like to try installing '+key+'? ')
-                        answer = answer.lower() in ['y', 'yes', 'true']
-                        if answer == True:
-                            function()
-        else:
-            print('Everything OK!')
-        print('----------------------------------------------------------------------')
-        print('Goodbye!')
-        
-    @contextlib.contextmanager
-    def GetStderrIO(self, stderr=None):
-        old = sys.stderr
-        if stderr is None:
-            stderr = io.StringIO()
-        sys.stderr = stderr
-        yield stderr
-        sys.stderr = old
 
     def run_command(self, CommandString, silent=True):
         if not silent:
@@ -141,49 +98,74 @@ class DependencyHandler():
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         return result, returncode
 
-    def check_terraform(self):
-        result, returncode = self.run_command('terraform -help')
-        returncode = not bool(returncode)
-        if returncode:
-            self.Installed.append('terraform')
+    def check(self, name):
+        if name in self.Installed:
+            return True
+        elif name in self.NotInstalled:
+            return False
         else:
-            self.NotInstalled['terraform'] = self.install_terraform
-        return returncode
-    def install_terraform(self):
-        self.run_command('curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -')
-        self.run_command('sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"')
-        self.run_command('sudo apt-get update && sudo apt-get install terraform')
-        self.run_command('terraform -help')
+            self.run_check(name)
 
-    def check_aws(self):
-        result, returncode = self.run_command('aws --version')
-        returncode = not bool(returncode)
-        if returncode:
-            self.Installed.append('aws')
+    def run_check(self, name):
+        if name == 'gui':
+            return self.check_gui()
+        checkpath = self.cwd+'/_installers/'+name+'_check.sh'
+        if os.path.exists(checkpath):
+            returncodes = 0
+            with open(checkpath, 'r') as file:
+                for line in file.readlines():
+                    print('line', line)
+                    result, returncode = self.run_command(line)
+                    returncodes += returncode
+            returncodes = not bool(returncodes)
+            if returncodes:
+                self.Installed.append(name)
+            else:
+                self.NotInstalled.append(name)
+            return returncodes
+
+    def run_installer(self, name):
+        checkpath = self.cwd+'/_installers/'+name+'_check.sh'
+        if os.path.exists(checkpath):
+            returncodes = 0
+            with open(checkpath, 'r') as file:
+                for line in file.readlines():
+                    print('line', line)
+                    result, returncode = self.run_command(line)
+                    returncodes += returncode
+            returncodes = not bool(returncodes)
+            return returncodes
+
+    def offer_installers(self):
+        if len(self.NotInstalled) != 0:
+            print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
+            for name in self.NotInstalled:
+                print('    '+name)
+            if 'gui' in self.NotInstalled:
+                self.NotInstalled.remove('gui')
+            if len(self.NotInstalled) != 0:
+                print('----------------------------------------------------------------------')
+                print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
+                print('Automated Dependency Installers:')
+                for name in self.NotInstalled:
+                    answer = input('    Would you like to try installing '+name+'? ')
+                    answer = answer.lower() in ['y', 'yes', 'true']
+                    if answer == True:
+                        run_installer(name)
         else:
-            self.NotInstalled['aws'] = self.install_aws
-        return returncode
-    def install_aws(self):
-        self.run_command('curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"')
-        self.run_command('unzip awscliv2.zip')
-        self.run_command('sudo ./aws/install')
-        self.run_command('aws --version')
-
-    def check_kubectl(self):
-        result, returncode = self.run_command('kubectl version --short --client')
-        returncode = not bool(returncode)
-        if returncode:
-            self.Installed.append('kubectl')
-        else:
-            self.NotInstalled['kubectl'] = self.install_kubectl
-        return returncode
-    def install_kubectl(self):
-        self.run_command('curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/kubectl')
-        self.run_command('chmod +x ./kubectl')
-        self.run_command('mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/awskubectl && export PATH=$PATH:$HOME/bin') #naming kubectl binary awskubectl to avoid potential WSL2 conflicts
-        #self.run_command('echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc')
-        self.run_command('kubectl version --short --client')
-
+            print('Everything OK!')
+        print('----------------------------------------------------------------------')
+        print('Goodbye!')
+    
+    ###Still hacking this for now until I find a more general way###
+    @contextlib.contextmanager
+    def GetStderrIO(self, stderr=None):
+        old = sys.stderr
+        if stderr is None:
+            stderr = io.StringIO()
+        sys.stderr = stderr
+        yield stderr
+        sys.stderr = old
     def check_gui(self):
         try:
             with self.GetStderrIO() as stderr:
@@ -193,54 +175,15 @@ class DependencyHandler():
                 installed = True
             else:
                 print('X server not available! Disabling gui tests!')
-                self.NotInstalled['gui'] = None
+                self.NotInstalled.append('gui')
                 installed = False
         except ImportError as exception:
             print('Qt not available! Disabling gui tests!')
-            self.NotInstalled['gui'] = None
+            self.NotInstalled.append('gui')
             installed = False
         print('gui installed', installed)
         return installed
-    def check_qt(self):
-        try:
-            from Qt import QtCore
-            installed = True
-        except ImportError as exception:
-            installed = False
-        if installed:
-            self.Installed.append('qt')
-        else:
-            self.NotInstalled['qt'] = self.install_qt
-        print('qt installed', installed)
-        return installed
-    def install_qt(self):
-        self.run_command('pip3 install pyside2')
-        self.run_command('pip3 install qt.py')
-
-    def check_docker(self):
-        result, returncode = self.run_command('docker --version')
-        returncode = not bool(returncode)
-        if returncode:
-            self.Installed.append('docker')
-        else:
-            self.NotInstalled['docker'] = self.install_docker
-        return returncode
-    def install_docker(self):
-        pass
-
-    def check_pandas(self):
-        try:
-            import pandas    
-            installed = True
-        except ImportError as exception:
-            installed = False
-        if installed:
-            self.Installed.append('pandas')
-        else:
-            self.NotInstalled['pandas'] = self.install_pandas
-        return installed
-    def install_pandas(self):
-        self.run_command('pip3 install pandas')
+    ################################################################
 ##################################################
 
 #Base Classes#####################################
@@ -366,7 +309,7 @@ def main(*args):
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
-    Dependencies.run_installers()
+    Dependencies.offer_installers()
 
 if __name__ == '__main__':
     main()

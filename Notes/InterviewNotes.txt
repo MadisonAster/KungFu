@@ -86,5 +86,3 @@ TODO:
     npm wrapping
     go wrapping
     java wrapping
-    Move installers into individual .sh files in _installers folder.
-    Make abstract installer() function that runs sh files line by line
