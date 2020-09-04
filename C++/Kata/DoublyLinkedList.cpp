@@ -16,6 +16,7 @@ public:
         this->head = NULL;
         this->tail = NULL;
     }
+
     void Initialize(node* Node)
     {
         if (this->head == NULL) {
@@ -31,7 +32,8 @@ public:
         Node->prev = NULL;
         return Node;
     }
-    void Append(int n)
+
+    void AppendValue(int n)
     {
         node* Node = this->MakeNode(n);
         this->AppendNode(Node);
@@ -44,7 +46,8 @@ public:
         this->tail->next = Node;
         this->tail = Node;
     }
-    void Push(int n)
+
+    void PushValue(int n)
     {
         node* Node = this->MakeNode(n);
         this->PushNode(Node);
@@ -56,6 +59,11 @@ public:
         this->head->prev = Node;
         this->head = Node;
     }
+
+    void InsertAt(int i, int n) {
+        node* Node = this->GetNode(i);
+        this->Insert(Node, n);
+    }
     void Insert(node* prev, int n) {
         if (prev == NULL) return;
         node* Node = this->MakeNode(n);
@@ -64,10 +72,7 @@ public:
         Node->prev = prev;
         if (Node->next != NULL) Node->next->prev = Node;
     }
-    void InsertAt(int i, int n) {
-        node* M = this->GetNode(i);
-        this->Insert(M, n);
-    }
+
     int GetValue(int i)
     {
         if (this->head == NULL) return NULL;
@@ -90,13 +95,19 @@ public:
         }
         return Node;
     }
-    node* Pop() {
+
+    int PopValue() {
+        node* Node = this->PopNode();
+        return Node->data;
+    }
+    node* PopNode() {
         node* Node = this->tail;
         this->tail = Node->prev;
         this->tail->next = NULL;
         Node->prev = NULL;
         return Node;
     }
+
     void Reverse(void) {
         node* n = this->GetNode(0);
     }
@@ -106,22 +117,22 @@ private:
 
 TEST(pch, test_DoublyLinkedList1) {
     DoublyLinkedList DLinkedList;
-    DLinkedList.Append(5);
+    DLinkedList.AppendValue(5);
 
     EXPECT_EQ(5, DLinkedList.GetValue(0));
 }
 TEST(pch, test_DoublyLinkedList2) {
     DoublyLinkedList DLinkedList;
-    DLinkedList.Append(5);
-    DLinkedList.Append(10);
+    DLinkedList.AppendValue(5);
+    DLinkedList.AppendValue(10);
 
     EXPECT_EQ(10, DLinkedList.GetValue(1));
 }
 TEST(pch, test_DoublyLinkedList3) {
     DoublyLinkedList DLinkedList;
-    DLinkedList.Append(5);
-    DLinkedList.Append(10);
-    DLinkedList.Append(15);
+    DLinkedList.AppendValue(5);
+    DLinkedList.AppendValue(10);
+    DLinkedList.AppendValue(15);
     DLinkedList.InsertAt(1, 12);
     EXPECT_EQ(12, DLinkedList.GetValue(2));
     EXPECT_EQ(15, DLinkedList.GetValue(3));
