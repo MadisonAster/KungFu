@@ -16,32 +16,53 @@ public:
         this->head = NULL;
         this->tail = NULL;
     }
+    void Initialize(node* Node)
+    {
+        if (this->head == NULL) {
+            this->head = Node;
+            this->tail = Node;
+        }
+    }
+    node* MakeNode(int n)
+    {
+        node* Node = new node;
+        Node->data = n;
+        Node->next = NULL;
+        Node->prev = NULL;
+        return Node;
+    }
     void Append(int n)
     {
-        node* tmp = new node;
-        tmp->data = n;
-        tmp->next = NULL;
-        tmp->prev = NULL;
+        node* Node = this->MakeNode(n);
+        this->AppendNode(Node);
+    }
+    void AppendNode(node* Node)
+    {
+        if (this->head == NULL) return this->Initialize(Node);
 
-        if (head == NULL) {
-            this->head = tmp;
-            this->tail = tmp;
-        }
-        else
-        {
-            tmp->prev = this->tail;
-            this->tail->next = tmp;
-            this->tail = tmp;
-        }
+        Node->prev = this->tail;
+        this->tail->next = Node;
+        this->tail = Node;
+    }
+    void Push(int n)
+    {
+        node* Node = this->MakeNode(n);
+        this->PushNode(Node);
+    }
+    void PushNode(node* Node)
+    {
+        Node->next = this->head;
+        Node->prev = NULL;
+        this->head->prev = Node;
+        this->head = Node;
     }
     void Insert(node* prev, int n) {
         if (prev == NULL) return;
-        node* tmp = new node;
-        tmp->data = n;
-        tmp->next = prev->next;
-        prev->next = tmp;
-        tmp->prev = prev;
-        if (tmp->next != NULL) tmp->next->prev = tmp;
+        node* Node = this->MakeNode(n);
+        Node->next = prev->next;
+        prev->next = Node;
+        Node->prev = prev;
+        if (Node->next != NULL) Node->next->prev = Node;
     }
     void InsertAt(int i, int n) {
         node* M = this->GetNode(i);
@@ -49,26 +70,32 @@ public:
     }
     int GetValue(int i)
     {
-        if (head == NULL) return NULL;
-        node* tmp;
-        tmp = this->head;
+        if (this->head == NULL) return NULL;
+        node* Node;
+        Node = this->head;
         int j = 0;
         while (j < i) {
-            tmp = tmp->next;
+            Node = Node->next;
             j += 1;
         }
-        return tmp->data;
+        return Node->data;
     }
     node* GetNode(int i) {
-        if (head == NULL) return NULL;
-        node* tmp;
-        tmp = this->head;
+        if (this->head == NULL) return NULL;
+        node* Node = this->head;
         int j = 0;
         while (j < i) {
-            tmp = tmp->next;
+            Node = Node->next;
             j += 1;
         }
-        return tmp;
+        return Node;
+    }
+    node* Pop() {
+        node* Node = this->tail;
+        this->tail = Node->prev;
+        this->tail->next = NULL;
+        Node->prev = NULL;
+        return Node;
     }
     void Reverse(void) {
         node* n = this->GetNode(0);
