@@ -61,7 +61,35 @@ def depends(*args):
     return actual_decorator
 ##################################################
 
-#Dependency Handling##############################
+#Base Classes#####################################
+class TimedTest(unittest.TestCase):
+    def __init__(self, *args):
+        super(TimedTest, self).__init__(*args)
+        for FunctionName, Function in inspect.getmembers(self.__class__):
+            if Function and 'test_' in FunctionName:
+                partial = functools.partial(self.GetPartial, Function)
+                setattr(self.__class__, FunctionName, partial)
+
+    def GetPartial(self, func):
+        if type(func) == functools.partial: return func()
+        if func.__defaults__:
+            arglist = list(func.__defaults__)
+            for key in sys.TestArgs.kwargs:
+                if key in func.__code__.co_varnames:
+                    i = func.__code__.co_varnames.index(key)
+                    arglist[i-1] = sys.TestArgs.kwargs[key]
+            func.__defaults__ = tuple(arglist)
+        return func(self)
+
+    def setUp(self):
+        self.starttime = datetime.now()
+
+    def tearDown(self):
+        t = datetime.now() - self.starttime
+        print(str(t), self.id())
+##################################################
+
+#Main#############################################
 class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
@@ -163,6 +191,7 @@ class DependencyHandler():
         sys.stderr = stderr
         yield stderr
         sys.stderr = old
+
     def check_gui(self):
         try:
             with self.GetStderrIO() as stderr:
@@ -181,39 +210,7 @@ class DependencyHandler():
         print('gui installed', installed)
         return installed
     ################################################################
-##################################################
 
-#Base Classes#####################################
-class TimedTest(unittest.TestCase):
-    def __init__(self, *args):
-        super(TimedTest, self).__init__(*args)
-        for FunctionName, Function in inspect.getmembers(self.__class__):
-            if Function and 'test_' in FunctionName:
-                partial = functools.partial(self.GetPartial, Function)
-                setattr(self.__class__, FunctionName, partial)
-
-    def GetPartial(self, func):
-        if type(func)==functools.partial:
-            return func()
-        new_kwargs = {}
-        if func.__defaults__:
-            arglist = list(func.__defaults__)
-            for key in sys.TestArgs.kwargs:
-                if key in func.__code__.co_varnames:
-                    i = func.__code__.co_varnames.index(key)
-                    arglist[i-1] = sys.TestArgs.kwargs[key]
-            func.__defaults__ = tuple(arglist)
-        return func(self)
-
-    def setUp(self):
-        self.starttime = datetime.now()
-
-    def tearDown(self):
-        t = datetime.now() - self.starttime
-        print(str(t), self.id())
-##################################################
-
-#Main#############################################
 class TestRunner():
     SkippedCount = 0
     def __init__(self, *args):
