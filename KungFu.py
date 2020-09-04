@@ -8,8 +8,6 @@ python3 KungFu.py                          #run all tests, automatically decide 
 python3 KungFu.py -sleep 1.0               #run tests with a sleeptime of 1.0 seconds
 python3 KungFu.py -folder Python/Qt        #run all tests in the Python/Qt folder
 python3 KungFu.py -folders Python,AWS      #run all tests in the Python and AWS folders
-python3 KungFu.py -gui True                #Force gui tests to run.
-python3 KungFu.py -gui False               #Force gui tests not to run.
 python3 KungFu.py --create                 #Run tests that provision real cloud resources. THIS WILL COST MONEY!
 python3 KungFu.py --destroy                #Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!
 '''
@@ -104,7 +102,7 @@ class DependencyHandler():
         elif name in self.NotInstalled:
             return False
         else:
-            self.run_check(name)
+            return self.run_check(name)
 
     def run_check(self, name):
         if name == 'gui':
@@ -114,7 +112,6 @@ class DependencyHandler():
             returncodes = 0
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
-                    print('line', line)
                     result, returncode = self.run_command(line)
                     returncodes += returncode
             returncodes = not bool(returncodes)
@@ -191,12 +188,13 @@ def PartialWrapper(func, self, **kwargs):
     if type(func)==functools.partial:
         return func(**kwargs)
     new_kwargs = {}
-    arglist = list(func.__defaults__)
-    for key in kwargs:
-        if key in func.__code__.co_varnames:
-            i = func.__code__.co_varnames.index(key)
-            arglist[i-1] = kwargs[key]
-    func.__defaults__ = tuple(arglist)
+    if func.__defaults__:
+        arglist = list(func.__defaults__)
+        for key in kwargs:
+            if key in func.__code__.co_varnames:
+                i = func.__code__.co_varnames.index(key)
+                arglist[i-1] = kwargs[key]
+        func.__defaults__ = tuple(arglist)
     return func(self)
 
 class TimedTest(unittest.TestCase):
@@ -231,7 +229,8 @@ class TestRunner():
 
     def main(self):
         start = datetime.now()
-        self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
+        #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
+        self.Runner = unittest.TextTestRunner()
         result = self.Runner.run(self.TestSuite)
         print('----------------------------------------------------------------------')
         t = datetime.now()-start
@@ -278,7 +277,6 @@ class TestRunner():
         parser.add_argument("-folders", help="Specify a list of test folders to run.", type=csv)
         parser.add_argument("-folder", help="Specify a folder of tests to run.", type=str)
         parser.add_argument("-sleep", help="Specify a sleep time in second for gui tests to remain on the screen.", type=float)
-        parser.add_argument("-gui", help="Specify whether or not to run GUI tests.", type=bool)
         parser.add_argument("--create", help="provision cloud resources, (this will cost money!)", action="store_true")
         parser.add_argument("--destroy", help="destroy cloud resources, (this will destory resouces!)", action="store_true")
 
@@ -287,9 +285,6 @@ class TestRunner():
             self.TestArgs.sleep = 0.5
         if self.TestArgs.folder != None:
             self.TestArgs.folders = [self.TestArgs.folder]
-        if self.TestArgs.gui == None:
-            print('testargs check gui!')
-            self.TestArgs.gui = DependencyHandler().check('gui')
         self.TestArgs.kwargs = {}
         for (key, value) in self.TestArgs._get_kwargs():
             if key != 'kwargs':
