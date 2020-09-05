@@ -41,11 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Algorithms\Games\Bowling.cpp" />
+    <ClCompile Include="..\Algorithms\Geometry\Box.cpp" />
     <ClCompile Include="..\Algorithms\Math.cpp" />
     <ClCompile Include="..\Algorithms\_CodeWars\PlanetById.cpp" />
     <ClCompile Include="..\Algorithms\_CodeWars\SakuraFall.cpp" />
+    <ClCompile Include="..\DataStructures\DoublyLinkedList.cpp" />
+    <ClCompile Include="..\DataStructures\LinkedList.cpp" />
     <ClCompile Include="..\RunTests.cpp" />
-    <ClCompile Include="Box.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
