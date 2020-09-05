@@ -18,6 +18,8 @@ class CPPTestParser():
     def __init__(self):
         super(CPPTestParser, self).__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
+        #insert compile command, and os check here
+        print('sys.platform', sys.platform)
         self.exepath = self.cwd+'/x64/Debug/Kata.exe'
         self.results = {}
 
@@ -37,6 +39,7 @@ class CPPTestParser():
                 testname = line[13:].strip().rstrip().split('.',1)[-1]
                 nextline = True
         print('#######################################################')
+    
     def run_command(self, CommandString, silent=True):
         if not silent:
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
@@ -84,7 +87,7 @@ class test_CPPTestParser(unittest.TestCase):
         newfunc.__kwdefaults__ = {'testname': testname}
         return newfunc
 
-if False: #Need to run the compiler still before I enable this
+if False:
     test_CPPTestParser.add_tests(test_CPPTestParser)
 ##################################################
 
