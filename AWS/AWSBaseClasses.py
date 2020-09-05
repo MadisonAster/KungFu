@@ -34,8 +34,8 @@ class EKSCluster(dict):
             self[var] = val
         return result, returncode
 
-    def run_command(self, CommandString, printout=True):
-        if printout:
+    def run_command(self, CommandString, silent=True):
+        if not silent:
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
             print('run_command', CommandString)
         result = u""
@@ -44,12 +44,12 @@ class EKSCluster(dict):
                 stdout = proc.stdout.readline()
                 if stdout:
                     result += stdout.decode('utf8')
-                    if printout:
+                    if not silent:
                         print(stdout.decode('utf8'))
                 if proc.poll() is not None:
                     break
             returncode = proc.poll()
-        if printout:
+        if not silent:
             print('returncode', returncode)
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         return result, returncode

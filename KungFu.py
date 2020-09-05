@@ -260,7 +260,6 @@ class TestRunner():
             ModuleSpec.loader.exec_module(Module)
         except ImportError as exception:
             pass
-        inspect.getmembers(Module)
         for ClassName, Class in inspect.getmembers(Module):
             if 'test_' in ClassName and Class != None:
                 if ClassName in globals().keys():

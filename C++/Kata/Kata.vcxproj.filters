@@ -15,13 +15,7 @@
       <Filter>Algorithms\Games</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="..\DataStructures\DoublyLinkedList.cpp">
-      <Filter>DataStructures</Filter>
-    </ClCompile>
-    <ClCompile Include="..\DataStructures\LinkedList.cpp">
-      <Filter>DataStructures</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Algorithms\Geometry\Box.cpp">
+    <ClCompile Include="Box.cpp">
       <Filter>Algorithms\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
