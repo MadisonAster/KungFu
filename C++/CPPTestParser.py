@@ -1,10 +1,7 @@
 #Standard Imports#################################
-import sys, os
-import unittest
+import sys, os, unittest
 from importlib import machinery
 import subprocess, shlex
-import types
-import functools
 ##################################################
 
 #Relative Imports#################################
@@ -67,28 +64,11 @@ class CPPTestParser():
 
 #Test#############################################
 #@KungFu.depends('msvc', 'gcc')
-class test_CPPTestParser(unittest.TestCase):
-    def prototest(self, *args, testname=''):
-        (result, testtime) = self.parser.results[testname]
-        success = 'executed' if result else 'failed'
-        self.assertEqual(result, True)
+class test_CPPTestParser(KungFu.PrototypeTestParser):
+    pass
 
-    def add_tests(cls):
-        cls.parser = CPPTestParser()
-        cls.parser.run()
-        for testname in cls.parser.results:
-            newtest = cls.copy_func(cls, cls.prototest, testname)
-            newtest.__name__ = testname
-            setattr(cls, testname, newtest)
-
-    def copy_func(cls, func, testname):
-        newfunc = types.FunctionType(func.__code__, func.__globals__)
-        newfunc = functools.update_wrapper(newfunc, func)
-        newfunc.__kwdefaults__ = {'testname': testname}
-        return newfunc
-
-if False:
-    test_CPPTestParser.add_tests(test_CPPTestParser)
+if True:
+    test_CPPTestParser.add_tests(test_CPPTestParser, CPPTestParser)
 ##################################################
 
 #Main#############################################

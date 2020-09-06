@@ -21,6 +21,7 @@ import traceback
 import functools
 import io
 import contextlib
+import types
 ##################################################
 
 #Decorators#######################################
@@ -87,6 +88,26 @@ class TimedTest(unittest.TestCase):
     def tearDown(self):
         t = datetime.now() - self.starttime
         print(str(t), self.id())
+
+class PrototypeTestParser(unittest.TestCase):
+    def prototest(self, *args, testname=''):
+        (result, testtime) = self.parser.results[testname]
+        success = 'executed' if result else 'failed'
+        self.assertEqual(result, True)
+
+    def add_tests(cls, parsercls):
+        cls.parser = parsercls()
+        cls.parser.run()
+        for testname in cls.parser.results:
+            newtest = cls.copy_func(cls, cls.prototest, testname)
+            newtest.__name__ = testname
+            setattr(cls, testname, newtest)
+
+    def copy_func(cls, func, testname):
+        newfunc = types.FunctionType(func.__code__, func.__globals__)
+        newfunc = functools.update_wrapper(newfunc, func)
+        newfunc.__kwdefaults__ = {'testname': testname}
+        return newfunc
 ##################################################
 
 #Main#############################################
