@@ -116,7 +116,7 @@ class DependencyHandler():
     Installed = []
     NotInstalled = []
     SkipCount = 0
-    
+
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
@@ -208,6 +208,7 @@ class DependencyHandler():
         print('gui installed', installed)
         return installed
     ################################################################
+    pass
 
 class TestRunner():
     SkippedCount = 0
@@ -298,18 +299,24 @@ def RunCmd(CommandString, silent=True, cwd=os.path.dirname(os.path.abspath(__fil
     if not silent:
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('KungFu.RunCmd', CommandString)
+        print('run_command', shlex.split(CommandString))
+        print('cwd', cwd)
     result = u""
     try:
-        with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=cwd) as proc:
-            while True:
-                stdout = proc.stdout.readline()
-                if stdout:
-                    result += stdout.decode('utf8')
-                    if not silent:
-                        print(stdout.decode('utf8'))
-                if proc.poll() is not None:
-                    break
+        with subprocess.Popen(shlex.split(CommandString), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd) as proc:
+            stdout, stderr = proc.communicate()
+            print('stderr!', stderr)
+            #while True:
+            #    stdout = proc.stdout.readline()
+            #    if stdout:
+            #        result += stdout.decode('utf8')
+            #        if not silent:
+            #            print(stdout.decode('utf8'))
+            #    if proc.poll() is not None:
+            #        break
             returncode = proc.poll()
+            result += stdout.decode('utf8')
+            result += stderr.decode('utf8')
     except:
         result += traceback.format_exc()
         returncode = 1

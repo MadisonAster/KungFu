@@ -12,34 +12,35 @@ import KungFu
 
 #Code#############################################
 class NPMTestParser():
-    def __init__(self):
-        super(NPMTestParser, self).__init__()
-        self.cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
-        #insert compile command, and os check here
-        print('sys.platform', sys.platform)
-        self.exepath = self.cwd+'/x64/Debug/Kata.exe'
-        self.results = {}
-
     def run(self):
+        cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
+        self.results = {}
+        
         print('#######################################################')
-        print('Running C++ tests:')
-        result, returncode = KungFu.RunCmd(self.exepath, cwd=self.cwd)
-        print(result)
+        print('Running Javascript tests:')
+        result, returncode = KungFu.RunCmd('npm test', cwd=cwd)
         nextline = False
+        print(result)
         for line in result.rstrip().split('\n'):
-            if nextline:
-                nextline = False
-                result = 'OK' in line[0:12]
-                testtime = line.split(testname,1)[-1].strip()
+            if u'\u221A' in line:
+                result = True
+                testinfo = line.split('\u221A')[-1].strip()
+                testname = testinfo.rsplit(' (',1)[0]
+                testtime = '('+testinfo.rsplit(' (',1)[-1]
                 self.results[testname] = (result, testtime)
-            if 'RUN' in line[0:12]:
-                testname = line[13:].strip().rstrip().split('.',1)[-1]
-                nextline = True
+            elif u'\u00D7' in line:
+                result = False
+                testinfo = line.split('\u00D7')[-1].strip()
+                testname = testinfo.rsplit(' (',1)[0]
+                testtime = '('+testinfo.rsplit(' (',1)[-1]
+                self.results[testname] = (result, testtime)
+            else:
+                print(line)
         print('#######################################################')
 ##################################################
 
 #Test#############################################
-#@KungFu.depends('msvc', 'gcc')
+#@KungFu.depends('npm')
 class test_NPMTestParser(KungFu.PrototypeTestParser):
     pass
 

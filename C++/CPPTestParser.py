@@ -36,8 +36,6 @@ class CPPTestParser():
                 testname = line[13:].strip().rstrip().split('.',1)[-1]
                 nextline = True
         print('#######################################################')
-    
-    
 ##################################################
 
 #Test#############################################
@@ -45,7 +43,7 @@ class CPPTestParser():
 class test_CPPTestParser(KungFu.PrototypeTestParser):
     pass
 
-if False:
+if False: #disabling for now, until compiler is done
     test_CPPTestParser.add_tests(test_CPPTestParser, CPPTestParser)
 ##################################################
 
