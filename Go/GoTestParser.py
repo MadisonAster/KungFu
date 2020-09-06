@@ -11,9 +11,9 @@ import KungFu
 ##################################################
 
 #Code#############################################
-class CPPTestParser():
+class GoTestParser():
     def __init__(self):
-        super(CPPTestParser, self).__init__()
+        super(GoTestParser, self).__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
         #insert compile command, and os check here
         print('sys.platform', sys.platform)
@@ -36,17 +36,15 @@ class CPPTestParser():
                 testname = line[13:].strip().rstrip().split('.',1)[-1]
                 nextline = True
         print('#######################################################')
-    
-    
 ##################################################
 
 #Test#############################################
 #@KungFu.depends('msvc', 'gcc')
-class test_CPPTestParser(KungFu.PrototypeTestParser):
+class test_GoTestParser(KungFu.PrototypeTestParser):
     pass
 
-if True:
-    test_CPPTestParser.add_tests(test_CPPTestParser, CPPTestParser)
+if False:
+    test_GoTestParser.add_tests(test_GoTestParser, GoTestParser)
 ##################################################
 
 #Main#############################################

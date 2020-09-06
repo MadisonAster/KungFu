@@ -116,34 +116,11 @@ class DependencyHandler():
     Installed = []
     NotInstalled = []
     SkipCount = 0
+    
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
         return sys.DependencyHandler
-
-    def run_command(self, CommandString, silent=True):
-        if not silent:
-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            print('run_command', CommandString)
-        result = u""
-        try:
-            with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=self.cwd) as proc:
-                while True:
-                    stdout = proc.stdout.readline()
-                    if stdout:
-                        result += stdout.decode('utf8')
-                        if not silent:
-                            print(stdout.decode('utf8'))
-                    if proc.poll() is not None:
-                        break
-                returncode = proc.poll()
-        except:
-            result += traceback.format_exc()
-            returncode = 1
-        if not silent:
-            print('returncode', returncode)
-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
-        return result, returncode
 
     def check(self, name):
         if name in self.Installed:
@@ -161,7 +138,7 @@ class DependencyHandler():
             returncodes = 0
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
-                    result, returncode = self.run_command(line)
+                    result, returncode = RunCmd(line, cwd=self.cwd)
                     returncodes += returncode
             returncodes = not bool(returncodes)
             if returncodes:
@@ -177,7 +154,7 @@ class DependencyHandler():
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
                     print('line', line)
-                    result, returncode = self.run_command(line)
+                    result, returncode = RunCmd(line, cwd=self.cwd)
                     returncodes += returncode
             returncodes = not bool(returncodes)
             return returncodes
@@ -316,6 +293,30 @@ class TestRunner():
         print(self.TestArgs)
         sys.TestArgs = self.TestArgs
         return self.TestArgs
+
+def RunCmd(CommandString, silent=True, cwd=os.path.dirname(os.path.abspath(__file__)).replace('\\','/')):
+    if not silent:
+        print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
+        print('KungFu.RunCmd', CommandString)
+    result = u""
+    try:
+        with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, cwd=cwd) as proc:
+            while True:
+                stdout = proc.stdout.readline()
+                if stdout:
+                    result += stdout.decode('utf8')
+                    if not silent:
+                        print(stdout.decode('utf8'))
+                if proc.poll() is not None:
+                    break
+            returncode = proc.poll()
+    except:
+        result += traceback.format_exc()
+        returncode = 1
+    if not silent:
+        print('returncode', returncode)
+        print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    return result, returncode
 
 def main(*args):
     Dependencies = DependencyHandler()
