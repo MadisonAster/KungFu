@@ -13,11 +13,11 @@ import KungFu
 #Code#############################################
 class NPMTestParser():
     def run(self):
-        cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
         self.results = {}
-        
+       
         print('#######################################################')
         print('Running Javascript tests:')
+        cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
         result, returncode = KungFu.RunCmd('npm test', cwd=cwd)
         nextline = False
         print(result)
@@ -40,11 +40,11 @@ class NPMTestParser():
 ##################################################
 
 #Test#############################################
-#@KungFu.depends('npm')
+@KungFu.depends('npm')
 class test_NPMTestParser(KungFu.PrototypeTestParser):
     pass
 
-if False:
+if test_NPMTestParser != None:
     test_NPMTestParser.add_tests(test_NPMTestParser, NPMTestParser)
 ##################################################
 
