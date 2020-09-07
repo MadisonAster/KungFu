@@ -115,7 +115,7 @@ class DependencyHandler():
     Installed = []
     NotInstalled = []
     SkipCount = 0
-    ShellList = ['npm']
+    ShellList = ['npm'] #packages that require the shell option to be set
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
