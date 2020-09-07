@@ -18,7 +18,7 @@ class NPMTestParser():
         print('#######################################################')
         print('Running Javascript tests:')
         cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
-        result, returncode = KungFu.RunCmd('npm test', cwd=cwd)
+        result, returncode = KungFu.RunCmd('npm test', cwd=cwd, shell=True)
         nextline = False
         print(result)
         for line in result.rstrip().split('\n'):

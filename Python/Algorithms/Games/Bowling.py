@@ -1,6 +1,6 @@
 import KungFu
 
-class Game():
+class BowlingGame():
     def __init__(self):
         self.rolls = []
     def roll(self, pins):
@@ -32,7 +32,11 @@ class Game():
                 roll += 2
         return score
 
-class BowlingGameTest(KungFu.TimedTest):
+class test_BowlingGame(KungFu.TimedTest):
+    def setUp(self):
+        
+        self.game = BowlingGame()
+
     def rollMany(self, rolls, pins):
         for i in range(rolls):
             self.game.roll(pins)

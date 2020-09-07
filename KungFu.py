@@ -92,7 +92,6 @@ class TimedTest(unittest.TestCase):
 class PrototypeTestParser(unittest.TestCase):
     def prototest(self, *args, testname=''):
         (result, testtime) = self.parser.results[testname]
-        success = 'executed' if result else 'failed'
         self.assertEqual(result, True)
 
     def add_tests(cls, parsercls):
@@ -295,7 +294,7 @@ class TestRunner():
         sys.TestArgs = self.TestArgs
         return self.TestArgs
 
-def RunCmd(CommandString, silent=True, cwd=os.path.dirname(os.path.abspath(__file__)).replace('\\','/')):
+def RunCmd(CommandString, silent=True, shell=False, cwd=os.path.dirname(os.path.abspath(__file__)).replace('\\','/')):
     if not silent:
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('KungFu.RunCmd', CommandString)
@@ -303,17 +302,8 @@ def RunCmd(CommandString, silent=True, cwd=os.path.dirname(os.path.abspath(__fil
         print('cwd', cwd)
     result = u""
     try:
-        with subprocess.Popen(shlex.split(CommandString), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd) as proc:
+        with subprocess.Popen(shlex.split(CommandString), stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, shell=shell) as proc:
             stdout, stderr = proc.communicate()
-            print('stderr!', stderr)
-            #while True:
-            #    stdout = proc.stdout.readline()
-            #    if stdout:
-            #        result += stdout.decode('utf8')
-            #        if not silent:
-            #            print(stdout.decode('utf8'))
-            #    if proc.poll() is not None:
-            #        break
             returncode = proc.poll()
             result += stdout.decode('utf8')
             result += stderr.decode('utf8')
