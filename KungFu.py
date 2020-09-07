@@ -115,6 +115,7 @@ class DependencyHandler():
     Installed = []
     NotInstalled = []
     SkipCount = 0
+    ShellList = ['npm']
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
@@ -129,15 +130,17 @@ class DependencyHandler():
         else:
             return self.run_check(name)
 
-    def run_check(self, name):
+    def run_check(self, name, shell=False):
         if name == 'gui':
             return self.check_gui()
+        if name in self.ShellList:
+            shell = True
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
         if os.path.exists(checkpath):
             returncodes = 0
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
-                    result, returncode = RunCmd(line, cwd=self.cwd)
+                    result, returncode = RunCmd(line, cwd=self.cwd, shell=shell)
                     returncodes += returncode
             returncodes = not bool(returncodes)
             if returncodes:
@@ -146,7 +149,9 @@ class DependencyHandler():
                 self.NotInstalled.append(name)
             return returncodes
 
-    def run_installer(self, name):
+    def run_installer(self, name, shell=False):
+        if name in self.ShellList:
+            shell = True
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
         if os.path.exists(checkpath):
             returncodes = 0
