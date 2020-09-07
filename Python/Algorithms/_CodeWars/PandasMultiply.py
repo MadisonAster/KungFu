@@ -22,7 +22,7 @@ class test_PandasMult(KungFu.TimedTest):
     def test_3(self):
         PandasMult('b', 'c')
 ##################################################
-'''
+
 #Code#############################################
 import pandas
 def PandasMult(left, right):
@@ -38,4 +38,3 @@ def PandasMult(left, right):
 if __name__ == '__main__':
     KungFu.main(__file__)
 ##################################################
-'''
