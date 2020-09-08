@@ -416,6 +416,7 @@ def main(*args):
     '''
     KungFu.main() will run recursively
     KungFu.main(__file__) will run a single file
+    KungFu.main([file1, file2]) will run a list of files
     '''
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
