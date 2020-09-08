@@ -29,8 +29,9 @@ from pprint import pprint, pformat
 ExpectedTestCount = {'aws': 7, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
 
 def WriteBack():
-    #Writes back TestCount data into this module so that any machine can count
-    #the tests it skipped from unfulfilled dependencies with minimal complexity
+    #Writes back TestCount data into this module so that any machine
+    #can countthe tests it skipped from unfulfilled dependencies
+    #with minimal complexity
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
         ExpectedTestCount[skey] = value
