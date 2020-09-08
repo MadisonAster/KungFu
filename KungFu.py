@@ -35,9 +35,9 @@ def WriteBack():
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
         ExpectedTestCount[skey] = value
-    with open(__file__, 'r') as file:
+    with open(__file__, 'r', newline='\n') as file:
         filetext = file.read()
-    with open(__file__, 'w') as file:
+    with open(__file__, 'w', newline='\n') as file:
         #TODO: Find a cleaner way of implementing this
         flist = filetext.split('ExpectedTestCount = {',1)
         f0 = flist[0] + 'ExpectedTestCount = {'
