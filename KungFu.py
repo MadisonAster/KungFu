@@ -52,6 +52,9 @@ def WriteBack():
     the dictionary. This allows for graceful updates via git as new 
     tests are added, while still keeping the testkit logic in a 
     single file for maximum portability.
+
+    TODO: Add contents of _installers/ files into code as well, so 
+    that _installers logic is carried with the module.
     '''
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
@@ -70,9 +73,10 @@ def WriteBack():
 #Decorators#######################################
 def create(func):
     '''
-    KungFu.create decorator is for marking functions that will create cloud resources
-    and cost money. Any function marked with this decorator will not run unless the
-    --create flag is passed into argparse.
+    KungFu.create decorator is for marking functions that will create
+    cloud resources and cost money. Any function marked with this 
+    decorator will not run unless the --create flag is passed into 
+    argparse.
     See:
         AWSBaseClasses.py
     '''
@@ -84,9 +88,9 @@ def create(func):
 
 def destroy(func):
     '''
-    KungFu.create decorator is for marking functions that will destroy cloud resources.
-    Any function marked with this decorator will not run unless the --destroy flag is 
-    passed into argparse.
+    KungFu.create decorator is for marking functions that will destroy
+    cloud resources. Any function marked with this decorator will not
+    run unless the --destroy flag is passed into argparse.
     See:
         AWSBaseClasses.py
     '''
@@ -98,9 +102,10 @@ def destroy(func):
 
 def depends(*args):
     '''
-    KungFu.depends decorator provides a generic way for any test function 
-    to specify any arbitrary dependency. DependencyHandler will automatically
-    check the _installers folder to run a _check.sh file if it's available.
+    KungFu.depends decorator provides a generic way for any test 
+    function to specify any arbitrary dependency. DependencyHandler 
+    will automatically check the _installers folder to run a 
+    _check.sh file if it's available.
     '''
     dependencies = args
     def ActualDecorator(cls):
@@ -134,7 +139,8 @@ def depends(*args):
 class TimedTest(unittest.TestCase):
     '''
     Takes care of timing each test, and printing output.
-    GetPartial passes any arbitrary argparse kwarg into each test function
+    GetPartial passes any arbitrary argparse kwarg into each test 
+    function
     '''
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
@@ -163,8 +169,9 @@ class TimedTest(unittest.TestCase):
 
 class PrototypeTestParser(unittest.TestCase):
     '''
-    Prototype class for turning test data output into test_ methods that 
-    unittest can count. parsercls must be provided by the module.
+    Prototype class for turning test data output into test_ methods 
+    that unittest can count. parsercls must be provided by the 
+    module.
     See:
         CPPTestParser.py
         NPMTestParser.py
@@ -193,8 +200,9 @@ class PrototypeTestParser(unittest.TestCase):
 #Main#############################################
 class DependencyHandler():
     '''
-    Automates the process of checking, counting, and installing dependencies.
-    KungFu will automatically skip any test that your machine lacks dependencies for.
+    Automates the process of checking, counting, and installing 
+    dependencies. KungFu will automatically skip any test that your 
+    machine lacks dependencies for.
     '''
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
@@ -310,8 +318,8 @@ class DependencyHandler():
 
 class TestRunner():
     '''
-    Recursively walks down from the folder in which this module is placed
-    running every test that it can find.
+    Recursively walks down from the folder in which this module is 
+    placed running every test that it can find.
     '''
     SkippedCount = 0
     def __init__(self, *args):
@@ -401,10 +409,12 @@ def RunCmd(CommandString, silent=True, shell=False, cwd=os.path.dirname(os.path.
     '''
     Making all system calls via this command.
 
-    TODO: Turn this into CommandRunner class, and add threading wrapper to each 
-    subprocess so that tests and module level calls are automatically parralellized.
+    TODO: Turn this into CommandRunner class, and add threading 
+    wrapper to each subprocess so that tests and module level calls 
+    are automatically parralellized.
 
-    TODO: Create and manage mutex locks for each listed dependency in a test.
+    TODO: Create and manage mutex locks for each listed dependency in
+    a test.
     '''
     if not silent:
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
