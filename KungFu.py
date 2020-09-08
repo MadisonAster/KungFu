@@ -25,7 +25,7 @@ import types
 from pprint import pprint, pformat
 ##################################################
 
-#Auto Generated###################################
+#Write Back###################################
 ExpectedTestCount = {'aws': 7, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
 
 def WriteBack():
@@ -63,7 +63,7 @@ def destroy(func):
 
 def depends(*args):
     dependencies = args
-    def actual_decorator(cls):
+    def ActualDecorator(cls):
         if 'base' in dependencies:
             setattr(cls, 'dependencies', dependencies)
             return cls
@@ -73,7 +73,7 @@ def depends(*args):
                 count += 1
         rNone = False
         for dependency in dependencies:
-            if not DependencyHandler().check(dependency):
+            if not DependencyHandler().Check(dependency):
                 rcount = count
                 if rcount == 0 and dependency in ExpectedTestCount.keys():
                     rcount = ExpectedTestCount[dependency]   
@@ -87,7 +87,7 @@ def depends(*args):
                 return None
             setattr(cls, 'dependencies', dependencies)
             return cls
-    return actual_decorator
+    return ActualDecorator
 ##################################################
 
 #Base Classes#####################################
@@ -118,20 +118,20 @@ class TimedTest(unittest.TestCase):
         print(str(t), self.id())
 
 class PrototypeTestParser(unittest.TestCase):
-    def prototest(self, *args, testname=''):
+    def Prototest(self, *args, testname=''):
         (result, testtime) = self.parser.results[testname]
         self.assertEqual(result, True)
 
-    def add_tests(cls, parsercls):
+    def AddTests(cls, parsercls):
         cls.parser = parsercls()
         cls.parser.run()
         for testname in cls.parser.results:
-            newtest = cls.copy_func(cls, cls.prototest, testname)
+            newtest = cls.CopyFunc(cls, cls.Prototest, testname)
             newtest.__name__ = testname
             setattr(cls, testname, newtest)
         DependencyHandler().CountTests(cls.dependencies, len(cls.parser.results))
 
-    def copy_func(cls, func, testname):
+    def CopyFunc(cls, func, testname):
         newfunc = types.FunctionType(func.__code__, func.__globals__)
         newfunc = functools.update_wrapper(newfunc, func)
         newfunc.__kwdefaults__ = {'testname': testname}
@@ -152,17 +152,17 @@ class DependencyHandler():
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
         return sys.DependencyHandler
 
-    def check(self, name):
+    def Check(self, name):
         if name in self.Installed:
             return True
         elif name in self.NotInstalled:
             return False
         else:
-            return self.run_check(name)
+            return self.RunCheck(name)
 
-    def run_check(self, name, shell=False):
+    def RunCheck(self, name, shell=False):
         if name == 'gui':
-            return self.check_gui()
+            return self.CheckGui()
         if name in self.ShellList:
             shell = True
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
@@ -179,7 +179,7 @@ class DependencyHandler():
                 self.NotInstalled.append(name)
             return returncodes
 
-    def run_installer(self, name, shell=False):
+    def RunInstaller(self, name, shell=False):
         if name in self.ShellList:
             shell = True
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
@@ -193,7 +193,7 @@ class DependencyHandler():
             returncodes = not bool(returncodes)
             return returncodes
 
-    def offer_installers(self):
+    def OfferInstallers(self):
         if len(self.NotInstalled) != 0:
             print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
             for name in self.NotInstalled:
@@ -208,21 +208,12 @@ class DependencyHandler():
                     answer = input('    Would you like to try installing '+name+'? ')
                     answer = answer.lower() in ['y', 'yes', 'true']
                     if answer == True:
-                        run_installer(name)
+                        RunInstaller(name)
         else:
             print('Everything OK!')
         print('----------------------------------------------------------------------')
         print('Goodbye!')
     
-    def CountTests(self, dependencies, count):
-        if isinstance(dependencies, str):
-            dependencies = [dependencies]
-        for dependency in dependencies:
-            actual_dependecy = 'actual_'+dependency
-            if actual_dependecy not in self.TestCount:
-                self.TestCount[actual_dependecy] = 0
-            self.TestCount[actual_dependecy] += count
-
     ###Still hacking this for now until I find a more general way###
     @contextlib.contextmanager
     def GetStderrIO(self, stderr=None):
@@ -233,7 +224,7 @@ class DependencyHandler():
         yield stderr
         sys.stderr = old
 
-    def check_gui(self):
+    def CheckGui(self):
         try:
             with self.GetStderrIO() as stderr:
                 from Qt import QtCore
@@ -251,7 +242,15 @@ class DependencyHandler():
         print('gui installed', installed)
         return installed
     ################################################################
-    pass
+    
+    def CountTests(self, dependencies, count):
+        if isinstance(dependencies, str):
+            dependencies = [dependencies]
+        for dependency in dependencies:
+            actual_dependecy = 'actual_'+dependency
+            if actual_dependecy not in self.TestCount:
+                self.TestCount[actual_dependecy] = 0
+            self.TestCount[actual_dependecy] += count
 
 class TestRunner():
     SkippedCount = 0
@@ -363,7 +362,7 @@ def main(*args):
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
-    Dependencies.offer_installers()
+    Dependencies.OfferInstallers()
 
 if __name__ == '__main__':
     main()

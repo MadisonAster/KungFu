@@ -44,7 +44,7 @@ class test_GoTestParser(KungFu.PrototypeTestParser):
     pass
 
 if False:
-    test_GoTestParser.add_tests(test_GoTestParser, GoTestParser)
+    test_GoTestParser.AddTests(test_GoTestParser, GoTestParser)
 ##################################################
 
 #Main#############################################
