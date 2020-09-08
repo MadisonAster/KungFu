@@ -32,7 +32,7 @@ def WriteBack():
     '''
     Writes back TestCount data into this module so that any machine
     can count the tests it skipped from unfulfilled dependencies
-    with minimal complexity anywhere this module is run.
+    anywhere this module is run.
     
     Only successful runs of any dependency on a machine will update 
     the dictionary. This allows for graceful updates via git as new 
@@ -345,6 +345,14 @@ class TestRunner():
         return self.TestArgs
 
 def RunCmd(CommandString, silent=True, shell=False, cwd=os.path.dirname(os.path.abspath(__file__)).replace('\\','/')):
+    '''
+    Making all system calls via this command.
+
+    TODO: Turn this into CommandRunner class, and add threading wrapper to each 
+    subprocess so that tests and module level calls are automatically parralellized.
+
+    Create and manage mutex locks for each listed dependency in a test.
+    '''
     if not silent:
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('KungFu.RunCmd', CommandString)
