@@ -147,6 +147,10 @@ class PrototypeTestParser(unittest.TestCase):
 
 #Main#############################################
 class DependencyHandler():
+    '''
+    Automates the process of checking, counting, and installing dependencies.
+    KungFu will automatically skip any test that your machine lacks dependencies for.
+    '''
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
     NotInstalled = []
@@ -260,6 +264,10 @@ class DependencyHandler():
             self.TestCount[actual_dependecy] += count
 
 class TestRunner():
+    '''
+    Recursively walks down from the folder in which this module is placed
+    running every test that it can find.
+    '''
     SkippedCount = 0
     def __init__(self, *args):
         super(TestRunner, self).__init__()
@@ -374,6 +382,10 @@ def RunCmd(CommandString, silent=True, shell=False, cwd=os.path.dirname(os.path.
     return result, returncode
 
 def main(*args):
+    '''
+    KungFu.main() will run recursively
+    KungFu.main(__file__) will run a single file
+    '''
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
@@ -381,5 +393,5 @@ def main(*args):
 
 if __name__ == '__main__':
     main()
-    WriteBack()
+    WriteBack() #Code will only modify itself when run directly
 ##################################################
