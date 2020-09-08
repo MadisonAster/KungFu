@@ -13,9 +13,7 @@ import KungFu
 #Test#############################################
 class test_Darts(KungFu.TimedTest):
     def test_GutterGame(self):
-        game = Bowling()
-        game.rollMany(20, 0)
-        self.assertEqual(game.score(), 0)
+        game = Darts()
 ##################################################
 
 #Code#############################################
@@ -27,9 +25,6 @@ class Darts():
         self.initial_velocity = (0,0,0)
         self.initial_rvelocity = (0,0,0)
         self.drag_coefficient = 0
-
-    def roll(self, pins):
-        self.rolls.append(pins)
 ##################################################
 
 #Main#############################################
