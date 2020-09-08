@@ -55,6 +55,13 @@ def WriteBack():
 
 #Decorators#######################################
 def create(func):
+    '''
+    KungFu.create decorator is for marking functions that will create cloud resources
+    and cost money. Any function marked with this decorator will not run unless the
+    --create flag is passed into argparse.
+    See:
+        AWSBaseClasses.py
+    '''
     if not sys.TestArgs.create:
         print('Skipping create Test')
         return None
@@ -62,6 +69,13 @@ def create(func):
         return func
 
 def destroy(func):
+    '''
+    KungFu.create decorator is for marking functions that will destroy cloud resources.
+    Any function marked with this decorator will not run unless the --destroy flag is 
+    passed into argparse.
+    See:
+        AWSBaseClasses.py
+    '''
     if not sys.TestArgs.destroy:
         print('Skipping destroy Test')
         return None
@@ -69,6 +83,11 @@ def destroy(func):
         return func
 
 def depends(*args):
+    '''
+    KungFu.depends decorator provides a generic way for any test function 
+    to specify any arbitrary dependency. DependencyHandler will automatically
+    check the _installers folder to run a _check.sh file if it's available.
+    '''
     dependencies = args
     def ActualDecorator(cls):
         if 'base' in dependencies:
@@ -99,6 +118,10 @@ def depends(*args):
 
 #Base Classes#####################################
 class TimedTest(unittest.TestCase):
+    '''
+    Takes care of timing each test, and printing output.
+    GetPartial passes any arbitrary argparse kwarg into each test function
+    '''
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
         for FunctionName, Function in inspect.getmembers(self.__class__):
@@ -125,6 +148,14 @@ class TimedTest(unittest.TestCase):
         print(str(t), self.id())
 
 class PrototypeTestParser(unittest.TestCase):
+    '''
+    Prototype class for turning test data output into test_ methods that 
+    unittest can count. parsercls must be provided by the module.
+    See:
+        CPPTestParser.py
+        NPMTestParser.py
+        GoTestParser.py
+    '''
     def Prototest(self, *args, testname=''):
         (result, testtime) = self.parser.results[testname]
         self.assertEqual(result, True)
