@@ -334,6 +334,23 @@ class TestRunner():
             self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
+        '''
+        TODO: add printing of comaprison columns for matching testnames like this
+        
+        TestName        python3         c++             javascript      go 
+        Dijkstras       P-1.000s        P-0.500s        P-0.800s        F-10.000s
+        Fibonacci       P-1.000s        P-0.500s        P-0.800s        F-10.000s
+        QuickSort       P-1.000s        P-0.500s        P-0.800s        F-10.000s
+        Darts           P-1.000s        P-0.500s        P-0.800s        F-10.000s
+
+        TestName        aws             gcp
+        CreateCluster   P-300.000s      P-250.000s
+        DestroyCluster  P-300.000s      P-250.000s
+
+        TestName        unreal          unity
+        PluginCompile   P-50.000s       P-20.000s
+        SublevelHell    P-300.000s      P-250.000s
+        '''
         start = datetime.now()
         #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
         self.Runner = unittest.TextTestRunner()
