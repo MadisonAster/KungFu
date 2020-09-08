@@ -43,7 +43,6 @@ def WriteBack():
         f1 = flist[1].split('}',1)[1]
         newfiletext = f0 + pformat(ExpectedTestCount).replace('{','',1) + f1
         file.write(newfiletext)
-    #print('ExpectedTestCount', pformat(ExpectedTestCount))
 ##################################################
 
 #Decorators#######################################
