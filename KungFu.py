@@ -22,6 +22,28 @@ import functools
 import io
 import contextlib
 import types
+from pprint import pprint, pformat
+##################################################
+
+#Auto Generated###################################
+ExpectedTestCount = {'aws': 7, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
+
+def WriteBack():
+    #Writes back TestCount data into this module so that any machine can count
+    #the tests it skipped from unfulfilled dependencies with minimal complexity
+    for key, value in DependencyHandler().TestCount.items():
+        skey = key.replace('actual_', '')
+        ExpectedTestCount[skey] = value
+    with open(__file__, 'r') as file:
+        filetext = file.read()
+    with open(__file__, 'w') as file:
+        #TODO: Find a cleaner way of implementing this
+        flist = filetext.split('ExpectedTestCount = {',1)
+        f0 = flist[0] + 'ExpectedTestCount = {'
+        f1 = flist[1].split('}',1)[1]
+        newfiletext = f0 + pformat(ExpectedTestCount).replace('{','',1) + f1
+        file.write(newfiletext)
+    #print('ExpectedTestCount', pformat(ExpectedTestCount))
 ##################################################
 
 #Decorators#######################################
@@ -40,25 +62,31 @@ def destroy(func):
         return func
 
 def depends(*args):
-    dependencylist = args
+    dependencies = args
     def actual_decorator(cls):
-        if 'base' in dependencylist:
+        if 'base' in dependencies:
+            setattr(cls, 'dependencies', dependencies)
             return cls
+        count = 0
+        for FunctionName, Function in inspect.getmembers(cls):
+            if 'test_' in FunctionName:
+                count += 1
         rNone = False
-        for dependency in dependencylist:
+        for dependency in dependencies:
             if not DependencyHandler().check(dependency):
-                count = 0
-                for FunctionName, Function in inspect.getmembers(cls):
-                    if 'test_' in FunctionName:
-                        count += 1
-                print('Skipping '+str(count)+' '+dependency+' test(s).')
-                DependencyHandler().SkipCount += count
+                rcount = count
+                if rcount == 0 and dependency in ExpectedTestCount.keys():
+                    rcount = ExpectedTestCount[dependency]   
+                print('Skipping '+str(rcount)+' '+dependency+' test(s).')
+                DependencyHandler().SkipCount += rcount
                 rNone = True
+            else:
+                DependencyHandler().CountTests(dependency, count)
         else:
-            if rNone:
+            if rNone or cls == None:
                 return None
-            if cls:
-                return cls
+            setattr(cls, 'dependencies', dependencies)
+            return cls
     return actual_decorator
 ##################################################
 
@@ -101,6 +129,7 @@ class PrototypeTestParser(unittest.TestCase):
             newtest = cls.copy_func(cls, cls.prototest, testname)
             newtest.__name__ = testname
             setattr(cls, testname, newtest)
+        DependencyHandler().CountTests(cls.dependencies, len(cls.parser.results))
 
     def copy_func(cls, func, testname):
         newfunc = types.FunctionType(func.__code__, func.__globals__)
@@ -116,6 +145,7 @@ class DependencyHandler():
     NotInstalled = []
     SkipCount = 0
     ShellList = ['npm'] #packages that require the shell option to be set
+    TestCount = {}
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
@@ -184,6 +214,15 @@ class DependencyHandler():
         print('----------------------------------------------------------------------')
         print('Goodbye!')
     
+    def CountTests(self, dependencies, count):
+        if isinstance(dependencies, str):
+            dependencies = [dependencies]
+        for dependency in dependencies:
+            actual_dependecy = 'actual_'+dependency
+            if actual_dependecy not in self.TestCount:
+                self.TestCount[actual_dependecy] = 0
+            self.TestCount[actual_dependecy] += count
+
     ###Still hacking this for now until I find a more general way###
     @contextlib.contextmanager
     def GetStderrIO(self, stderr=None):
@@ -328,4 +367,5 @@ def main(*args):
 
 if __name__ == '__main__':
     main()
+    WriteBack()
 ##################################################
