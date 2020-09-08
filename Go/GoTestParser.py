@@ -12,38 +12,33 @@ import KungFu
 
 #Code#############################################
 class GoTestParser():
-    def __init__(self):
-        super(GoTestParser, self).__init__()
-        self.cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
-        #insert compile command, and os check here
-        print('sys.platform', sys.platform)
-        self.exepath = self.cwd+'/x64/Debug/Kata.exe'
+    def run(self):
         self.results = {}
 
-    def run(self):
         print('#######################################################')
-        print('Running C++ tests:')
-        result, returncode = KungFu.RunCmd(self.exepath, cwd=self.cwd)
+        print('Running Go tests:')
+        cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
+        result, returncode = KungFu.RunCmd('go test -v', cwd=cwd)
         print(result)
         nextline = False
         for line in result.rstrip().split('\n'):
             if nextline:
                 nextline = False
-                result = 'OK' in line[0:12]
+                result = 'PASS' in line[0:8]
                 testtime = line.split(testname,1)[-1].strip()
                 self.results[testname] = (result, testtime)
-            if 'RUN' in line[0:12]:
-                testname = line[13:].strip().rstrip().split('.',1)[-1]
+            if 'RUN' in line[0:7]:
+                testname = line[10:].rstrip()
                 nextline = True
         print('#######################################################')
 ##################################################
 
 #Test#############################################
-#@KungFu.depends('msvc', 'gcc')
+@KungFu.depends('go')
 class test_GoTestParser(KungFu.PrototypeTestParser):
     pass
 
-if False:
+if True:
     test_GoTestParser.AddTests(test_GoTestParser, GoTestParser)
 ##################################################
 

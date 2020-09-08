@@ -26,7 +26,7 @@ from pprint import pprint, pformat
 ##################################################
 
 #Write Back###################################
-ExpectedTestCount = {'aws': 7, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
+ExpectedTestCount = {'aws': 7, 'go': 14, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
 
 def WriteBack():
     '''
@@ -95,7 +95,7 @@ def depends(*args):
             return cls
         count = 0
         for FunctionName, Function in inspect.getmembers(cls):
-            if 'test_' in FunctionName:
+            if 'test_' == FunctionName.lower()[:5]:
                 count += 1
         rNone = False
         for dependency in dependencies:
@@ -125,7 +125,7 @@ class TimedTest(unittest.TestCase):
     def __init__(self, *args):
         super(TimedTest, self).__init__(*args)
         for FunctionName, Function in inspect.getmembers(self.__class__):
-            if Function and 'test_' in FunctionName:
+            if Function and 'test_' == FunctionName.lower()[:5]:
                 partial = functools.partial(self.GetPartial, Function)
                 setattr(self.__class__, FunctionName, partial)
 
@@ -165,8 +165,8 @@ class PrototypeTestParser(unittest.TestCase):
         cls.parser.run()
         for testname in cls.parser.results:
             newtest = cls.CopyFunc(cls, cls.Prototest, testname)
-            newtest.__name__ = testname
-            setattr(cls, testname, newtest)
+            newtest.__name__ = 'test_'+testname[5:]
+            setattr(cls, newtest.__name__, newtest)
         DependencyHandler().CountTests(cls.dependencies, len(cls.parser.results))
 
     def CopyFunc(cls, func, testname):
