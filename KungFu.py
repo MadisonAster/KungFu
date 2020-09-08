@@ -334,6 +334,13 @@ class TestRunner():
             self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
+        start = datetime.now()
+        #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
+        self.Runner = unittest.TextTestRunner()
+        result = self.Runner.run(self.TestSuite)
+        print('----------------------------------------------------------------------')
+        t = datetime.now()-start
+        print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
         '''
         TODO: add printing of comaprison columns for matching testnames like this
         
@@ -351,13 +358,6 @@ class TestRunner():
         PluginCompile   P-50.000s       P-20.000s
         SublevelHell    P-300.000s      P-250.000s
         '''
-        start = datetime.now()
-        #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
-        self.Runner = unittest.TextTestRunner()
-        result = self.Runner.run(self.TestSuite)
-        print('----------------------------------------------------------------------')
-        t = datetime.now()-start
-        print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
 
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
