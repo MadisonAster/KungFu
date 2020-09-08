@@ -29,9 +29,16 @@ from pprint import pprint, pformat
 ExpectedTestCount = {'aws': 7, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
 
 def WriteBack():
-    #Writes back TestCount data into this module so that any machine
-    #can count the tests it skipped from unfulfilled dependencies
-    #with minimal complexity anywhere this module is run
+    '''
+    Writes back TestCount data into this module so that any machine
+    can count the tests it skipped from unfulfilled dependencies
+    with minimal complexity anywhere this module is run.
+    
+    Only successful runs of any dependency on a machine will update 
+    the dictionary. This allows for graceful updates via git as new 
+    tests are added, while still keeping the testkit logic in a 
+    single file for maximum portability.
+    '''
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
         ExpectedTestCount[skey] = value
