@@ -28,9 +28,11 @@ from pprint import pprint, pformat
 #Write Back###################################
 ExpectedTestCount = {
  'aws': 7,
+ 'docker': 0,
  'go': 14,
  'gui': 6,
  'java': 0,
+ 'kubectl': 0,
  'maya': 0,
  'npm': 7,
  'nuke': 0,
