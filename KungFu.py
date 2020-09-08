@@ -351,7 +351,7 @@ def RunCmd(CommandString, silent=True, shell=False, cwd=os.path.dirname(os.path.
     TODO: Turn this into CommandRunner class, and add threading wrapper to each 
     subprocess so that tests and module level calls are automatically parralellized.
 
-    Create and manage mutex locks for each listed dependency in a test.
+    TODO: Create and manage mutex locks for each listed dependency in a test.
     '''
     if not silent:
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~')
