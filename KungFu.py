@@ -30,8 +30,8 @@ ExpectedTestCount = {'aws': 7, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraf
 
 def WriteBack():
     #Writes back TestCount data into this module so that any machine
-    #can countthe tests it skipped from unfulfilled dependencies
-    #with minimal complexity
+    #can count the tests it skipped from unfulfilled dependencies
+    #with minimal complexity anywhere this module is run
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
         ExpectedTestCount[skey] = value
