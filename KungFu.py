@@ -26,7 +26,19 @@ from pprint import pprint, pformat
 ##################################################
 
 #Write Back###################################
-ExpectedTestCount = {'aws': 7, 'go': 14, 'gui': 6, 'npm': 7, 'pandas': 3, 'qt': 6, 'terraform': 7}
+ExpectedTestCount = {
+ 'aws': 7,
+ 'go': 14,
+ 'gui': 6,
+ 'java': 0,
+ 'maya': 0,
+ 'npm': 7,
+ 'nuke': 0,
+ 'pandas': 3,
+ 'qt': 6,
+ 'terraform': 7,
+ 'unreal': 0,
+}
 
 def WriteBack():
     '''
@@ -46,10 +58,10 @@ def WriteBack():
         filetext = file.read()
     with open(__file__, 'w', newline='\n') as file:
         #TODO: Find a cleaner way of implementing this
-        flist = filetext.split('ExpectedTestCount = {',1)
-        f0 = flist[0] + 'ExpectedTestCount = {'
+        flist = filetext.split('ExpectedTestCount = {\n',1)
+        f0 = flist[0] + 'ExpectedTestCount = {\n'
         f1 = flist[1].split('}',1)[1]
-        newfiletext = f0 + pformat(ExpectedTestCount).replace('{','',1) + f1
+        newfiletext = f0 +' '+ pformat(ExpectedTestCount).replace('{','',1).replace('}',',\n}') + f1
         file.write(newfiletext)
 ##################################################
 
