@@ -11,38 +11,41 @@ import KungFu
 ##################################################
 
 #Test#############################################
-@KungFu.depends('static_frame', 'yfinance')
+@KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
 class test_StaticFrameFromSymbol(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
         frame = StaticFrameFromSymbol('GLD')
     def test_GOLD(self):
-        frame = StaticFrameFromSymbol('GOLD')
+        frame = StaticFrameFromSymbol('GC=F')
+    
     def test_SLV(self):
         frame = StaticFrameFromSymbol('SLV')
     def test_SILVER(self):
-        frame = StaticFrameFromSymbol('SILVER')
+        frame = StaticFrameFromSymbol('SI=F')
+    
     def test_BTCUSD(self):
-        frame = StaticFrameFromSymbol('BTCUSD')
-    def test_EURUSD(self):
-        frame = StaticFrameFromSymbol('EURUSD')
+        frame = StaticFrameFromSymbol('BTC=X')
+    def test_USDEUR(self):
+        frame = StaticFrameFromSymbol('EUR=X')
     def test_USDGBP(self):
-        frame = StaticFrameFromSymbol('USDGBP')
+        frame = StaticFrameFromSymbol('GBP=X')
     def test_USDCAD(self):
-        frame = StaticFrameFromSymbol('USDCAD')
+        frame = StaticFrameFromSymbol('CAD=X')
     def test_USDJPY(self):
-        frame = StaticFrameFromSymbol('USDJPY')
+        frame = StaticFrameFromSymbol('JPY=X')
     def test_USDCNY(self):
-        frame = StaticFrameFromSymbol('USDCNY')
+        frame = StaticFrameFromSymbol('CNY=X')
 
     #Indexes 
     def test_DJI(self):
-        frame = StaticFrameFromSymbol('DJI')
+        frame = StaticFrameFromSymbol('^DJI')
     def test_NDAQ(self):
         frame = StaticFrameFromSymbol('NDAQ')
     def test_SPX(self):
-        frame = StaticFrameFromSymbol('SPX')
-
+        frame = StaticFrameFromSymbol('^GSPC')
+    
+    
     #ETFs
     def test_VYM(self):
         frame = StaticFrameFromSymbol('VYM')
@@ -56,7 +59,7 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
         frame = StaticFrameFromSymbol('MFUS')
     def test_MFDX(self):
         frame = StaticFrameFromSymbol('MFDX')
-
+    
     #Tech
     def test_FB(self):
         frame = StaticFrameFromSymbol('FB')
@@ -84,19 +87,23 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
         frame = StaticFrameFromSymbol('MCD')
     def test_WMT(self):
         frame = StaticFrameFromSymbol('WMT')
-    def test_TGT(self):
-        frame = StaticFrameFromSymbol('TGT')
-
+    #def test_TGT(self):
+    #    frame = StaticFrameFromSymbol('TGT')
+    
     #War
     def test_USOIL(self):
-        frame = StaticFrameFromSymbol('USOIL')
+        frame = StaticFrameFromSymbol('CL=F')
     def test_RTX(self):
         frame = StaticFrameFromSymbol('RTX')
     def test_AAXN(self):
         frame = StaticFrameFromSymbol('AAXN')
     def test_CXW(self):
         frame = StaticFrameFromSymbol('CXW')
-
+    #def test_SWBI(self):
+    #    frame = StaticFrameFromSymbol('SWBI')
+    def test_RGR(self):
+        frame = StaticFrameFromSymbol('RGR')
+    
     
 ##################################################
 
@@ -104,8 +111,47 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
 import static_frame as sf
 import yfinance as yf
 class StaticFrameFromSymbol():
-    def __init__(self, Symbol):
-        pass
+    def __init__(self, Symbol, period='ytd', interval='1d'):
+        ticker = yf.Ticker(Symbol)
+        #print(ticker.info)
+        #hist = ticker.history(period="1m")
+        '''
+        data = yf.download(
+            # or pdr.get_data_yahoo(...
+            # tickers list or string as well
+            tickers = Symbol,
+
+            # use "period" instead of start/end
+            # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
+            # (optional, default is '1mo')
+            period = period,
+
+            # fetch data by interval (including intraday if period < 60 days)
+            # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
+            # (optional, default is '1d')
+            interval = interval,
+
+            # group by ticker (to access via data['SPY'])
+            # (optional, default is 'column')
+            group_by = 'ticker',
+
+            # adjust all OHLC automatically
+            # (optional, default is False)
+            auto_adjust = True,
+
+            # download pre/post regular market hours data
+            # (optional, default is False)
+            prepost = True,
+
+            # use threads for mass downloading? (True/False/Integer)
+            # (optional, default is True)
+            threads = True,
+
+            # proxy URL scheme use use when downloading?
+            # (optional, default is None)
+            proxy = None
+        )
+        '''
 ##################################################
 
 #Main#############################################

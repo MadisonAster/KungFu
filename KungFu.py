@@ -33,10 +33,11 @@ ExpectedTestCount = {
  'gui': 6,
  'java': 0,
  'kubectl': 0,
+ 'lxml': 36,
  'maya': 0,
  'npm': 7,
  'nuke': 0,
- 'pandas': 3,
+ 'pandas': 36,
  'qt': 6,
  'static_frame': 36,
  'terraform': 7,
@@ -227,13 +228,11 @@ class DependencyHandler():
             return self.RunCheck(name)
 
     def RunCheck(self, name, shell=False):
-        print('RunCheck', name)
         if name == 'gui':
             return self.CheckGui()
         if name in self.ShellList:
             shell = True
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
-        print('checkpath', checkpath)
         if os.path.exists(checkpath):
             returncodes = 0
             with open(checkpath, 'r') as file:
