@@ -16,15 +16,12 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
         frame = StaticFrameFromSymbol('GLD')
-    
     def test_GOLD(self):
         frame = StaticFrameFromSymbol('GC=F')
-    
     def test_SLV(self):
         frame = StaticFrameFromSymbol('SLV')
     def test_SILVER(self):
         frame = StaticFrameFromSymbol('SI=F')
-    
     def test_BTCUSD(self):
         frame = StaticFrameFromSymbol('BTC=X')
     def test_USDEUR(self):
