@@ -38,9 +38,10 @@ ExpectedTestCount = {
  'nuke': 0,
  'pandas': 3,
  'qt': 6,
- 'static_frame': 1,
+ 'static_frame': 36,
  'terraform': 7,
  'unreal': 0,
+ 'yfinance': 36,
 }
 
 def WriteBack():
