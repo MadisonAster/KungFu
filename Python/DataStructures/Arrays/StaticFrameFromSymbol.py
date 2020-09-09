@@ -12,6 +12,7 @@ import KungFu
 
 #Test#############################################
 @KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
+#@KungFu.depends('hypothesis', 'xlsxwriter', 'openpyxl', 'xarray', 'tables', 'pyarrow')
 class test_static_frame(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
