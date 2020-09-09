@@ -16,6 +16,7 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
         frame = StaticFrameFromSymbol('GLD')
+    
     def test_GOLD(self):
         frame = StaticFrameFromSymbol('GC=F')
     
@@ -44,7 +45,6 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
         frame = StaticFrameFromSymbol('NDAQ')
     def test_SPX(self):
         frame = StaticFrameFromSymbol('^GSPC')
-    
     
     #ETFs
     def test_VYM(self):
@@ -105,6 +105,7 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
         frame = StaticFrameFromSymbol('RGR')
     
     
+    
 ##################################################
 
 #Code#############################################
@@ -115,7 +116,7 @@ class StaticFrameFromSymbol():
         ticker = yf.Ticker(Symbol)
         #print(ticker.info)
         #hist = ticker.history(period="1m")
-        '''
+        
         data = yf.download(
             # or pdr.get_data_yahoo(...
             # tickers list or string as well
@@ -151,7 +152,9 @@ class StaticFrameFromSymbol():
             # (optional, default is None)
             proxy = None
         )
-        '''
+        
+        print(type(data))
+        print(data)
 ##################################################
 
 #Main#############################################
