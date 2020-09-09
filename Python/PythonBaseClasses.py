@@ -38,4 +38,8 @@ class SingletonApp(QtWidgets.QApplication):
 if 'BasicWindow' not in sys.modules.keys(): #Relative import handling for base classes
     machinery.SourceFileLoader('BasicWindow', os.path.dirname(os.path.abspath(__file__))+'/Qt/Windows/BasicWindow.py').load_module()
 from BasicWindow import BasicWindow
+
+if 'StaticFrameFromSymbol' not in sys.modules.keys(): #Relative import handling for base classes
+    machinery.SourceFileLoader('StaticFrameFromSymbol', os.path.dirname(os.path.abspath(__file__))+'/Datastructures/Arrays/StaticFrameFromSymbol.py').load_module()
+from StaticFrameFromSymbol import static_frame
 ##################################################
