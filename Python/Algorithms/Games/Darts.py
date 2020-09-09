@@ -12,7 +12,7 @@ import KungFu
 
 #Test#############################################
 class test_Darts(KungFu.TimedTest):
-    def test_GutterGame(self):
+    def test_Darts1(self):
         game = Darts()
 ##################################################
 
