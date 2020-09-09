@@ -2,6 +2,7 @@ Java/bin/
 Desktop.ini
 Thumbs.db
 .DS_Store
+workspace.wp
 *.pyc
 __pycache__
 Python/codility/__pycache__
