@@ -117,7 +117,7 @@ class StaticFrameFromSymbol():
         #print(ticker.info)
         #hist = ticker.history(period="1m")
         
-        data = yf.download(
+        data = sf.Frame.from_pandas(yf.download(
             # or pdr.get_data_yahoo(...
             # tickers list or string as well
             tickers = Symbol,
@@ -151,10 +151,10 @@ class StaticFrameFromSymbol():
             # proxy URL scheme use use when downloading?
             # (optional, default is None)
             proxy = None
-        )
-        
+        ))
         print(type(data))
         print(data)
+        return data
 ##################################################
 
 #Main#############################################
