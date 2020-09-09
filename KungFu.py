@@ -36,7 +36,7 @@ ExpectedTestCount = {
  'maya': 0,
  'npm': 7,
  'nuke': 0,
- 'pandas': 3,
+ 'pandas': 0,
  'qt': 6,
  'terraform': 7,
  'unreal': 0,
@@ -53,8 +53,8 @@ def WriteBack():
     tests are added, while still keeping the testkit logic in a 
     single file for maximum portability.
 
-    TODO: Add contents of _installers/ files into code as well, so 
-    that _installers logic is carried with the module.
+    TODO: Replace _installers with "conda install -c package" commands.
+          I was previously unaware of the existence of this.
     '''
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
