@@ -103,9 +103,6 @@ class test_StaticFrameFromSymbol(KungFu.TimedTest):
     #    frame = StaticFrameFromSymbol('SWBI')
     def test_RGR(self):
         frame = StaticFrameFromSymbol('RGR')
-    
-    
-    
 ##################################################
 
 #Code#############################################
