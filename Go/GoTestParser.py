@@ -39,7 +39,7 @@ class test_GoTestParser(KungFu.PrototypeTestParser):
     pass
 
 if test_GoTestParser != None:
-    test_GoTestParser.AddTests(test_GoTestParser, GoTestParser)
+    test_GoTestParser.AddTests(GoTestParser)
 ##################################################
 
 #Main#############################################

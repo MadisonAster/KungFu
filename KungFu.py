@@ -184,15 +184,17 @@ class PrototypeTestParser(unittest.TestCase):
         (result, testtime) = self.parser.results[testname]
         self.assertEqual(result, True)
 
+    @classmethod
     def AddTests(cls, parsercls):
         cls.parser = parsercls()
         cls.parser.run()
         for testname in cls.parser.results:
-            newtest = cls.CopyFunc(cls, cls.Prototest, testname)
+            newtest = cls.CopyFunc(cls.Prototest, testname)
             newtest.__name__ = 'test_'+testname[5:]
             setattr(cls, newtest.__name__, newtest)
         DependencyHandler().CountTests(cls.dependencies, len(cls.parser.results))
 
+    @classmethod
     def CopyFunc(cls, func, testname):
         newfunc = types.FunctionType(func.__code__, func.__globals__)
         newfunc = functools.update_wrapper(newfunc, func)
