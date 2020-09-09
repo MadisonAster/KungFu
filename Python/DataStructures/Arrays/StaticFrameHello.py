@@ -11,21 +11,17 @@ import KungFu
 ##################################################
 
 #Test#############################################
-@KungFu.depends('pandas')
-class test_Darts(KungFu.TimedTest):
-    def test_Darts1(self):
-        game = Darts()
+@KungFu.depends('static_frame')
+class test_StaticFrameHello(KungFu.TimedTest):
+    def test_1(self):
+        myframe = StaticFrameHello()
 ##################################################
 
 #Code#############################################
-import pandas
-class Darts():
+import static_frame as sf
+class StaticFrameHello():
     def __init__(self):
-        self.start_location = (0,0,0)
-        self.start_rotation = (0,0,0)
-        self.initial_velocity = (0,0,0)
-        self.initial_rvelocity = (0,0,0)
-        self.drag_coefficient = 0
+        pass
 ##################################################
 
 #Main#############################################
