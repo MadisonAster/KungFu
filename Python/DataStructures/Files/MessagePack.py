@@ -22,14 +22,20 @@ import PythonBaseClasses
 class test_MessagePack(unittest.TestCase):
     def test_1(self):
         frame = PythonBaseClasses.static_frame.from_symbol('GLD')
+        proto = {
+            'index' : [index for index in frame._index],
+            'columns' : [column for column in frame._columns],
+            'name' : frame._name,
+            'blocks' : [[value[0] for value in block.values] for block in frame._blocks],
+        }
+        #print('index', proto['index'])
+        print('columns', proto['columns'])
+        print('name', proto['name'])
+        print('blocks', len(proto['blocks']))
+        for block in proto['blocks']:
+            print('    block', type(block[0]))
+        
         data = [1,2,3]
-        print('_index', frame._index)
-        print('_columns', frame._columns)
-        print('_name', frame._name)
-        print('_blocks', frame._blocks)
-        #for array in frame._blocks.axis_values(0):
-        #    data.append(list(array))
-        #print(type(data), type(data[0]))
         pack = MessagePack(data)
         print('messagepack!', pack)
         

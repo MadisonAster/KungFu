@@ -122,6 +122,7 @@ class static_frame(sf.Frame):
             threads = True,
             proxy = None
         ))
+        data = data.rename(Symbol)
         if not silent:
             print(data)
         return data
