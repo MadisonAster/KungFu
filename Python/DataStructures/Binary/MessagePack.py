@@ -24,20 +24,16 @@ class test_MessagePack(unittest.TestCase):
         frame = PythonBaseClasses.static_frame.from_symbol('GLD')
         proto = {
             'index' : [index for index in frame._index],
-            'columns' : [column for column in frame._columns],
-            'name' : frame._name,
+            'columns' : MessagePack([column for column in frame._columns]),
+            'name' : MessagePack(frame._name),
             'blocks' : [[value[0] for value in block.values] for block in frame._blocks],
         }
-        #print('index', proto['index'])
+        print('index', type(proto['index'][0]))
         print('columns', proto['columns'])
         print('name', proto['name'])
         print('blocks', len(proto['blocks']))
         for block in proto['blocks']:
             print('    block', type(block[0]))
-        
-        data = [1,2,3]
-        pack = MessagePack(data)
-        print('messagepack!', pack)
         
         #self.assertEqual(PrintTree(self.mock_path), ExpectedResult)
 ##################################################
