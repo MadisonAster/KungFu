@@ -23,6 +23,7 @@ class test_MessagePack(unittest.TestCase):
     def test_1(self):
         frame = PythonBaseClasses.static_frame.from_symbol('GLD')
         
+        '''
         print('~~~~prototype~~~~')
         proto = {
             'index' : [index for index in frame._index],
@@ -34,23 +35,23 @@ class test_MessagePack(unittest.TestCase):
         print('columns', proto['columns'])
         print('name', proto['name'])
         print('blocks', len(proto['blocks']))
-        #for block in proto['blocks']:
-        #    print('    block', type(block[0]))
+        for block in proto['blocks']:
+            print('    block', type(block[0]))
+        '''
         
-        
-        print('~~~~datatype~~~~')
+        #print('~~~~datatype~~~~')
         data = {
-            'index' : MessagePack([index for index in frame._index]),
-            'columns' : MessagePack([column for column in frame._columns]),
-            'name' : MessagePack(frame._name),
-            'blocks' : [MessagePack([value[0] for value in block.values]) for block in frame._blocks],
+            '_index' : MessagePack(index for index in frame._index),
+            '_columns' : MessagePack(column for column in frame._columns),
+            '_name' : MessagePack(frame._name),
+            '_blocks' : [MessagePack(value[0] for value in block.values) for block in frame._blocks],
         }
-        print('index', data['index'])
-        print('columns', data['columns'])
-        print('name', data['name'])
-        print('blocks', len(data['blocks']))
-        for block in data['blocks']:
-            print('    block', block)
+        print('index', data['_index'][:40], '...')
+        print('columns', data['_columns'])
+        print('name', data['_name'])
+        print('blocks', len(data['_blocks']))
+        for block in data['_blocks']:
+            print('    block', block[:20], '...')
         
         #self.assertEqual(data, ExpectedResult)
 ##################################################

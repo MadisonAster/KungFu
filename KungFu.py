@@ -36,6 +36,7 @@ ExpectedTestCount = {
  'lxml': 109,
  'maya': 0,
  'msgpack': 1,
+ 'msgpack_numpy': 1,
  'npm': 7,
  'nuke': 0,
  'pandas': 113,

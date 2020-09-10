@@ -108,7 +108,7 @@ import static_frame as sf
 import yfinance as yf
 class static_frame(sf.Frame):
     @classmethod
-    def from_symbol(cls, Symbol, period='ytd', interval='1d', silent=False):
+    def from_symbol(cls, Symbol, period='ytd', interval='1d', silent=True):
         ticker = yf.Ticker(Symbol)
         data = cls.from_pandas(yf.download(
             tickers = Symbol,
