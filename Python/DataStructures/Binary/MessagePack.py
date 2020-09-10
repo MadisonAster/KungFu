@@ -18,17 +18,18 @@ import PythonBaseClasses
 
 #Test#############################################
 @KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
-@KungFu.depends('msgpack')
+@KungFu.depends('msgpack', 'msgpack_numpy')
 class test_MessagePack(unittest.TestCase):
     def test_1(self):
         frame = PythonBaseClasses.static_frame.from_symbol('GLD')
+        
+        print('~~~~prototype~~~~')
         proto = {
             'index' : [index for index in frame._index],
             'columns' : [column for column in frame._columns],
             'name' : frame._name,
             'blocks' : [[value[0] for value in block.values] for block in frame._blocks],
         }
-        print('~~~~prototype~~~~')
         print('index', type(proto['index'][0]))
         print('columns', proto['columns'])
         print('name', proto['name'])
@@ -36,21 +37,20 @@ class test_MessagePack(unittest.TestCase):
         for block in proto['blocks']:
             print('    block', type(block[0]))
         
+        
         print('~~~~datatype~~~~')
         data = {
-            #'index' : MessagePack([index for index in frame._index]),
+            #'index' : MessagePackNumpy([index for index in frame._index]),
             'columns' : MessagePack([column for column in frame._columns]),
             'name' : MessagePack(frame._name),
-            #'blocks' : [MessagePack([value[0] for value in block.values]) for block in frame._blocks],
+            'blocks' : [MessagePackNumpy([value[0] for value in block.values]) for block in frame._blocks],
         }
         #print('index', type(data['index'][0]))
         print('columns', data['columns'])
         print('name', data['name'])
-        #print('blocks', len(data['blocks']))
-        #for block in data['blocks']:
-        #    print('    block', type(block[0]))
-        
-        
+        print('blocks', len(data['blocks']))
+        for block in data['blocks']:
+            print('    block', block)
         
         #self.assertEqual(data, ExpectedResult)
 ##################################################
@@ -58,8 +58,16 @@ class test_MessagePack(unittest.TestCase):
 #Code#############################################
 import msgpack
 def MessagePack(input):
-    pack = msgpack.packb(input, use_bin_type=True)
-    return pack
+    return msgpack.packb(input, use_bin_type=True)
+
+import msgpack_numpy
+def MessagePackNumpy(input):
+    try:
+        data = msgpack.packb(input, default=msgpack_numpy.encode)
+    except:
+        data = msgpack.packb(input, use_bin_type=False)
+    return data
+    #input_rec = msgpack.unpackb(input_enc, object_hook=m.decode)
 ##################################################
 
 #Main#############################################

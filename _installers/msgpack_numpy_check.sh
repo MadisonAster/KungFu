@@ -1,0 +1,1 @@
+python3 -c 'import msgpack_numpy'
