@@ -33,17 +33,17 @@ ExpectedTestCount = {
  'gui': 6,
  'java': 0,
  'kubectl': 0,
- 'lxml': 108,
+ 'lxml': 109,
  'maya': 0,
  'msgpack': 1,
  'npm': 7,
  'nuke': 0,
- 'pandas': 112,
+ 'pandas': 113,
  'qt': 6,
- 'static_frame': 108,
+ 'static_frame': 109,
  'terraform': 7,
  'unreal': 0,
- 'yfinance': 108,
+ 'yfinance': 109,
 }
 
 def WriteBack():
