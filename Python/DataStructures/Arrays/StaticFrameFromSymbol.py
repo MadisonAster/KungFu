@@ -110,6 +110,7 @@ class test_StaticFrameGO(KungFu.TimedTest):
         end = datetime.now() - timedelta(days=5)
         frame = StaticFrameGO.from_symbol('GC=F', start=start, end=end)
         print(frame)
+        frame.update_symbol()
 ##################################################
 
 #Code#############################################
@@ -117,13 +118,13 @@ import static_frame as sf
 import yfinance as yf
 class StaticFrame(sf.Frame):
     @classmethod
-    def from_symbol(cls, Symbol, period=None, start=None, end=None, interval='1d', silent=True):
+    def from_symbol(cls, Symbol, start=None, end=None, interval='1d', period=None, silent=True):
         #self.ticker = yf.Ticker(Symbol)
         data = cls.from_pandas(yf.download(
             tickers = Symbol,
             # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
             period = period,
-            #
+            #datetime objects
             start = start,
             end = end,
             # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
@@ -136,32 +137,33 @@ class StaticFrame(sf.Frame):
         ))
         data = data.rename(Symbol)
         data.Symbol = Symbol
+        data.interval = interval
         if end:
-            data.endDate = end
+            data.end = end
         if not silent:
             print(data)
         return data
 
 class StaticFrameGO(StaticFrame):
-    def update_symbol(self):
-        Symbol = self.name
-        ticker = yf.Ticker(Symbol)
-        start = self.endDate
+    def update_symbol(self, silent=True):
         end = datetime.now()
-        data = cls.from_pandas(yf.download(
-            tickers = Symbol,
+        print('start end', self.end, end)
+        data = yf.download(
+            tickers = self.name,
             # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
-            start = start,
+            start = self.end,
             end = end,
             # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
-            interval = interval,
+            interval = self.interval,
             group_by = 'ticker',
             auto_adjust = True,
             prepost = True,
             threads = True,
             proxy = None
-        ))
-        data = data.rename(Symbol)
+        )
+        self.end = end
+        print('update data', data)
+        
         if not silent:
             print(data)
         return data
