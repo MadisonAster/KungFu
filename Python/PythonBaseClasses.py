@@ -41,5 +41,5 @@ from BasicWindow import BasicWindow
 
 if 'StaticFrameFromSymbol' not in sys.modules.keys(): #Relative import handling for base classes
     machinery.SourceFileLoader('StaticFrameFromSymbol', os.path.dirname(os.path.abspath(__file__))+'/Datastructures/Arrays/StaticFrameFromSymbol.py').load_module()
-from StaticFrameFromSymbol import static_frame
+from StaticFrameFromSymbol import StaticFrame, StaticFrameGO
 ##################################################

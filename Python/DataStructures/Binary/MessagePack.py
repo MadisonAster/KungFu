@@ -21,7 +21,7 @@ import PythonBaseClasses
 @KungFu.depends('msgpack', 'msgpack_numpy')
 class test_MessagePack(unittest.TestCase):
     def test_1(self):
-        frame = PythonBaseClasses.static_frame.from_symbol('GLD')
+        frame = PythonBaseClasses.StaticFrame.from_symbol('GLD')
         '''
         data = frame.to_msgpack()
         frame2 = static_frame.Frame.from_msgpack(data)
