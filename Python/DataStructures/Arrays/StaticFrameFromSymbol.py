@@ -2,6 +2,7 @@
 import sys, os, unittest
 from importlib import machinery
 import subprocess, shlex
+from datetime import datetime, timedelta
 ##################################################
 
 #Relative Imports#################################
@@ -13,10 +14,11 @@ import KungFu
 #Test#############################################
 @KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
 #@KungFu.depends('hypothesis', 'xlsxwriter', 'openpyxl', 'xarray', 'tables', 'pyarrow')
-class test_static_frame(KungFu.TimedTest):
+class test_StaticFrame(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
-        frame = StaticFrame.from_symbol('GLD')
+        frame = StaticFrame.from_symbol('GLD', period='5d', interval='1d')
+    '''
     def test_GOLD(self):
         frame = StaticFrame.from_symbol('GC=F')
     def test_SLV(self):
@@ -101,6 +103,13 @@ class test_static_frame(KungFu.TimedTest):
     #    frame = StaticFrame.from_symbol('SWBI')
     def test_RGR(self):
         frame = StaticFrame.from_symbol('RGR')
+    '''
+class test_StaticFrameGO(KungFu.TimedTest):
+    def test_GOLD(self):
+        start = datetime.now() - timedelta(days=30)
+        end = datetime.now() - timedelta(days=5)
+        frame = StaticFrameGO.from_symbol('GC=F', start=start, end=end)
+        print(frame)
 ##################################################
 
 #Code#############################################
@@ -108,12 +117,15 @@ import static_frame as sf
 import yfinance as yf
 class StaticFrame(sf.Frame):
     @classmethod
-    def from_symbol(cls, Symbol, period='ytd', interval='1d', silent=True):
-        ticker = yf.Ticker(Symbol)
+    def from_symbol(cls, Symbol, period=None, start=None, end=None, interval='1d', silent=True):
+        #self.ticker = yf.Ticker(Symbol)
         data = cls.from_pandas(yf.download(
             tickers = Symbol,
             # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
             period = period,
+            #
+            start = start,
+            end = end,
             # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
             interval = interval,
             group_by = 'ticker',
@@ -123,18 +135,24 @@ class StaticFrame(sf.Frame):
             proxy = None
         ))
         data = data.rename(Symbol)
+        data.Symbol = Symbol
+        if end:
+            data.endDate = end
         if not silent:
             print(data)
         return data
 
-class StaticFrameGO(sf.FrameGO):
-    @classmethod
-    def from_symbol(cls, Symbol, period='ytd', interval='1d', silent=True):
+class StaticFrameGO(StaticFrame):
+    def update_symbol(self):
+        Symbol = self.name
         ticker = yf.Ticker(Symbol)
+        start = self.endDate
+        end = datetime.now()
         data = cls.from_pandas(yf.download(
             tickers = Symbol,
             # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
-            period = period,
+            start = start,
+            end = end,
             # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
             interval = interval,
             group_by = 'ticker',
