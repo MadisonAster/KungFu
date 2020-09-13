@@ -40,6 +40,18 @@ def PandasPanel():
     #print(pn.loc[:,'C', 'x'])
     #print(pn.loc[:,'C'].mean(axis=1))
     
+    mi1 = pd.MultiIndex.from_product((tuple('xy'), tuple('ABCD')))
+    df3 = pd.DataFrame(np.arange(16).reshape(8,2), index=mi1, columns=tuple('AB'))
+    #df3 = pd.DataFrame(np.arange(32).reshape(8,4), index=mi1, columns=tuple('ABCD'))
+    df4 = pd.DataFrame(np.arange(64).reshape(8,8), index=mi1, columns=mi1)
+    print(df3)
+    print(df3.loc[pd.IndexSlice[:,'B']])
+    print(df3.loc[pd.IndexSlice[:,'B'], 'B'])
+    print(df4)
+    print(df4.loc[
+            pd.IndexSlice['y', ['A','D']],
+            pd.IndexSlice[:, 'B']])
+    
 ##################################################
 
 #Main#############################################
