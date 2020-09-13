@@ -2,7 +2,7 @@
 import sys, os, unittest
 from importlib import machinery
 import subprocess, shlex
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 ##################################################
 
 #Relative Imports#################################
@@ -12,7 +12,7 @@ import KungFu
 ##################################################
 
 #Test#############################################
-@KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
+@KungFu.depends('lxml', 'numpy', 'pandas', 'static_frame', 'yfinance')
 #@KungFu.depends('hypothesis', 'xlsxwriter', 'openpyxl', 'xarray', 'tables', 'pyarrow')
 class test_StaticFrame(KungFu.TimedTest):
     #Currencies
@@ -104,13 +104,34 @@ class test_StaticFrame(KungFu.TimedTest):
     def test_RGR(self):
         frame = StaticFrame.from_symbol('RGR')
     '''
-class test_StaticFrameGO(KungFu.TimedTest):
+    
+    #class test_StaticFrameGO(KungFu.TimedTest):
     def test_GOLD(self):
+        import numpy
+        start = datetime.today() - timedelta(days=10)
+        end = datetime.today() - timedelta(days=3)
+        frame = StaticFrame.from_symbol('GC=F', start=start, end=end)
+        print('frame1', frame)
+        frame2 = frame.update_symbol()
+        print('frame2', frame2)
+        print('len', len(frame.index))
+        print('len', len(frame2.index))
+        print('busday_count', numpy.busday_count(start.date()+timedelta(days=1), date.today()))
+        
+    def test_close(self):
         start = datetime.now() - timedelta(days=30)
         end = datetime.now() - timedelta(days=5)
-        frame = StaticFrameGO.from_symbol('GC=F', start=start, end=end)
-        print(frame)
-        frame.update_symbol()
+        frame = StaticFrame.from_symbol('GC=F', start=start, end=end)
+        print('close1', frame.get_close())
+        '''
+        s = datetime.now() - timedelta(days=10)
+        print('s', s, type(s))
+        print('close11', frame.get_close(end=datetime.now()))
+        print('close2', frame.get_close(start=s))
+        close = frame.get_close(start=datetime.now() - timedelta(days=20))
+        print('close3', close)
+        '''
+    
 ##################################################
 
 #Code#############################################
@@ -122,13 +143,13 @@ class StaticFrame(sf.Frame):
         #self.ticker = yf.Ticker(Symbol)
         data = cls.from_pandas(yf.download(
             tickers = Symbol,
-            # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
-            period = period,
             #datetime objects
             start = start,
             end = end,
             # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
             interval = interval,
+            # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
+            period = period, #if not using start/end
             group_by = 'ticker',
             auto_adjust = True,
             prepost = True,
@@ -143,17 +164,26 @@ class StaticFrame(sf.Frame):
         if not silent:
             print(data)
         return data
-
-class StaticFrameGO(StaticFrame):
+    
+    def get_close(self, start=None, end=None):
+        if not start and not end:
+            return self.loc[:, 'Close']
+        elif start and end:
+            #return self.loc[start:end, 'Close']
+            return self.loc[(self.index > start) & (self.index < end), 'Close']
+        elif start:
+            return self.loc[(self.index > start), 'Close']
+            #return self.loc[start:, 'Close']
+        elif end:
+            #return self.loc[(self.index.values < end), 'Close']
+            return self.loc[:end, 'Close']
+    
     def update_symbol(self, silent=True):
         end = datetime.now()
-        print('start end', self.end, end)
-        data = yf.download(
+        newdata = yf.download(
             tickers = self.name,
-            # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
             start = self.end,
             end = end,
-            # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
             interval = self.interval,
             group_by = 'ticker',
             auto_adjust = True,
@@ -162,11 +192,12 @@ class StaticFrameGO(StaticFrame):
             proxy = None
         )
         self.end = end
-        print('update data', data)
-        
         if not silent:
-            print(data)
-        return data
+            print(newdata)
+        return self.__class__.from_pandas(self.to_pandas().append(newdata))
+
+class StaticFrameGO(StaticFrame):
+    pass
 ##################################################
 
 #Main#############################################
