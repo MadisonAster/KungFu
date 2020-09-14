@@ -51,12 +51,19 @@ class StaticFrameIndexHierarchy(sf.IndexHierarchy):
             proxy = None
         ))
         '''
-        ih1 = sf.IndexHierarchy.from_product(tuple('xy'), tuple('ABCD'))
-        f1 = sf.Frame(np.arange(16).reshape(8, 2), index=ih1, columns=tuple('AB'))
+        ih1 = sf.IndexHierarchy.from_product(tuple('ABCD'), tuple('1234'))
+        ih2 = sf.IndexHierarchy.from_product(tuple('EFGH'), tuple('5678'))
+        f1 = sf.Frame(np.arange(256).reshape(16, 16), index=ih1, columns=ih2)
         print(f1)
-        #data = data.rename(Symbol)
-        #data.Symbol = Symbol
-        #data.interval = interval
+        print('@@@@@@')
+        return
+        #print(f1.loc['x', 'B']) #KeyError! try Hloc!
+        print(f1.loc[sf.HLoc['x','B']])
+        print(f1.loc[sf.HLoc[:, ['B','D']]])
+        print('ih1', type(ih1))
+        print('ih1', dir(ih1))
+        
+        
 ##################################################
 
 #Main#############################################
