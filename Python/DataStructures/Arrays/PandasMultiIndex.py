@@ -21,7 +21,8 @@ class test_PandasPanel(KungFu.TimedTest):
 #Code#############################################
 import numpy as np
 import pandas as pd
-def PandasPanel():
+#def PandasPanel():
+def PandasMultiIndex():
     df1 = pd.DataFrame(
             np.arange(8).reshape(4,2),
             index=tuple('ABCD'),
@@ -51,6 +52,10 @@ def PandasPanel():
     print(df4.loc[
             pd.IndexSlice['y', ['A','D']],
             pd.IndexSlice[:, 'B']])
+    
+    #Iinconsistent axis specification!!
+    print(df3.loc['II', 'B']) #This selects row row!
+    print(df3.loc[:,'B']) #This selects row column!
     
 ##################################################
 
