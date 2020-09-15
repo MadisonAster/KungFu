@@ -38,6 +38,12 @@ class DockWindow(PythonBaseClasses.BasicWindow):
         self.setWindowTitle('Dock Window')
         
         #self.setDockOptions(False)
+        #self.setDockNestingEnabled(True)
+        
+        self.AllowNestedDocks
+        self.ForceTabbedDocks
+        self.setTabPosition(QtCore.Qt.AllDockWidgetAreas, QtWidgets.QTabWidget.North)
+        self.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.setDockNestingEnabled(True)
         
         
