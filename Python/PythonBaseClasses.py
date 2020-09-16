@@ -39,6 +39,12 @@ if 'BasicWindow' not in sys.modules.keys(): #Relative import handling for base c
     machinery.SourceFileLoader('BasicWindow', os.path.dirname(os.path.abspath(__file__))+'/Qt/Windows/BasicWindow.py').load_module()
 from BasicWindow import BasicWindow
 
+if 'BasicWidget' not in sys.modules.keys(): #Relative import handling for base classes
+    machinery.SourceFileLoader('BasicWidget', os.path.dirname(os.path.abspath(__file__))+'/Qt/Widgets/BasicWidget.py').load_module()
+from BasicWidget import BasicWidget
+
+
+
 if 'StaticFrameFromSymbol' not in sys.modules.keys(): #Relative import handling for base classes
     machinery.SourceFileLoader('StaticFrameFromSymbol', os.path.dirname(os.path.abspath(__file__))+'/Datastructures/Arrays/StaticFrameFromSymbol.py').load_module()
 from StaticFrameFromSymbol import StaticFrame, StaticFrameGO

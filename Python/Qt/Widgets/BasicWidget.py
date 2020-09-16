@@ -15,40 +15,24 @@ import PythonBaseClasses
 
 #Test#############################################
 @KungFu.depends('qt', 'gui')
-class test_BasicWindow(KungFu.TimedTest):
+class test_BasicWidget(KungFu.TimedTest):
     def __init__(self, *args):
-        super(test_BasicWindow, self).__init__(*args)
-        print('test_BasicWindow')
+        super(test_BasicWidget, self).__init__(*args)
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, sleep=0.5):
-        self.MainWindow = BasicWindow()
-        self.MainWindow.show()
+        testwidget = BasicWidget()
+        testwidget.show()
         time.sleep(sleep)
-        self.MainWindow.hide()
-
-    def test_2(self, sleep=0.5):
-        self.MainWindow = BasicWindow()
-        self.MainWindow.show()
-        self.MainWindow.resize(self.MainWindow.QAvailableGeo.width()/2, self.MainWindow.QAvailableGeo.height()-self.MainWindow.QStartBarHeight)
-        self.MainWindow.move(0,0)
-        time.sleep(sleep)
-        self.MainWindow.hide()
+        testwidget.hide()
+        
 ##################################################
 
 #Code#############################################
 from Qt import QtCore, QtGui, QtWidgets
-class BasicWindow(QtWidgets.QMainWindow):
+class BasicWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
-        super(BasicWindow, self).__init__(*args, **kwargs)
-        self.setWindowTitle('Basic Window')
-        self.QAvailableGeo = QtWidgets.QDesktopWidget().availableGeometry()
-        self.QStartBarHeight = QtWidgets.QDesktopWidget().screenGeometry(0).height()-self.QAvailableGeo.height()
-        
-        
-        #self.setDockOptions(False)
-        #self.setDockNestingEnabled(True)
-
+        super(BasicWidget, self).__init__(*args, **kwargs)
         
     def sizeHint(self):
         return QtCore.QSize(800,600)
