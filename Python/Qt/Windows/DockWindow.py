@@ -50,7 +50,6 @@ class DockWindow(PythonBaseClasses.BasicWindow):
         self.setTabPosition(QtCore.Qt.AllDockWidgetAreas, QtWidgets.QTabWidget.North)
         self.setTabShape(QtWidgets.QTabWidget.Triangular)
         self.setDockNestingEnabled(True)
-        
 
     def dockWidget(self, widget, dockArea = QtCore.Qt.RightDockWidgetArea):
         widgetName = widget.accessibleName()
@@ -61,10 +60,7 @@ class DockWindow(PythonBaseClasses.BasicWindow):
         dWidget.setObjectName(widgetName)
         dWidget.setWindowTitle(widgetName)
         self.addDockWidget(dockArea, dWidget)
-        
-        
-        
-        
+
     def sizeHint(self):
         return QtCore.QSize(800,600)
 ##################################################

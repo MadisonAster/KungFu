@@ -13,15 +13,14 @@ import KungFu
 
 #Test#############################################
 @KungFu.depends('numpy', 'pandas')
-class test_PandasPanel(KungFu.TimedTest):
+class test_PandasMultiIndex(KungFu.TimedTest):
     def test_1(self):
-        PandasPanel()
+        PandasMultiIndex()
 ##################################################
 
 #Code#############################################
 import numpy as np
 import pandas as pd
-#def PandasPanel():
 def PandasMultiIndex():
     df1 = pd.DataFrame(
             np.arange(8).reshape(4,2),

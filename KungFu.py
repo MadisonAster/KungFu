@@ -13,7 +13,7 @@ python3 KungFu.py --destroy                #Run tests that destroy real cloud re
 '''
 #Standard Imports#################################
 import sys, os
-import unittest, inspect, argparse
+import unittest, inspect, argparse, json
 from importlib import util
 from datetime import datetime
 import subprocess, shlex
@@ -28,9 +28,10 @@ from pprint import pprint, pformat
 #Write Back#######################################
 ExpectedTestCount = {
  'aws': 7,
+ 'conda': 0,
  'docker': 0,
  'go': 14,
- 'gui': 2,
+ 'gui': 9,
  'java': 0,
  'kubectl': 0,
  'lxml': 109,
@@ -39,9 +40,10 @@ ExpectedTestCount = {
  'msgpack_numpy': 1,
  'npm': 7,
  'nuke': 0,
+ 'numpy': 5,
  'pandas': 109,
- 'qt': 2,
- 'static_frame': 109,
+ 'qt': 9,
+ 'static-frame': 109,
  'terraform': 7,
  'unreal': 0,
  'yfinance': 109,
@@ -57,9 +59,6 @@ def WriteBack():
     the dictionary. This allows for graceful updates via git as new 
     tests are added, while still keeping the testkit logic in a 
     single file for maximum portability.
-
-    TODO: Replace _installers with "conda install -c package" commands.
-          I was previously unaware of the existence of this.
     '''
     for key, value in DependencyHandler().TestCount.items():
         skey = key.replace('actual_', '')
@@ -210,6 +209,9 @@ class DependencyHandler():
     Automates the process of checking, counting, and installing 
     dependencies. KungFu will automatically skip any test that your 
     machine lacks dependencies for.
+
+    TODO: Replace _installers with "conda install -c package" commands.
+          I was previously unaware of the existence of this.
     '''
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
@@ -223,46 +225,59 @@ class DependencyHandler():
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
         return sys.DependencyHandler
 
-    def Check(self, name):
+    def Check(self, name, shell=True, conda=True, pip=True):
         if name in self.Installed:
             return True
         elif name in self.NotInstalled:
             return False
         else:
-            return self.RunCheck(name)
+            return self.RunChecks(name, shell=shell, conda=conda, pip=pip)
 
-    def RunCheck(self, name, shell=False):
-        if name == 'gui':
-            return self.CheckGui()
-        if name in self.ShellList:
-            shell = True
+    def RunChecks(self, name, shell=True, conda=True, pip=True):
+        if name == 'gui': return self.CheckGui()
+        if shell and self.ShellCheck(name): return True
+        if conda and self.CondaCheck(name): return True
+        if pip and self.PipCheck(name): return True
+        self.NotInstalled.append(name)
+        return False
+
+    def ShellCheck(self, name, shellmode=False):
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
         if os.path.exists(checkpath):
+            #print('attempting shell check', name)
             returncodes = 0
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
-                    result, returncode = RunCmd(line, cwd=self.cwd, shell=shell)
+                    if name in self.ShellList:
+                        shellmode = True
+                    output, returncode = RunCmd(line, cwd=self.cwd, shell=shellmode)
                     returncodes += returncode
             returncodes = not bool(returncodes)
-            if returncodes:
+            if returncodes and name not in self.Installed:
                 self.Installed.append(name)
-            else:
-                self.NotInstalled.append(name)
             return returncodes
 
-    def RunInstaller(self, name, shell=False):
-        if name in self.ShellList:
-            shell = True
-        checkpath = self.cwd+'/_installers/'+name+'_check.sh'
-        if os.path.exists(checkpath):
-            returncodes = 0
-            with open(checkpath, 'r') as file:
-                for line in file.readlines():
-                    print('line', line)
-                    result, returncode = RunCmd(line, cwd=self.cwd)
-                    returncodes += returncode
-            returncodes = not bool(returncodes)
-            return returncodes
+    def CondaCheck(self, name):
+        if self.Check('conda', conda=False):
+            #print('attempting conda check', name)
+            output, returncode = RunCmd('conda list --json '+name)
+            #print('output', output)
+            #print('returncode', returncode)
+            vlist = json.loads(output)
+            result = not bool(returncode) and len(vlist) > 0
+            if result and name not in self.Installed:
+                self.Installed.append(name)
+            return result
+
+    def PipCheck(self, name):
+        #print('attempting pip check', name)
+        output, returncode = RunCmd('pip show '+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        result = not bool(returncode)
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
 
     def OfferInstallers(self):
         if len(self.NotInstalled) != 0:
@@ -279,12 +294,48 @@ class DependencyHandler():
                     answer = input('    Would you like to try installing '+name+'? ')
                     answer = answer.lower() in ['y', 'yes', 'true']
                     if answer == True:
-                        RunInstaller(name)
+                        self.RunInstallers(name)
         else:
             print('Everything OK!')
         print('----------------------------------------------------------------------')
         print('Goodbye!')
+
+    def RunInstallers(self, name, shell=True, conda=True, pip=True):
+        if shell and self.ShellInstall(name): return True
+        if conda and self.CondaInstall(name): return True
+        if pip and self.PipInstall(name): return True
+
+    def ShellInstall(self, name, shellmode=False):
+        if name in self.ShellList:
+            shellmode = True
+        installerpath = self.cwd+'/_installers/'+name+'_install.sh'
+        print('installerpath', installerpath)
+        if os.path.exists(installerpath):
+            returncodes = 0
+            with open(installerpath, 'r') as file:
+                for line in file.readlines():
+                    print('line', line)
+                    result, returncode = RunCmd(line, cwd=self.cwd)
+                    returncodes += returncode
+            returncodes = not bool(returncodes)
+            return ShellCheck(name)
+        
+    def CondaInstall(self, name):
+        if self.Check('conda', conda=False):
+            print('attempting conda install '+name)
+            #result, returncode = RunCmd('conda install --quiet --name '+name)
+            result, returncode = RunCmd('conda install -y '+name)
+            print('result', result)
+            print('returncode', returncode)
+            return CondaCheck(name)
     
+    def PipInstall(self, name):
+        print('attempting pip install '+name)
+        result, returncode = RunCmd('pip install -y '+name, cwd=self.cwd)
+        print('result', result)
+        print('returncode', returncode)
+        return PipCheck(name)
+   
     ###Still hacking this for now until I find a more general way###
     @contextlib.contextmanager
     def GetStderrIO(self, stderr=None):

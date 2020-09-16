@@ -1,1 +1,1 @@
-pip3 install conda
+pip install conda

@@ -12,7 +12,7 @@ import KungFu
 ##################################################
 
 #Test#############################################
-@KungFu.depends('lxml', 'numpy', 'pandas', 'static_frame', 'yfinance')
+@KungFu.depends('lxml', 'numpy', 'pandas', 'static-frame', 'yfinance')
 #@KungFu.depends('hypothesis', 'xlsxwriter', 'openpyxl', 'xarray', 'tables', 'pyarrow')
 class test_StaticFrame(KungFu.TimedTest):
     #Currencies

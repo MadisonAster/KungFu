@@ -17,7 +17,7 @@ import PythonBaseClasses
 #Code#############################################
 
 #Test#############################################
-@KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
+@KungFu.depends('lxml', 'pandas', 'static-frame', 'yfinance')
 class test_implied_volatility(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):

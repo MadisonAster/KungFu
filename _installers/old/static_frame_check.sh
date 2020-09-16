@@ -1,0 +1,1 @@
+python -c 'import static_frame'

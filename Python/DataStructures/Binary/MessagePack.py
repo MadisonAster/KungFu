@@ -17,7 +17,7 @@ import PythonBaseClasses
 #Code#############################################
 
 #Test#############################################
-@KungFu.depends('lxml', 'pandas', 'static_frame', 'yfinance')
+@KungFu.depends('lxml', 'pandas', 'static-frame', 'yfinance')
 @KungFu.depends('msgpack', 'msgpack_numpy')
 class test_MessagePack(unittest.TestCase):
     def test_1(self):
