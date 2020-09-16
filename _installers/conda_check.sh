@@ -1,1 +1,1 @@
-python3 -c 'import conda'
+conda -V
