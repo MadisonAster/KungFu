@@ -210,9 +210,6 @@ class DependencyHandler():
     Automates the process of checking, counting, and installing 
     dependencies. KungFu will automatically skip any test that your 
     machine lacks dependencies for.
-
-    TODO: Replace _installers with "conda install -c package" commands.
-          I was previously unaware of the existence of this.
     '''
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
