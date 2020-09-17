@@ -34,19 +34,20 @@ ExpectedTestCount = {
  'gui': 9,
  'java': 0,
  'kubectl': 0,
- 'lxml': 109,
+ 'lxml': 9,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
  'npm': 7,
  'nuke': 0,
- 'numpy': 5,
- 'pandas': 109,
- 'qt': 9,
- 'static-frame': 109,
+ 'numpy': 8,
+ 'pandas': 14,
+ 'pyside2': 9,
+ 'qt.py': 9,
+ 'static-frame': 9,
  'terraform': 7,
  'unreal': 0,
- 'yfinance': 109,
+ 'yfinance': 9,
 }
 
 def WriteBack():
@@ -396,8 +397,8 @@ class DependencyHandler():
         if self.ShellInstall(name): return True
         if pm('conda') and self.CondaInstall(name): return True
         if pm('pip') and self.PipInstall(name): return True
-        if pm('apt') and self.AptInstall(name): return True
-        if pm('yum') and self.YumInstall(name): return True
+        #if pm('apt') and self.AptInstall(name): return True
+        #if pm('yum') and self.YumInstall(name): return True
         #if pm('rpm') and self.RpmInstall(name): return True
         #if pm('zypper') and self.ZypperInstall(name): return True
         #if pm('yast') and self.YastInstall(name): return True
@@ -611,5 +612,5 @@ def main(*args):
 
 if __name__ == '__main__':
     main()
-    #WriteBack() #Code will only modify itself when run directly
+    WriteBack() #Code will only modify itself when run directly
 ##################################################
