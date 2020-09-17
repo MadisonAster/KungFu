@@ -491,7 +491,7 @@ class DependencyHandler():
         print('returncode', returncode)
         return self.MarkInstalled(name, self.AptCheck(name))
 
-    def YumCheck(self, name):
+    def YumInstall(self, name):
         #Untested
         print('attempting yum install', name)
         output, returncode = RunCmd("yum install "+name, cwd=self.cwd)
