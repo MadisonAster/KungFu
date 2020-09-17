@@ -18,92 +18,92 @@ class test_StaticFrame(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
         frame = StaticFrame.from_symbol('GLD', period='5d', interval='1d')
-    '''
+    
     def test_GOLD(self):
-        frame = StaticFrame.from_symbol('GC=F')
+        frame = StaticFrame.from_symbol('GC=F', period='5d', interval='1d')
     def test_SLV(self):
-        frame = StaticFrame.from_symbol('SLV')
+        frame = StaticFrame.from_symbol('SLV', period='5d', interval='1d')
     def test_SILVER(self):
-        frame = StaticFrame.from_symbol('SI=F')
+        frame = StaticFrame.from_symbol('SI=F', period='5d', interval='1d')
     def test_BTCUSD(self):
-        frame = StaticFrame.from_symbol('BTC=X')
+        frame = StaticFrame.from_symbol('BTC=X', period='5d', interval='1d')
     def test_USDEUR(self):
-        frame = StaticFrame.from_symbol('EUR=X')
+        frame = StaticFrame.from_symbol('EUR=X', period='5d', interval='1d')
     def test_USDGBP(self):
-        frame = StaticFrame.from_symbol('GBP=X')
+        frame = StaticFrame.from_symbol('GBP=X', period='5d', interval='1d')
     def test_USDCAD(self):
-        frame = StaticFrame.from_symbol('CAD=X')
+        frame = StaticFrame.from_symbol('CAD=X', period='5d', interval='1d')
     def test_USDJPY(self):
-        frame = StaticFrame.from_symbol('JPY=X')
+        frame = StaticFrame.from_symbol('JPY=X', period='5d', interval='1d')
     def test_USDCNY(self):
-        frame = StaticFrame.from_symbol('CNY=X')
+        frame = StaticFrame.from_symbol('CNY=X', period='5d', interval='1d')
 
     #Indexes 
     def test_DJI(self):
-        frame = StaticFrame.from_symbol('^DJI')
+        frame = StaticFrame.from_symbol('^DJI', period='5d', interval='1d')
     def test_NDAQ(self):
-        frame = StaticFrame.from_symbol('NDAQ')
+        frame = StaticFrame.from_symbol('NDAQ', period='5d', interval='1d')
     def test_SPX(self):
-        frame = StaticFrame.from_symbol('^GSPC')
+        frame = StaticFrame.from_symbol('^GSPC', period='5d', interval='1d')
     
     #ETFs
     def test_VYM(self):
-        frame = StaticFrame.from_symbol('VYM')
+        frame = StaticFrame.from_symbol('VYM', period='5d', interval='1d')
     def test_VOO(self):
-        frame = StaticFrame.from_symbol('VOO')
+        frame = StaticFrame.from_symbol('VOO', period='5d', interval='1d')
     def test_MGK(self):
-        frame = StaticFrame.from_symbol('MGK')
+        frame = StaticFrame.from_symbol('MGK', period='5d', interval='1d')
     def test_MFEM(self):
-        frame = StaticFrame.from_symbol('MFEM')
+        frame = StaticFrame.from_symbol('MFEM', period='5d', interval='1d')
     def test_MFUS(self):
-        frame = StaticFrame.from_symbol('MFUS')
+        frame = StaticFrame.from_symbol('MFUS', period='5d', interval='1d')
     def test_MFDX(self):
-        frame = StaticFrame.from_symbol('MFDX')
+        frame = StaticFrame.from_symbol('MFDX', period='5d', interval='1d')
     
     #Tech
     def test_FB(self):
-        frame = StaticFrame.from_symbol('FB')
+        frame = StaticFrame.from_symbol('FB', period='5d', interval='1d')
     def test_AAPL(self):
-        frame = StaticFrame.from_symbol('AAPL')
+        frame = StaticFrame.from_symbol('AAPL', period='5d', interval='1d')
     def test_AMZN(self):
-        frame = StaticFrame.from_symbol('AMZN')
+        frame = StaticFrame.from_symbol('AMZN', period='5d', interval='1d')
     def test_NFLX(self):
-        frame = StaticFrame.from_symbol('NFLX')
+        frame = StaticFrame.from_symbol('NFLX', period='5d', interval='1d')
     def test_GOOG(self):
-        frame = StaticFrame.from_symbol('GOOG')
+        frame = StaticFrame.from_symbol('GOOG', period='5d', interval='1d')
     def test_TSLA(self):
-        frame = StaticFrame.from_symbol('TSLA')
+        frame = StaticFrame.from_symbol('TSLA', period='5d', interval='1d')
     def test_NVDA(self):
-        frame = StaticFrame.from_symbol('NVDA')
+        frame = StaticFrame.from_symbol('NVDA', period='5d', interval='1d')
     def test_INTC(self):
-        frame = StaticFrame.from_symbol('INTC')
+        frame = StaticFrame.from_symbol('INTC', period='5d', interval='1d')
     def test_MSFT(self):
-        frame = StaticFrame.from_symbol('MSFT')
+        frame = StaticFrame.from_symbol('MSFT', period='5d', interval='1d')
 
     #Retail
     def test_KR(self):
-        frame = StaticFrame.from_symbol('KR')
+        frame = StaticFrame.from_symbol('KR', period='5d', interval='1d')
     def test_MCD(self):
-        frame = StaticFrame.from_symbol('MCD')
+        frame = StaticFrame.from_symbol('MCD', period='5d', interval='1d')
     def test_WMT(self):
-        frame = StaticFrame.from_symbol('WMT')
+        frame = StaticFrame.from_symbol('WMT', period='5d', interval='1d')
     #def test_TGT(self):
-    #    frame = StaticFrame.from_symbol('TGT')
+    #    frame = StaticFrame.from_symbol('TGT', period='5d', interval='1d')
     
     #War
     def test_USOIL(self):
-        frame = StaticFrame.from_symbol('CL=F')
+        frame = StaticFrame.from_symbol('CL=F', period='5d', interval='1d')
     def test_RTX(self):
-        frame = StaticFrame.from_symbol('RTX')
+        frame = StaticFrame.from_symbol('RTX', period='5d', interval='1d')
     def test_AAXN(self):
-        frame = StaticFrame.from_symbol('AAXN')
+        frame = StaticFrame.from_symbol('AAXN', period='5d', interval='1d')
     def test_CXW(self):
-        frame = StaticFrame.from_symbol('CXW')
+        frame = StaticFrame.from_symbol('CXW', period='5d', interval='1d')
     #def test_SWBI(self):
     #    frame = StaticFrame.from_symbol('SWBI')
     def test_RGR(self):
-        frame = StaticFrame.from_symbol('RGR')
-    '''
+        frame = StaticFrame.from_symbol('RGR', period='5d', interval='1d')
+    
     
     #class test_StaticFrameGO(KungFu.TimedTest):
     def test_GOLD(self):
@@ -112,11 +112,12 @@ class test_StaticFrame(KungFu.TimedTest):
         end = datetime.today() - timedelta(days=3)
         frame = StaticFrame.from_symbol('GC=F', start=start, end=end)
         print('frame1', frame)
-        frame2 = frame.update_symbol()
-        print('frame2', frame2)
-        print('len', len(frame.index))
-        print('len', len(frame2.index))
-        print('busday_count', numpy.busday_count(start.date()+timedelta(days=1), date.today()))
+        #print('len', len(frame.index))
+        #frame2 = frame.update_symbol()
+        #print('frame2', frame2)
+        
+        #print('len', len(frame2.index))
+        #print('busday_count', numpy.busday_count(start.date()+timedelta(days=1), date.today()))
         
     def test_close(self):
         start = datetime.now() - timedelta(days=30)
