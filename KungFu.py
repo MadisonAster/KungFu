@@ -3,13 +3,15 @@ Recursively searches folders below the location of this file.
 Runs any unittest class that begins with test_
 
 examples:
-python3 KungFu.py                          #run all tests, automatically decide if gui is available
+python3 KungFu.py                          #Run all tests, automatically decide if gui is available.
 
-python3 KungFu.py -sleep 1.0               #run tests with a sleeptime of 1.0 seconds
-python3 KungFu.py -folder Python/Qt        #run all tests in the Python/Qt folder
-python3 KungFu.py -folders Python,AWS      #run all tests in the Python and AWS folders
+python3 KungFu.py -sleep 1.0               #Run tests with a sleeptime of 1.0 seconds.
+python3 KungFu.py -folder Python/Qt        #Run all tests in the Python/Qt folder.
+python3 KungFu.py -folders Python,AWS      #Run all tests in the Python and AWS folders.
 python3 KungFu.py --create                 #Run tests that provision real cloud resources. THIS WILL COST MONEY!
 python3 KungFu.py --destroy                #Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!
+python3 KungFu.py --install                #Run all installers. You probably shouldn't do this in the full KungFu library!
+python3 KungFu.py --skip                   #Skip all installers. Turn this on for CI.
 '''
 #Standard Imports#################################
 import sys, os
@@ -701,11 +703,13 @@ class TestRunner():
     def LoadTestVars(self):
         parser = argparse.ArgumentParser()
         def csv(val): return val.split(',')
-        parser.add_argument("-folders", help="Specify a list of test folders to run.", type=csv)
-        parser.add_argument("-folder", help="Specify a folder of tests to run.", type=str)
-        parser.add_argument("-sleep", help="Specify a sleep time in second for gui tests to remain on the screen.", type=float)
-        parser.add_argument("--create", help="provision cloud resources, (this will cost money!)", action="store_true")
-        parser.add_argument("--destroy", help="destroy cloud resources, (this will destory resouces!)", action="store_true")
+        parser.add_argument("-folders", help="Run all tests in the specified folders.", type=csv)
+        parser.add_argument("-folder", help="Run all tests in the specified folder.", type=str)
+        parser.add_argument("-sleep", help="Run tests with a sleeptime of n seconds.", type=float)
+        parser.add_argument("--create", help="Run tests that provision real cloud resources. THIS WILL COST MONEY!", action="store_true")
+        parser.add_argument("--destroy", help="Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!", action="store_true")
+        parser.add_argument("--install", help="Run all installers. You probably shouldn't do this in the full KungFu library!", action="store_true")
+        parser.add_argument("--skip", help="Skip all installers. Turn this on for CI.", action="store_true")
 
         self.TestArgs, unknown = parser.parse_known_args()
         if self.TestArgs.sleep == None:
@@ -767,7 +771,8 @@ def main(*args):
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
-    Dependencies.OfferInstallers()
+    if not TestInstance.TestArgs.skip:
+        Dependencies.OfferInstallers()
 
 if __name__ == '__main__':
     main()
