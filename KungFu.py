@@ -237,8 +237,6 @@ class DependencyHandler():
             return self.RunChecks(name, **kwargs)
 
     def RunChecks(self, name, **kwargs):
-        print('RunChecks', name, kwargs)
-        
         def pm(nm):
             if nm in kwargs: return False
             ch = self.ShellCheck(nm, pm=True)
@@ -263,10 +261,8 @@ class DependencyHandler():
                 return True
             elif name in self.PMNotInstalled:
                 return False
-        print('ShellCheck', name)
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
         if os.path.exists(checkpath):
-            print('attempting shell check', name)
             returncodes = 0
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
@@ -285,12 +281,9 @@ class DependencyHandler():
                     self.PMNotInstalled.append(name)
                 else:
                     self.NotInstalled.append(name)
-            print('returncodes', returncodes)
             return returncodes
 
     def CondaCheck(self, name):
-        print('CondaCheck', name)
-        #print('attempting conda check', name)
         output, returncode = RunCmd('conda list --json '+name)
         #print('output', output)
         #print('returncode', returncode)
@@ -301,8 +294,6 @@ class DependencyHandler():
         return result
 
     def PipCheck(self, name):
-        print('PipCheck', name)
-        #print('attempting pip check', name)
         output, returncode = RunCmd('pip show '+name, cwd=self.cwd)
         #print('output', output)
         #print('returncode', returncode)
@@ -313,7 +304,7 @@ class DependencyHandler():
     
     def AptCheck(self, name):
         #Untested
-        #print('attempting python check', name)
+        #print('attempting apt check', name)
         output, returncode = RunCmd("apt list "+name, cwd=self.cwd)
         #print('output', output)
         #print('returncode', returncode)
@@ -325,7 +316,7 @@ class DependencyHandler():
     
     def YumCheck(self, name):
         #Untested
-        #print('attempting python check', name)
+        #print('attempting yum check', name)
         output, returncode = RunCmd("yum list "+name, cwd=self.cwd)
         #print('output', output)
         #print('returncode', returncode)
@@ -336,7 +327,6 @@ class DependencyHandler():
         return result
     
     def PythonCheck(self, name):
-        #print('attempting python check', name)
         output, returncode = RunCmd("python -c 'import "+name+"'", cwd=self.cwd)
         #print('output', output)
         #print('returncode', returncode)
@@ -356,7 +346,6 @@ class DependencyHandler():
         sys.stderr = old
 
     def CheckGui(self):
-        print('CheckGui!')
         #Hack
         try:
             with self.GetStderrIO() as stderr:
@@ -406,8 +395,6 @@ class DependencyHandler():
             return ch and nm not in kwargs
         if self.ShellInstall(name): return True
         if pm('conda') and self.CondaInstall(name): return True
-        print('runinstallers return')
-        return False
         if pm('pip') and self.PipInstall(name): return True
         if pm('apt') and self.AptInstall(name): return True
         if pm('yum') and self.YumInstall(name): return True
@@ -430,7 +417,7 @@ class DependencyHandler():
                     result, returncode = RunCmd(line, cwd=self.cwd)
                     returncodes += returncode
             returncodes = not bool(returncodes)
-            return self.RunChecks(name)
+            return self.ShellCheck(name)
         
     def CondaInstall(self, name):
         print('attempting conda install '+name)
@@ -439,14 +426,14 @@ class DependencyHandler():
         result, returncode = RunCmd('conda install -y '+name)
         print('result', result)
         print('returncode', returncode)
-        return self.RunChecks(name)
+        return self.CondaCheck(name)
     
     def PipInstall(self, name):
         print('attempting pip install '+name)
-        result, returncode = RunCmd('pip install -y '+name, cwd=self.cwd)
+        result, returncode = RunCmd('pip install '+name, cwd=self.cwd)
         print('result', result)
         print('returncode', returncode)
-        return self.RunChecks(name)
+        return self.PipCheck(name)
     
     def AptInstall(self, name):
         #Untested
@@ -454,7 +441,7 @@ class DependencyHandler():
         output, returncode = RunCmd("apt install "+name, cwd=self.cwd)
         print('output', output)
         print('returncode', returncode)
-        return self.RunChecks(name)
+        return self.AptCheck(name)
     
     def YumCheck(self, name):
         #Untested
@@ -462,7 +449,7 @@ class DependencyHandler():
         output, returncode = RunCmd("yum install "+name, cwd=self.cwd)
         print('output', output)
         print('returncode', returncode)
-        return self.RunChecks(name)
+        return self.YumCheck(name)
     ##################################################
     
     def CountTests(self, dependencies, count):
