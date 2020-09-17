@@ -53,7 +53,7 @@ def PandasMultiIndex():
             pd.IndexSlice[:, 'B']])
     
     #Iinconsistent axis specification!!
-    print(df3.loc['II', 'B']) #This selects row row!
+    print(df3.loc['y', 'B']) #This selects row row!
     print(df3.loc[:,'B']) #This selects row column!
     
 ##################################################

@@ -224,7 +224,8 @@ class DependencyHandler():
         if not hasattr(sys, 'DependencyHandler'): #Global Singleton
             sys.DependencyHandler = super(DependencyHandler, cls).__new__(cls, *args, **kwargs)
         return sys.DependencyHandler
-
+    
+    #Checks###########################################
     def Check(self, name, shell=True, conda=True, pip=True):
         if name in self.Installed:
             return True
@@ -233,11 +234,18 @@ class DependencyHandler():
         else:
             return self.RunChecks(name, shell=shell, conda=conda, pip=pip)
 
-    def RunChecks(self, name, shell=True, conda=True, pip=True):
+    def RunChecks(self, name, shell=True, conda=True, pip=True, python=True):
         if name == 'gui': return self.CheckGui()
         if shell and self.ShellCheck(name): return True
         if conda and self.CondaCheck(name): return True
         if pip and self.PipCheck(name): return True
+        #if apt and self.AptCheck(name): return True
+        #if yum and self.YumCheck(name): return True
+        #if rpm and self.RpmCheck(name): return True
+        #if zypper and self.ZypperCheck(name): return True
+        #if yast and self.YastCheck(name): return True
+        #if snap and self.SnapCheck(name): return True
+        if python and self.PythonCheck(name): return True
         self.NotInstalled.append(name)
         return False
 
@@ -278,7 +286,60 @@ class DependencyHandler():
         if result and name not in self.Installed:
             self.Installed.append(name)
         return result
+    
+    def AptCheck(self, name):
+        #print('attempting python check', name)
+        output, returncode = RunCmd("apt list "+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        vcount = len(output.split('\n'))
+        result = not bool(returncode) and vcount > 1
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+    
+    def PythonCheck(self, name):
+        #print('attempting python check', name)
+        output, returncode = RunCmd("python -c 'import "+name+"'", cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        result = not bool(returncode)
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+    
+    @contextlib.contextmanager
+    def GetStderrIO(self, stderr=None):
+        #Hack
+        old = sys.stderr
+        if stderr is None:
+            stderr = io.StringIO()
+        sys.stderr = stderr
+        yield stderr
+        sys.stderr = old
 
+    def CheckGui(self):
+        print('CheckGui!')
+        #Hack
+        try:
+            with self.GetStderrIO() as stderr:
+                from Qt import QtCore
+            if stderr.getvalue() == '':
+                self.Installed.append('gui')
+                installed = True
+            else:
+                print('X server not available! Disabling gui tests!')
+                self.NotInstalled.append('gui')
+                installed = False
+        except ImportError as exception:
+            print('Qt not available! Disabling gui tests!')
+            self.NotInstalled.append('gui')
+            installed = False
+        print('gui installed', installed)
+        return installed
+    ##################################################
+    
+    #Installers#######################################
     def OfferInstallers(self):
         if len(self.NotInstalled) != 0:
             print(str(self.SkipCount)+" tests couldn't run because the following items are missing:")
@@ -304,6 +365,12 @@ class DependencyHandler():
         if shell and self.ShellInstall(name): return True
         if conda and self.CondaInstall(name): return True
         if pip and self.PipInstall(name): return True
+        #if apt and self.AptInstall(name): return True
+        #if yum and self.YumInstall(name): return True
+        #if rpm and self.RpmInstall(name): return True
+        #if zypper and self.ZypperInstall(name): return True
+        #if yast and self.YastInstall(name): return True
+        #if snap and self.SnapInstall(name): return True
 
     def ShellInstall(self, name, shellmode=False):
         if name in self.ShellList:
@@ -335,35 +402,7 @@ class DependencyHandler():
         print('result', result)
         print('returncode', returncode)
         return PipCheck(name)
-   
-    ###Still hacking this for now until I find a more general way###
-    @contextlib.contextmanager
-    def GetStderrIO(self, stderr=None):
-        old = sys.stderr
-        if stderr is None:
-            stderr = io.StringIO()
-        sys.stderr = stderr
-        yield stderr
-        sys.stderr = old
-
-    def CheckGui(self):
-        try:
-            with self.GetStderrIO() as stderr:
-                from Qt import QtCore
-            if stderr.getvalue() == '':
-                self.Installed.append('gui')
-                installed = True
-            else:
-                print('X server not available! Disabling gui tests!')
-                self.NotInstalled.append('gui')
-                installed = False
-        except ImportError as exception:
-            print('Qt not available! Disabling gui tests!')
-            self.NotInstalled.append('gui')
-            installed = False
-        print('gui installed', installed)
-        return installed
-    ################################################################
+    ##################################################
     
     def CountTests(self, dependencies, count):
         if isinstance(dependencies, str):
@@ -524,5 +563,5 @@ def main(*args):
 
 if __name__ == '__main__':
     main()
-    WriteBack() #Code will only modify itself when run directly
+    #WriteBack() #Code will only modify itself when run directly
 ##################################################
