@@ -226,26 +226,30 @@ class DependencyHandler():
         return sys.DependencyHandler
     
     #Checks###########################################
-    def Check(self, name, shell=True, conda=True, pip=True):
+    def Check(self, name, **kwargs):
         if name in self.Installed:
             return True
         elif name in self.NotInstalled:
             return False
         else:
-            return self.RunChecks(name, shell=shell, conda=conda, pip=pip)
+            return self.RunChecks(name, **kwargs)
 
-    def RunChecks(self, name, shell=True, conda=True, pip=True, python=True):
+    def RunChecks(self, name, **kwargs):
+        def pm(nm):
+            kw = {nm:False}
+            ch = self.Check(nm, **kw)
+            return ch and nm not in kwargs
         if name == 'gui': return self.CheckGui()
-        if shell and self.ShellCheck(name): return True
-        if conda and self.CondaCheck(name): return True
-        if pip and self.PipCheck(name): return True
-        #if apt and self.AptCheck(name): return True
-        #if yum and self.YumCheck(name): return True
-        #if rpm and self.RpmCheck(name): return True
-        #if zypper and self.ZypperCheck(name): return True
-        #if yast and self.YastCheck(name): return True
-        #if snap and self.SnapCheck(name): return True
-        if python and self.PythonCheck(name): return True
+        if self.ShellCheck(name): return True
+        if pm('conda') and self.CondaCheck(name): return True
+        if pm('pip') and self.PipCheck(name): return True
+        #if pm('apt') and self.AptCheck(name): return True
+        #if pm('yum') and self.YumCheck(name): return True
+        #if pm('rpm') and self.RpmCheck(name): return True
+        #if pm('zypper') and self.ZypperCheck(name): return True
+        #if pm('yast') and self.YastCheck(name): return True
+        #if pm('snap') and self.SnapCheck(name): return True
+        if self.PythonCheck(name): return True
         self.NotInstalled.append(name)
         return False
 
@@ -266,16 +270,15 @@ class DependencyHandler():
             return returncodes
 
     def CondaCheck(self, name):
-        if self.Check('conda', conda=False):
-            #print('attempting conda check', name)
-            output, returncode = RunCmd('conda list --json '+name)
-            #print('output', output)
-            #print('returncode', returncode)
-            vlist = json.loads(output)
-            result = not bool(returncode) and len(vlist) > 0
-            if result and name not in self.Installed:
-                self.Installed.append(name)
-            return result
+        #print('attempting conda check', name)
+        output, returncode = RunCmd('conda list --json '+name)
+        #print('output', output)
+        #print('returncode', returncode)
+        vlist = json.loads(output)
+        result = not bool(returncode) and len(vlist) > 0
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
 
     def PipCheck(self, name):
         #print('attempting pip check', name)
@@ -288,8 +291,21 @@ class DependencyHandler():
         return result
     
     def AptCheck(self, name):
+        #Untested
         #print('attempting python check', name)
         output, returncode = RunCmd("apt list "+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        vcount = len(output.split('\n'))
+        result = not bool(returncode) and vcount > 1
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+    
+    def YumCheck(self, name):
+        #Untested
+        #print('attempting python check', name)
+        output, returncode = RunCmd("yum list "+name, cwd=self.cwd)
         #print('output', output)
         #print('returncode', returncode)
         vcount = len(output.split('\n'))
@@ -361,16 +377,21 @@ class DependencyHandler():
         print('----------------------------------------------------------------------')
         print('Goodbye!')
 
-    def RunInstallers(self, name, shell=True, conda=True, pip=True):
+    def RunInstallers(self, name, **kwargs):
+        def pm(nm):
+            kw = {nm:False}
+            ch = self.Check(nm, **kw)
+            return ch and nm not in kwargs
         if shell and self.ShellInstall(name): return True
-        if conda and self.CondaInstall(name): return True
-        if pip and self.PipInstall(name): return True
-        #if apt and self.AptInstall(name): return True
-        #if yum and self.YumInstall(name): return True
-        #if rpm and self.RpmInstall(name): return True
-        #if zypper and self.ZypperInstall(name): return True
-        #if yast and self.YastInstall(name): return True
-        #if snap and self.SnapInstall(name): return True
+        if pm('conda') and self.CondaInstall(name): return True
+        if pm('pip') and self.PipInstall(name): return True
+        if pm('apt') and self.AptInstall(name): return True
+        if pm('yum') and self.YumInstall(name): return True
+        #if pm('rpm') and self.RpmInstall(name): return True
+        #if pm('zypper') and self.ZypperInstall(name): return True
+        #if pm('yast') and self.YastInstall(name): return True
+        #if pm('snap') and self.SnapInstall(name): return True
+        return False
 
     def ShellInstall(self, name, shellmode=False):
         if name in self.ShellList:
@@ -385,23 +406,38 @@ class DependencyHandler():
                     result, returncode = RunCmd(line, cwd=self.cwd)
                     returncodes += returncode
             returncodes = not bool(returncodes)
-            return ShellCheck(name)
+        return self.RunChecks(name)
         
     def CondaInstall(self, name):
-        if self.Check('conda', conda=False):
-            print('attempting conda install '+name)
-            #result, returncode = RunCmd('conda install --quiet --name '+name)
-            result, returncode = RunCmd('conda install -y '+name)
-            print('result', result)
-            print('returncode', returncode)
-            return CondaCheck(name)
+        print('attempting conda install '+name)
+        #result, returncode = RunCmd('conda install --quiet --name '+name)
+        result, returncode = RunCmd('conda install -y '+name)
+        print('result', result)
+        print('returncode', returncode)
+        return self.RunChecks(name)
     
     def PipInstall(self, name):
         print('attempting pip install '+name)
         result, returncode = RunCmd('pip install -y '+name, cwd=self.cwd)
         print('result', result)
         print('returncode', returncode)
-        return PipCheck(name)
+        return self.RunChecks(name)
+    
+    def AptInstall(self, name):
+        #Untested
+        print('attempting apt install', name)
+        output, returncode = RunCmd("apt install "+name, cwd=self.cwd)
+        print('output', output)
+        print('returncode', returncode)
+        return self.RunChecks(name)
+    
+    def YumCheck(self, name):
+        #Untested
+        print('attempting yum install', name)
+        output, returncode = RunCmd("yum install "+name, cwd=self.cwd)
+        print('output', output)
+        print('returncode', returncode)
+        return self.RunChecks(name)
     ##################################################
     
     def CountTests(self, dependencies, count):
