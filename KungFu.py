@@ -43,8 +43,8 @@ ExpectedTestCount = {
  'nodejs': 7,
  'npm.jest': 7,
  'nuke': 0,
- 'numpy': 37,
- 'pandas': 37,
+ 'numpy': 76,
+ 'pandas': 82,
  'static-frame': 77,
  'terraform': 7,
  'unreal': 0,
@@ -242,11 +242,26 @@ class DependencyHandler():
         def pm(nm):
             return self.ShellCheck(nm, pm=True)
         if manager:
-            if manager in ['pip', 'conda']:
+            if manager == 'conda':
                 if pm('conda') and self.CondaCheck(name): return True
                 if pm('pip') and self.PipCheck(name): return True
+            if manager == 'pip':
+                if pm('pip') and self.PipCheck(name): return True
+                if pm('conda') and self.CondaCheck(name): return True
             if manager in ['nodejs', 'npm']:
                 if pm('nodejs') and self.NpmCheck(name): return True
+            if manager == 'apt':
+                if pm('apt') and self.AptCheck(name): return True
+            if manager == 'yum':
+                if pm('yum') and self.YumCheck(name): return True
+            if manager == 'rpm':
+                if pm('rpm') and self.RpmCheck(name): return True
+            if manager == 'zypper':
+                if pm('zypper') and self.ZypperCheck(name): return True
+            if manager == 'yast':
+                if pm('yast') and self.YastCheck(name): return True
+            if manager == 'snap':
+                if pm('snap') and self.SnapCheck(name): return True
             print('Unrecognized package manager: '+manager)
             if manager+'.'+name not in self.NotInstalled:
                 self.NotInstalled.append(manager+'.'+name)
@@ -464,11 +479,26 @@ class DependencyHandler():
         def pm(nm):
             return self.ShellCheck(nm, pm=True)
         if manager:
-            if manager in ['pip', 'conda']:
+            if manager == 'conda':
                 if pm('conda') and self.CondaInstall(name): return True
                 if pm('pip') and self.PipInstall(name): return True
+            if manager == 'pip':
+                if pm('pip') and self.PipInstall(name): return True
+                if pm('conda') and self.CondaInstall(name): return True
             if manager in ['nodejs', 'npm']:
                 if pm('nodejs') and self.NpmInstall(name): return True
+            if manager == 'apt':
+                if pm('apt') and self.AptInstall(name): return True
+            if manager == 'yum':
+                if pm('yum') and self.YumInstall(name): return True
+            if manager == 'rpm':
+                if pm('rpm') and self.RpmInstall(name): return True
+            if manager == 'zypper':
+                if pm('zypper') and self.ZypperInstall(name): return True
+            if manager == 'yast':
+                if pm('yast') and self.YastInstall(name): return True
+            if manager == 'snap':
+                if pm('snap') and self.SnapInstall(name): return True
             print('Unrecognized package manager: '+name)
             return False
         else:
