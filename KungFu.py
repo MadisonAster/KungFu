@@ -43,8 +43,8 @@ ExpectedTestCount = {
  'nodejs': 7,
  'npm.jest': 7,
  'nuke': 0,
- 'numpy': 76,
- 'pandas': 82,
+ 'numpy': 37,
+ 'pandas': 37,
  'static-frame': 77,
  'terraform': 7,
  'unreal': 0,
@@ -247,8 +247,9 @@ class DependencyHandler():
                 if pm('pip') and self.PipCheck(name): return True
             if manager in ['nodejs', 'npm']:
                 if pm('nodejs') and self.NpmCheck(name): return True
-            print('Unrecognized package manager: '+name)
-            self.NotInstalled.append(manager+'.'+name)
+            print('Unrecognized package manager: '+manager)
+            if manager+'.'+name not in self.NotInstalled:
+                self.NotInstalled.append(manager+'.'+name)
             return False
         else:
             if name == 'gui': return self.CheckGui()
@@ -263,7 +264,8 @@ class DependencyHandler():
             #if pm('snap') and self.SnapCheck(name): return True
             if pm('nodejs') and self.NpmCheck(name): return True
             if self.PythonCheck(name): return True
-            self.NotInstalled.append(name)
+            if name not in self.NotInstalled:
+                self.NotInstalled.append(name)
             return False
 
     def ShellCheck(self, name, shellmode=False, pm=False):
@@ -343,7 +345,55 @@ class DependencyHandler():
         if result and name not in self.Installed:
             self.Installed.append(name)
         return result
-    
+
+    def RpmCheck(self, name):
+        #Untested
+        #print('attempting rpm check', name)
+        output, returncode = RunCmd("rpm list "+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        vcount = len(output.split('\n'))
+        result = not bool(returncode) and vcount > 1
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+
+    def ZypperCheck(self, name):
+        #Untested
+        #print('attempting zypper check', name)
+        output, returncode = RunCmd("zypper list "+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        vcount = len(output.split('\n'))
+        result = not bool(returncode) and vcount > 1
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+
+    def YastCheck(self, name):
+        #Untested
+        #print('attempting yast check', name)
+        output, returncode = RunCmd("yast list "+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        vcount = len(output.split('\n'))
+        result = not bool(returncode) and vcount > 1
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+
+    def SnapCheck(self, name):
+        #Untested
+        #print('attempting snap check', name)
+        output, returncode = RunCmd("snap list "+name, cwd=self.cwd)
+        #print('output', output)
+        #print('returncode', returncode)
+        vcount = len(output.split('\n'))
+        result = not bool(returncode) and vcount > 1
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+
     def PythonCheck(self, name):
         output, returncode = RunCmd("python -c 'import "+name+"'", cwd=self.cwd)
         #print('output', output)
@@ -495,6 +545,38 @@ class DependencyHandler():
         #Untested
         print('attempting yum install', name)
         output, returncode = RunCmd("yum install "+name, cwd=self.cwd)
+        print('output', output)
+        print('returncode', returncode)
+        return self.MarkInstalled(name, self.YumCheck(name))
+
+    def RpmInstall(self, name):
+        #Untested
+        print('attempting rpm install', name)
+        output, returncode = RunCmd("rpm install "+name, cwd=self.cwd)
+        print('output', output)
+        print('returncode', returncode)
+        return self.MarkInstalled(name, self.YumCheck(name))
+
+    def ZypperInstall(self, name):
+        #Untested
+        print('attempting zypper install', name)
+        output, returncode = RunCmd("zypper install "+name, cwd=self.cwd)
+        print('output', output)
+        print('returncode', returncode)
+        return self.MarkInstalled(name, self.YumCheck(name))
+
+    def YastInstall(self, name):
+        #Untested
+        print('attempting yast install', name)
+        output, returncode = RunCmd("yast install "+name, cwd=self.cwd)
+        print('output', output)
+        print('returncode', returncode)
+        return self.MarkInstalled(name, self.YumCheck(name))
+
+    def SnapInstall(self, name):
+        #Untested
+        print('attempting snap install', name)
+        output, returncode = RunCmd("snap install "+name, cwd=self.cwd)
         print('output', output)
         print('returncode', returncode)
         return self.MarkInstalled(name, self.YumCheck(name))
