@@ -14,7 +14,7 @@ import PythonBaseClasses
 ##################################################
 
 #Test#############################################
-@KungFu.depends('qt', 'gui')
+@KungFu.depends('pyside2', 'qt.py', 'gui')
 class test_FramelessWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_FramelessWindow, self).__init__(*args)

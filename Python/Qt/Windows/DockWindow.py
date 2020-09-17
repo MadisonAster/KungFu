@@ -14,23 +14,23 @@ import PythonBaseClasses
 ##################################################
 
 #Test#############################################
-@KungFu.depends('qt', 'gui')
+@KungFu.depends('pyside2', 'qt.py', 'gui')
 class test_DockWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_DockWindow, self).__init__(*args)
         PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, sleep=0.5):
-        self.MainWindow = DockWindow()
-        self.MainWindow.show()
-        self.MainWindow.resize(self.MainWindow.QAvailableGeo.width()/2, self.MainWindow.QAvailableGeo.height()-self.MainWindow.QStartBarHeight)
-        self.MainWindow.move(0,0)
+        MainWindow = DockWindow()
+        MainWindow.show()
+        MainWindow.resize(MainWindow.QAvailableGeo.width()/2, MainWindow.QAvailableGeo.height()-MainWindow.QStartBarHeight)
+        MainWindow.move(0,0)
         
         testwidget = PythonBaseClasses.BasicWidget()
-        MainWindow.dockThisWidget(testwidget)
+        MainWindow.dockWidget(testwidget)
         
         time.sleep(sleep)
-        self.MainWindow.hide()
+        MainWindow.hide()
         
         
 ##################################################
@@ -55,7 +55,7 @@ class DockWindow(PythonBaseClasses.BasicWindow):
         widgetName = widget.accessibleName()
         if widgetName == '':
             widgetName = type(widget).__name__
-        dWidget = QtGui.QDockWidget()
+        dWidget = QtWidgets.QDockWidget()
         dWidget.setWidget(widget)
         dWidget.setObjectName(widgetName)
         dWidget.setWindowTitle(widgetName)

@@ -14,7 +14,7 @@ import PythonBaseClasses
 ##################################################
 
 #Test#############################################
-@KungFu.depends('qt', 'gui')
+@KungFu.depends('pyside2', 'qt.py', 'gui')
 class test_BasicWidget(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_BasicWidget, self).__init__(*args)
@@ -25,7 +25,6 @@ class test_BasicWidget(KungFu.TimedTest):
         testwidget.show()
         time.sleep(sleep)
         testwidget.hide()
-        
 ##################################################
 
 #Code#############################################
