@@ -277,8 +277,6 @@ class DependencyHandler():
             elif not returncodes:
                 if pm:
                     self.PMNotInstalled.append(name)
-                else:
-                    self.NotInstalled.append(name)
             return returncodes
 
     def CondaCheck(self, name):
