@@ -40,7 +40,7 @@ class NPMTestParser():
 ##################################################
 
 #Test#############################################
-@KungFu.depends('npm')
+@KungFu.depends('nodejs', 'jest')
 class test_NPMTestParser(KungFu.PrototypeTestParser):
     pass
 

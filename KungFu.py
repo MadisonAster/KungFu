@@ -18,7 +18,7 @@ from importlib import util
 from datetime import datetime
 import subprocess, shlex
 import traceback
-import functools
+import functools, copy
 import io
 import contextlib
 import types
@@ -33,12 +33,13 @@ ExpectedTestCount = {
  'go': 14,
  'gui': 9,
  'java': 0,
+ 'jest': 7,
  'kubectl': 0,
  'lxml': 9,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
- 'npm': 7,
+ 'nodejs': 7,
  'nuke': 0,
  'numpy': 8,
  'pandas': 14,
@@ -217,7 +218,7 @@ class DependencyHandler():
     PMInstalled = []
     PMNotInstalled = []
     SkipCount = 0
-    ShellList = ['npm'] #packages that require the shell option to be set
+    ShellList = ['nodejs'] #packages that require the shell option to be set
     TestCount = {}
 
     def __new__(cls, *args, **kwargs):
@@ -249,6 +250,7 @@ class DependencyHandler():
         #if pm('zypper') and self.ZypperCheck(name): return True
         #if pm('yast') and self.YastCheck(name): return True
         #if pm('snap') and self.SnapCheck(name): return True
+        if pm('nodejs') and self.NpmCheck(name): return True
         if self.PythonCheck(name): return True
         self.NotInstalled.append(name)
         return False
@@ -285,6 +287,15 @@ class DependencyHandler():
         #print('returncode', returncode)
         vlist = json.loads(output)
         result = not bool(returncode) and len(vlist) > 0
+        if result and name not in self.Installed:
+            self.Installed.append(name)
+        return result
+
+    def NpmCheck(self, name):
+        output, returncode = RunCmd('npm list '+name, cwd=self.cwd+'/Javascript', shell=True)
+        #print('output', output)
+        #print('returncode', returncode)
+        result = not bool(returncode)
         if result and name not in self.Installed:
             self.Installed.append(name)
         return result
@@ -373,7 +384,7 @@ class DependencyHandler():
                 print('----------------------------------------------------------------------')
                 print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
                 print('Automated Dependency Installers:')
-                for name in self.NotInstalled:
+                for name in copy.copy(self.NotInstalled):
                     answer = input('    Would you like to try installing '+name+'? ')
                     answer = answer.lower() in ['y', 'yes', 'true']
                     if answer == True:
@@ -398,7 +409,18 @@ class DependencyHandler():
         #if pm('zypper') and self.ZypperInstall(name): return True
         #if pm('yast') and self.YastInstall(name): return True
         #if pm('snap') and self.SnapInstall(name): return True
+        if pm('nodejs') and self.NpmInstall(name): return True
         return False
+
+    def MarkInstalled(self, name, checkval):
+        if checkval:
+            if name in self.NotInstalled:
+                self.NotInstalled.remove(name)
+            if name in self.PMNotInstalled:
+                self.PMNotInstalled.remove(name)
+                self.PMInstalled.append(name)
+            self.Installed.append(name)
+        return checkval
 
     def ShellInstall(self, name, shellmode=False):
         if name in self.ShellList:
@@ -413,39 +435,47 @@ class DependencyHandler():
                     result, returncode = RunCmd(line, cwd=self.cwd)
                     returncodes += returncode
             returncodes = not bool(returncodes)
-            return self.ShellCheck(name)
-        
+            return self.MarkInstalled(name, self.ShellCheck(name))
+
     def CondaInstall(self, name):
         print('attempting conda install '+name)
         #result, returncode = RunCmd('conda install --quiet --name '+name)
-        result, returncode = RunCmd('conda config --append channels conda-forge')
-        result, returncode = RunCmd('conda install -y '+name)
-        print('result', result)
-        print('returncode', returncode)
-        return self.CondaCheck(name)
-    
+        result0, returncode0 = RunCmd('conda config --prepend channels conda-forge')
+        result1, returncode1 = RunCmd('conda install -y '+name)
+        result2, returncode2 = RunCmd('conda update -y '+name)
+        print('result1', result1)
+        print('returncode1', returncode1)
+        return self.MarkInstalled(name, self.CondaCheck(name))
+
     def PipInstall(self, name):
         print('attempting pip install '+name)
         result, returncode = RunCmd('pip install '+name, cwd=self.cwd)
         print('result', result)
         print('returncode', returncode)
-        return self.PipCheck(name)
-    
+        return self.MarkInstalled(name, self.PipCheck(name))
+
+    def NpmInstall(self, name):
+        print('attempting npm install '+name)
+        result, returncode = RunCmd('npm install '+name, cwd=self.cwd+'/Javascript', shell=True)
+        print('result', result)
+        print('returncode', returncode)
+        return self.MarkInstalled(name, self.NpmCheck(name))
+
     def AptInstall(self, name):
         #Untested
         print('attempting apt install', name)
         output, returncode = RunCmd("apt install "+name, cwd=self.cwd)
         print('output', output)
         print('returncode', returncode)
-        return self.AptCheck(name)
-    
+        return self.MarkInstalled(name, self.AptCheck(name))
+
     def YumCheck(self, name):
         #Untested
         print('attempting yum install', name)
         output, returncode = RunCmd("yum install "+name, cwd=self.cwd)
         print('output', output)
         print('returncode', returncode)
-        return self.YumCheck(name)
+        return self.MarkInstalled(name, self.YumCheck(name))
     ##################################################
     
     def CountTests(self, dependencies, count):
