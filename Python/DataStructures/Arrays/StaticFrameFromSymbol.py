@@ -103,8 +103,7 @@ class test_StaticFrame(KungFu.TimedTest):
     #    frame = StaticFrame.from_symbol('SWBI')
     def test_RGR(self):
         frame = StaticFrame.from_symbol('RGR', period='5d', interval='1d')
-    
-    
+
     #class test_StaticFrameGO(KungFu.TimedTest):
     def test_GOLD(self):
         import numpy
@@ -118,7 +117,7 @@ class test_StaticFrame(KungFu.TimedTest):
         
         #print('len', len(frame2.index))
         #print('busday_count', numpy.busday_count(start.date()+timedelta(days=1), date.today()))
-        
+
     def test_close(self):
         start = datetime.now() - timedelta(days=30)
         end = datetime.now() - timedelta(days=5)

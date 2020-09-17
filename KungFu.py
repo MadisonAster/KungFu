@@ -29,26 +29,26 @@ from pprint import pprint, pformat
 ExpectedTestCount = {
  'aws': 7,
  'conda': 0,
+ 'conda.pyside2': 9,
+ 'conda.qt.py': 9,
  'docker': 0,
  'go': 14,
  'gui': 9,
  'java': 0,
- 'jest': 7,
  'kubectl': 0,
- 'lxml': 37,
+ 'lxml': 77,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
  'nodejs': 7,
+ 'npm.jest': 7,
  'nuke': 0,
- 'numpy': 37,
- 'pandas': 37,
- 'pyside2': 9,
- 'qt.py': 9,
- 'static-frame': 37,
+ 'numpy': 76,
+ 'pandas': 82,
+ 'static-frame': 77,
  'terraform': 7,
  'unreal': 0,
- 'yfinance': 37,
+ 'yfinance': 77,
 }
 
 def WriteBack():
@@ -227,33 +227,44 @@ class DependencyHandler():
         return sys.DependencyHandler
     
     #Checks###########################################
-    def Check(self, name, **kwargs):
+    def Check(self, name):
+        manager = None
+        if '.' in name:
+            manager, name = name.split('.',1)
         if name in self.Installed:
             return True
         elif name in self.NotInstalled:
             return False
         else:
-            return self.RunChecks(name, **kwargs)
+            return self.RunChecks(name, manager=manager)
 
-    def RunChecks(self, name, **kwargs):
+    def RunChecks(self, name, manager=None):
         def pm(nm):
-            if nm in kwargs: return False
-            ch = self.ShellCheck(nm, pm=True)
-            return ch and nm not in kwargs
-        if name == 'gui': return self.CheckGui()
-        if self.ShellCheck(name): return True
-        if pm('conda') and self.CondaCheck(name): return True
-        if pm('pip') and self.PipCheck(name): return True
-        #if pm('apt') and self.AptCheck(name): return True
-        #if pm('yum') and self.YumCheck(name): return True
-        #if pm('rpm') and self.RpmCheck(name): return True
-        #if pm('zypper') and self.ZypperCheck(name): return True
-        #if pm('yast') and self.YastCheck(name): return True
-        #if pm('snap') and self.SnapCheck(name): return True
-        if pm('nodejs') and self.NpmCheck(name): return True
-        if self.PythonCheck(name): return True
-        self.NotInstalled.append(name)
-        return False
+            return self.ShellCheck(nm, pm=True)
+        if manager:
+            if manager in ['pip', 'conda']:
+                if pm('conda') and self.CondaCheck(name): return True
+                if pm('pip') and self.PipCheck(name): return True
+            if manager in ['nodejs', 'npm']:
+                if pm('nodejs') and self.NpmCheck(name): return True
+            print('Unrecognized package manager: '+name)
+            self.NotInstalled.append(manager+'.'+name)
+            return False
+        else:
+            if name == 'gui': return self.CheckGui()
+            if self.ShellCheck(name): return True
+            if pm('conda') and self.CondaCheck(name): return True
+            if pm('pip') and self.PipCheck(name): return True
+            #if pm('apt') and self.AptCheck(name): return True
+            #if pm('yum') and self.YumCheck(name): return True
+            #if pm('rpm') and self.RpmCheck(name): return True
+            #if pm('zypper') and self.ZypperCheck(name): return True
+            #if pm('yast') and self.YastCheck(name): return True
+            #if pm('snap') and self.SnapCheck(name): return True
+            if pm('nodejs') and self.NpmCheck(name): return True
+            if self.PythonCheck(name): return True
+            self.NotInstalled.append(name)
+            return False
 
     def ShellCheck(self, name, shellmode=False, pm=False):
         if pm:
@@ -382,35 +393,46 @@ class DependencyHandler():
                 self.NotInstalled.remove('gui')
             if len(self.NotInstalled) != 0:
                 print('----------------------------------------------------------------------')
-                print('INSTALLERS ARE STILL UNTESTED! RUN AT YOUR OWN RISK!')
-                print('Automated Dependency Installers:')
+                print('AUTOMATED INSTALLERS (UNEXPECTED RESULTS MAY OCCUR!):')
                 for name in copy.copy(self.NotInstalled):
-                    answer = input('    Would you like to try installing '+name+'? ')
+                    manager = None
+                    if '.' in name:
+                        manager, name = name.split('.',1)
+                    if manager:
+                        answer = input('    Would you like to try installing '+name+' from '+manager+'? ')
+                    else:
+                        answer = input('    Would you like to try installing '+name+'? ')
                     answer = answer.lower() in ['y', 'yes', 'true']
                     if answer == True:
-                        self.RunInstallers(name)
+                        self.RunInstallers(name, manager=manager)
         else:
             print('Everything OK!')
         print('----------------------------------------------------------------------')
         print('Goodbye!')
 
-    def RunInstallers(self, name, **kwargs):
-        print('runinstallers', name)
+    def RunInstallers(self, name, manager=None):
         def pm(nm):
-            if nm == name: return False
-            ch = self.ShellCheck(nm, pm=True)
-            return ch and nm not in kwargs
-        if self.ShellInstall(name): return True
-        if pm('conda') and self.CondaInstall(name): return True
-        if pm('pip') and self.PipInstall(name): return True
-        #if pm('apt') and self.AptInstall(name): return True
-        #if pm('yum') and self.YumInstall(name): return True
-        #if pm('rpm') and self.RpmInstall(name): return True
-        #if pm('zypper') and self.ZypperInstall(name): return True
-        #if pm('yast') and self.YastInstall(name): return True
-        #if pm('snap') and self.SnapInstall(name): return True
-        if pm('nodejs') and self.NpmInstall(name): return True
-        return False
+            return self.ShellCheck(nm, pm=True)
+        if manager:
+            if manager in ['pip', 'conda']:
+                if pm('conda') and self.CondaInstall(name): return True
+                if pm('pip') and self.PipInstall(name): return True
+            if manager in ['nodejs', 'npm']:
+                if pm('nodejs') and self.NpmInstall(name): return True
+            print('Unrecognized package manager: '+name)
+            return False
+        else:
+            if self.ShellInstall(name): return True
+            if pm('conda') and self.CondaInstall(name): return True
+            if pm('pip') and self.PipInstall(name): return True
+            #if pm('apt') and self.AptInstall(name): return True
+            #if pm('yum') and self.YumInstall(name): return True
+            #if pm('rpm') and self.RpmInstall(name): return True
+            #if pm('zypper') and self.ZypperInstall(name): return True
+            #if pm('yast') and self.YastInstall(name): return True
+            #if pm('snap') and self.SnapInstall(name): return True
+            if pm('nodejs') and self.NpmInstall(name): return True
+            return False
 
     def MarkInstalled(self, name, checkval):
         if checkval:

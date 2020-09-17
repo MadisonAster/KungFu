@@ -14,7 +14,7 @@ import PythonBaseClasses
 ##################################################
 
 #Test#############################################
-@KungFu.depends('pyside2', 'qt.py', 'gui')
+@KungFu.depends('conda.pyside2', 'conda.qt.py', 'gui')
 class test_TranslucentWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_TranslucentWindow, self).__init__(*args)

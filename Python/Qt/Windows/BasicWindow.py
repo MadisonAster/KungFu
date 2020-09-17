@@ -14,7 +14,7 @@ import PythonBaseClasses
 ##################################################
 
 #Test#############################################
-@KungFu.depends('pyside2', 'qt.py', 'gui')
+@KungFu.depends('conda.pyside2', 'conda.qt.py', 'gui')
 class test_BasicWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_BasicWindow, self).__init__(*args)
