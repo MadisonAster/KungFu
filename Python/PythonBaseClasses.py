@@ -1,6 +1,7 @@
 #Standard Imports#################################
 import os, sys
 from importlib import machinery
+import traceback
 ##################################################
 
 #Relative Imports#################################
@@ -14,38 +15,35 @@ import KungFu
 ##################################################
 
 #Code#############################################
-from Qt import QtCore, QtGui, QtWidgets
-class SingletonApp(QtWidgets.QApplication):
-    def __new__(cls):
-        if QtWidgets.QApplication.instance() == None:
-            print('Starting QtWidgets.QApplication singleton.')
-            sys.QApplication = None
-            class_instance = super(SingletonApp, cls).__new__(cls)
-        else:
-            class_instance = QtWidgets.QApplication.instance()
-            class_instance.__init__()
-        return class_instance
 
-    def __init__(self):
-        print('Initializing Integrated QApplication')
-        if sys.QApplication == None:
-            print('Referencing Integrated QApplication')
-            sys.QApplication = self
-            super(SingletonApp, self).__init__()
 ##################################################
 
 #Relative Child Imports###########################
-if 'BasicWindow' not in sys.modules.keys(): #Relative import handling for base classes
-    machinery.SourceFileLoader('BasicWindow', os.path.dirname(os.path.abspath(__file__))+'/Qt/Windows/BasicWindow.py').load_module()
-from BasicWindow import BasicWindow
+try:
+    if 'SingletonApp' not in sys.modules.keys(): #Relative import handling for base classes
+        machinery.SourceFileLoader('SingletonApp', os.path.dirname(os.path.abspath(__file__))+'/Qt/Windows/SingletonApp.py').load_module()
+    from SingletonApp import SingletonApp
+except:
+    print(traceback.format_exc())
 
-if 'BasicWidget' not in sys.modules.keys(): #Relative import handling for base classes
-    machinery.SourceFileLoader('BasicWidget', os.path.dirname(os.path.abspath(__file__))+'/Qt/Widgets/BasicWidget.py').load_module()
-from BasicWidget import BasicWidget
+try:
+    if 'BasicWindow' not in sys.modules.keys(): #Relative import handling for base classes
+        machinery.SourceFileLoader('BasicWindow', os.path.dirname(os.path.abspath(__file__))+'/Qt/Windows/BasicWindow.py').load_module()
+    from BasicWindow import BasicWindow
+except:
+    print(traceback.format_exc())
+    
+try:
+    if 'BasicWidget' not in sys.modules.keys(): #Relative import handling for base classes
+        machinery.SourceFileLoader('BasicWidget', os.path.dirname(os.path.abspath(__file__))+'/Qt/Widgets/BasicWidget.py').load_module()
+    from BasicWidget import BasicWidget
+except:
+    print(traceback.format_exc())
 
-
-
-if 'StaticFrameFromSymbol' not in sys.modules.keys(): #Relative import handling for base classes
-    machinery.SourceFileLoader('StaticFrameFromSymbol', os.path.dirname(os.path.abspath(__file__))+'/Datastructures/Arrays/StaticFrameFromSymbol.py').load_module()
-from StaticFrameFromSymbol import StaticFrame, StaticFrameGO
+try:
+    if 'StaticFrameFromSymbol' not in sys.modules.keys(): #Relative import handling for base classes
+        machinery.SourceFileLoader('StaticFrameFromSymbol', os.path.dirname(os.path.abspath(__file__))+'/Datastructures/Arrays/StaticFrameFromSymbol.py').load_module()
+    from StaticFrameFromSymbol import StaticFrame, StaticFrameGO
+except:
+    print(traceback.format_exc())
 ##################################################

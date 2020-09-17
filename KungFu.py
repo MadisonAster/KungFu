@@ -216,6 +216,8 @@ class DependencyHandler():
     cwd = os.path.dirname(os.path.abspath(__file__))
     Installed = []
     NotInstalled = []
+    PMInstalled = []
+    PMNotInstalled = []
     SkipCount = 0
     ShellList = ['npm'] #packages that require the shell option to be set
     TestCount = {}
@@ -235,9 +237,11 @@ class DependencyHandler():
             return self.RunChecks(name, **kwargs)
 
     def RunChecks(self, name, **kwargs):
+        print('RunChecks', name, kwargs)
+        
         def pm(nm):
-            kw = {nm:False}
-            ch = self.Check(nm, **kw)
+            if nm in kwargs: return False
+            ch = self.ShellCheck(nm, pm=True)
             return ch and nm not in kwargs
         if name == 'gui': return self.CheckGui()
         if self.ShellCheck(name): return True
@@ -253,10 +257,16 @@ class DependencyHandler():
         self.NotInstalled.append(name)
         return False
 
-    def ShellCheck(self, name, shellmode=False):
+    def ShellCheck(self, name, shellmode=False, pm=False):
+        if pm:
+            if name in self.PMInstalled:
+                return True
+            elif name in self.PMNotInstalled:
+                return False
+        print('ShellCheck', name)
         checkpath = self.cwd+'/_installers/'+name+'_check.sh'
         if os.path.exists(checkpath):
-            #print('attempting shell check', name)
+            print('attempting shell check', name)
             returncodes = 0
             with open(checkpath, 'r') as file:
                 for line in file.readlines():
@@ -266,10 +276,20 @@ class DependencyHandler():
                     returncodes += returncode
             returncodes = not bool(returncodes)
             if returncodes and name not in self.Installed:
-                self.Installed.append(name)
+                if pm:
+                    self.PMInstalled.append(name)
+                else:
+                    self.Installed.append(name)
+            elif not returncodes:
+                if pm:
+                    self.PMNotInstalled.append(name)
+                else:
+                    self.NotInstalled.append(name)
+            print('returncodes', returncodes)
             return returncodes
 
     def CondaCheck(self, name):
+        print('CondaCheck', name)
         #print('attempting conda check', name)
         output, returncode = RunCmd('conda list --json '+name)
         #print('output', output)
@@ -281,6 +301,7 @@ class DependencyHandler():
         return result
 
     def PipCheck(self, name):
+        print('PipCheck', name)
         #print('attempting pip check', name)
         output, returncode = RunCmd('pip show '+name, cwd=self.cwd)
         #print('output', output)
@@ -378,12 +399,15 @@ class DependencyHandler():
         print('Goodbye!')
 
     def RunInstallers(self, name, **kwargs):
+        print('runinstallers', name)
         def pm(nm):
-            kw = {nm:False}
-            ch = self.Check(nm, **kw)
+            if nm == name: return False
+            ch = self.ShellCheck(nm, pm=True)
             return ch and nm not in kwargs
-        if shell and self.ShellInstall(name): return True
+        if self.ShellInstall(name): return True
         if pm('conda') and self.CondaInstall(name): return True
+        print('runinstallers return')
+        return False
         if pm('pip') and self.PipInstall(name): return True
         if pm('apt') and self.AptInstall(name): return True
         if pm('yum') and self.YumInstall(name): return True
@@ -406,11 +430,12 @@ class DependencyHandler():
                     result, returncode = RunCmd(line, cwd=self.cwd)
                     returncodes += returncode
             returncodes = not bool(returncodes)
-        return self.RunChecks(name)
+            return self.RunChecks(name)
         
     def CondaInstall(self, name):
         print('attempting conda install '+name)
         #result, returncode = RunCmd('conda install --quiet --name '+name)
+        result, returncode = RunCmd('conda config --append channels conda-forge')
         result, returncode = RunCmd('conda install -y '+name)
         print('result', result)
         print('returncode', returncode)
