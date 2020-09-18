@@ -1,16 +1,11 @@
-#Standard Imports#################################
-import sys, os, unittest
-from importlib import machinery
-import subprocess, shlex
-##################################################
-
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',1)[0]+'/KungFu.py').load_module()
-import KungFu
+#Imports##########################################
+import FooFinder
+from FooFinder import KungFu
 ##################################################
 
 #Code#############################################
+import sys, os
+import subprocess, shlex
 class CPPTestParser():
     def __init__(self):
         super(CPPTestParser, self).__init__()
@@ -19,7 +14,6 @@ class CPPTestParser():
         print('sys.platform', sys.platform)
         self.exepath = self.cwd+'/x64/Debug/Kata.exe'
         self.results = {}
-
     def run(self):
         print('#######################################################')
         print('Running C++ tests:')

@@ -1,20 +1,13 @@
-#Standard Imports#################################
-import sys, os, unittest
-from importlib import machinery
-import subprocess, shlex
-##################################################
-
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',1)[0]+'/KungFu.py').load_module()
-import KungFu
+#Imports##########################################
+import FooFinder
+from FooFinder import KungFu
 ##################################################
 
 #Code#############################################
+import os
 class GoTestParser():
     def run(self):
         self.results = {}
-
         print('#######################################################')
         print('Running Go tests:')
         cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
