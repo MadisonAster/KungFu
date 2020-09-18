@@ -1,5 +1,4 @@
 #Imports##########################################
-import FooFinder
 from FooFinder import KungFu
 from FooFinder import PythonBaseClasses
 ##################################################

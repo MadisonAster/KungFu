@@ -38,19 +38,19 @@ ExpectedTestCount = {
  'gui': 9,
  'java': 0,
  'kubectl': 0,
- 'lxml': 74,
+ 'lxml': 77,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
  'nodejs': 7,
  'npm.jest': 7,
  'nuke': 0,
- 'numpy': 75,
- 'pandas': 79,
- 'static-frame': 74,
+ 'numpy': 76,
+ 'pandas': 82,
+ 'static-frame': 77,
  'terraform': 7,
  'unreal': 0,
- 'yfinance': 74,
+ 'yfinance': 77,
 }
 
 def WriteBack():
@@ -683,7 +683,7 @@ class TestRunner():
 
     def ImportTests(self, ModulePath):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
-        if ModuleName in ['KungFu'] or 'BaseClasses' in ModuleName:
+        if ModuleName in ['KungFu', '__init__'] or 'BaseClasses' in ModuleName:
             return
         if ModuleName in globals().keys():
             raise Exception('Namespace conflict found. Module name already in use, pick another.', ModuleName)
@@ -768,7 +768,7 @@ def main(*args):
     KungFu.main(__file__) will run a single file
     KungFu.main([file1, file2]) will run a list of files
     '''
-    import FooFinder
+    #import FooFinder
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
