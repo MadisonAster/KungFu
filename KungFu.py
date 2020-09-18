@@ -768,7 +768,6 @@ def main(*args):
     KungFu.main(__file__) will run a single file
     KungFu.main([file1, file2]) will run a list of files
     '''
-    #import FooFinder
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
