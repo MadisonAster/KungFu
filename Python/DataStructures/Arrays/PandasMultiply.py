@@ -1,13 +1,6 @@
-
-#Standard Imports#################################
-import sys, os
-from importlib import machinery
-##################################################
-
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
-import KungFu
+#Imports##########################################
+import FooFinder
+from FooFinder import KungFu
 ##################################################
 
 #Test#############################################

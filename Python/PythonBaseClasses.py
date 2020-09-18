@@ -1,13 +1,10 @@
-#Standard Imports#################################
+#Imports##########################################
 import os, sys
 from importlib import machinery
 import traceback
-##################################################
 
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/KungFu.py').load_module()
-import KungFu
+import FooFinder
+from FooFinder import KungFu
 ##################################################
 
 #Test#############################################
@@ -19,6 +16,29 @@ import KungFu
 ##################################################
 
 #Relative Child Imports###########################
+try:
+    from FooFinder import SingletonApp
+    globals()['SingletonApp'] = SingletonApp.SingletonApp
+except:
+    pass
+try:
+    from FooFinder import BasicWindow
+    globals()['BasicWindow'] = BasicWindow.BasicWindow
+except:
+    pass
+try:
+    from FooFinder import BasicWidget
+    globals()['BasicWidget'] = BasicWidget.BasicWidget
+except:
+    pass
+try:
+    from FooFinder import StaticFrameFromSymbol
+    globals()['StaticFrame'] = StaticFrameFromSymbol.StaticFrame
+    globals()['StaticFrameGO'] = StaticFrameFromSymbol.StaticFrameGO
+except:
+    pass
+
+'''
 try:
     if 'SingletonApp' not in sys.modules.keys(): #Relative import handling for base classes
         machinery.SourceFileLoader('SingletonApp', os.path.dirname(os.path.abspath(__file__))+'/Qt/Windows/SingletonApp.py').load_module()
@@ -46,4 +66,5 @@ try:
     from StaticFrameFromSymbol import StaticFrame, StaticFrameGO
 except:
     print(traceback.format_exc())
+'''
 ##################################################

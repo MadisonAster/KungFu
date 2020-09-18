@@ -1,16 +1,7 @@
-#Standard Imports#################################
-import sys, os
-from importlib import machinery
-import time
-##################################################
-
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
-import KungFu
-if 'PythonBaseClasses' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['PythonBaseClasses'] = machinery.SourceFileLoader('PythonBaseClasses', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',2)[0]+'/PythonBaseClasses.py').load_module()
-import PythonBaseClasses
+#Imports##########################################
+import FooFinder
+from FooFinder import KungFu
+from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
@@ -23,6 +14,7 @@ class test_SingletonApp(KungFu.TimedTest):
 ##################################################
 
 #Code#############################################
+import sys
 from Qt import QtCore, QtGui, QtWidgets
 class SingletonApp(QtWidgets.QApplication):
     def __new__(cls):

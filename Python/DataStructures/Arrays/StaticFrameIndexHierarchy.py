@@ -1,32 +1,23 @@
-#Standard Imports#################################
-import sys, os, unittest
-from importlib import machinery
-import subprocess, shlex
-from datetime import datetime, timedelta, date
-##################################################
-
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',3)[0]+'/KungFu.py').load_module()
-import KungFu
+#Imports##########################################
+import FooFinder
+from FooFinder import KungFu
+from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
 @KungFu.depends('lxml', 'numpy', 'pandas', 'static-frame', 'yfinance')
 #@KungFu.depends('hypothesis', 'xlsxwriter', 'openpyxl', 'xarray', 'tables', 'pyarrow')
 class test_StaticFrameIndexHierarchy(KungFu.TimedTest):
-        
     #class test_StaticFrameGO(KungFu.TimedTest):
     def test_GOLD(self):
         import numpy
         start = datetime.today() - timedelta(days=10)
         end = datetime.today() - timedelta(days=3)
         frame = StaticFrameIndexHierarchy.from_symbol('GC=F', start=start, end=end)
-        
-    
 ##################################################
 
 #Code#############################################
+from datetime import datetime, timedelta, date
 import numpy as np
 import static_frame as sf
 import yfinance as yf
@@ -62,8 +53,6 @@ class StaticFrameIndexHierarchy(sf.IndexHierarchy):
         print(f1.loc[sf.HLoc[:, ['B','D']]])
         print('ih1', type(ih1))
         print('ih1', dir(ih1))
-        
-        
 ##################################################
 
 #Main#############################################

@@ -1,18 +1,10 @@
-#Standard Imports#################################
-import sys, os
-import unittest
-from importlib import machinery
-from datetime import datetime
-import subprocess, shlex
-##################################################
-
-#Relative Imports#################################
-if 'KungFu' not in sys.modules.keys(): #Relative import handling for testing individual modules that rely on base classes
-    sys.modules['KungFu'] = machinery.SourceFileLoader('KungFu', os.path.dirname(os.path.abspath(__file__)).replace('\\','/').rsplit('/',1)[0]+'/KungFu.py').load_module()
-import KungFu
+#Imports##########################################
+import FooFinder
+from FooFinder import KungFu
 ##################################################
 
 #Code#############################################
+import subprocess, shlex
 class EKSCluster(dict):
     def __init__(self):
         super(EKSCluster, self).__init__()

@@ -38,19 +38,19 @@ ExpectedTestCount = {
  'gui': 9,
  'java': 0,
  'kubectl': 0,
- 'lxml': 77,
+ 'lxml': 74,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
  'nodejs': 7,
  'npm.jest': 7,
  'nuke': 0,
- 'numpy': 76,
- 'pandas': 82,
- 'static-frame': 77,
+ 'numpy': 75,
+ 'pandas': 79,
+ 'static-frame': 74,
  'terraform': 7,
  'unreal': 0,
- 'yfinance': 77,
+ 'yfinance': 74,
 }
 
 def WriteBack():
@@ -768,6 +768,7 @@ def main(*args):
     KungFu.main(__file__) will run a single file
     KungFu.main([file1, file2]) will run a list of files
     '''
+    import FooFinder
     Dependencies = DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
