@@ -46,7 +46,7 @@ ExpectedTestCount = {
  'npm.jest': 7,
  'nuke': 0,
  'numpy': 76,
- 'pandas': 81,
+ 'pandas': 82,
  'static-frame': 77,
  'terraform': 7,
  'unreal': 0,
