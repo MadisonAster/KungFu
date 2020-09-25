@@ -23,3 +23,5 @@ C++/Kata/Debug
 .terraform
 kubeconfig_*
 
+Python/DataStructures/Notebooks/.ipynb_checkpoints
+Python/DataStructures/Notebooks/examples
