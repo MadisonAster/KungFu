@@ -1,7 +1,6 @@
 #Imports##########################################
 import time
 from FooFinder import KungFu
-from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
@@ -9,8 +8,8 @@ from FooFinder import PythonBaseClasses
 class test_BasicWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_BasicWindow, self).__init__(*args)
-        print('test_BasicWindow')
-        PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
+        from FooFinder import SingletonApp
+        SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, sleep=0.5):
         self.MainWindow = BasicWindow()

@@ -1,7 +1,6 @@
 #Imports##########################################
 import time
 from FooFinder import KungFu
-from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
@@ -9,7 +8,8 @@ from FooFinder import PythonBaseClasses
 class test_FramelessWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_FramelessWindow, self).__init__(*args)
-        PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
+        from FooFinder import SingletonApp
+        SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, sleep=0.5):
         self.MainWindow = FramelessWindow()
@@ -20,7 +20,8 @@ class test_FramelessWindow(KungFu.TimedTest):
 
 #Code#############################################
 from Qt import QtCore, QtGui, QtWidgets
-class FramelessWindow(PythonBaseClasses.BasicWindow):
+from FooFinder import BasicWindow
+class FramelessWindow(BasicWindow.BasicWindow):
     def __init__(self, *args, **kwargs):
         super(FramelessWindow, self).__init__(*args, **kwargs)
         self.setWindowTitle('Frameless Window')

@@ -1,7 +1,6 @@
 #Imports##########################################
 import time
 from FooFinder import KungFu
-from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
@@ -9,7 +8,8 @@ from FooFinder import PythonBaseClasses
 class test_DockWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_DockWindow, self).__init__(*args)
-        PythonBaseClasses.SingletonApp() #Global because it QApplication must be a singleton
+        from FooFinder import SingletonApp
+        SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
 
     def test_1(self, sleep=0.5):
         MainWindow = DockWindow()
@@ -17,18 +17,18 @@ class test_DockWindow(KungFu.TimedTest):
         MainWindow.resize(MainWindow.QAvailableGeo.width()/2, MainWindow.QAvailableGeo.height()-MainWindow.QStartBarHeight)
         MainWindow.move(0,0)
         
-        testwidget = PythonBaseClasses.BasicWidget()
+        from FooFinder import BasicWidget
+        testwidget = BasicWidget.BasicWidget()
         MainWindow.dockWidget(testwidget)
         
         time.sleep(sleep)
         MainWindow.hide()
-        
-        
 ##################################################
 
 #Code#############################################
 from Qt import QtCore, QtGui, QtWidgets
-class DockWindow(PythonBaseClasses.BasicWindow):
+from FooFinder import BasicWindow
+class DockWindow(BasicWindow.BasicWindow):
     def __init__(self, *args, **kwargs):
         super(DockWindow, self).__init__(*args, **kwargs)
         self.setWindowTitle('Dock Window')

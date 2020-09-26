@@ -1,6 +1,5 @@
 #Imports##########################################
 from FooFinder import KungFu
-from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
@@ -8,7 +7,6 @@ from FooFinder import PythonBaseClasses
 class test_SingletonApp(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_SingletonApp, self).__init__(*args)
-        print('test_SingletonApp')
         SingletonApp() #Global because it QApplication must be a singleton
 ##################################################
 
@@ -18,7 +16,7 @@ from Qt import QtCore, QtGui, QtWidgets
 class SingletonApp(QtWidgets.QApplication):
     def __new__(cls):
         if QtWidgets.QApplication.instance() == None:
-            print('Starting QtWidgets.QApplication singleton.')
+            print('Initializing Integrated QApplication.')
             sys.QApplication = None
             class_instance = super(SingletonApp, cls).__new__(cls)
         else:
@@ -27,9 +25,7 @@ class SingletonApp(QtWidgets.QApplication):
         return class_instance
 
     def __init__(self):
-        print('Initializing Integrated QApplication')
         if sys.QApplication == None:
-            print('Referencing Integrated QApplication')
             sys.QApplication = self
             super(SingletonApp, self).__init__()
 ##################################################
