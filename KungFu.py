@@ -38,7 +38,7 @@ ExpectedTestCount = {
  'gui': 9,
  'java': 0,
  'kubectl': 0,
- 'lxml': 77,
+ 'lxml': 76,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
@@ -46,11 +46,11 @@ ExpectedTestCount = {
  'npm.jest': 7,
  'nuke': 0,
  'numpy': 76,
- 'pandas': 82,
- 'static-frame': 77,
+ 'pandas': 81,
+ 'static-frame': 76,
  'terraform': 7,
  'unreal': 0,
- 'yfinance': 77,
+ 'yfinance': 76,
 }
 
 def WriteBack():
@@ -677,6 +677,13 @@ class TestRunner():
             for root, dirs, files in os.walk(folder):
                 dirs.sort()
                 files.sort()
+                for i, dir in reversed(list(enumerate(dirs))):
+                    if dir[0] == '.': #.git .hg etc
+                        del dirs[i]
+                    elif dir == '__pycache__':
+                        del dirs[i]
+                    elif dir.rsplit('.',1)[-1] == 'egg-info':
+                        del dirs[i]
                 for file in files:
                     if file.rsplit('.',1)[-1] == 'py':
                         self.ImportTests(root.replace('\\','/')+'/'+file)

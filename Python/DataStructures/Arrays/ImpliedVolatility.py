@@ -1,6 +1,6 @@
 #Imports##########################################
 from FooFinder import KungFu
-from FooFinder import PythonBaseClasses
+from FooFinder import StaticFrameFromSymbol
 ##################################################
 
 #Test#############################################
@@ -15,7 +15,7 @@ class test_implied_volatility(KungFu.TimedTest):
 #Code#############################################
 import static_frame as sf
 import yfinance as yf
-class StaticFrame(PythonBaseClasses.StaticFrame):
+class StaticFrame(StaticFrameFromSymbol.StaticFrame):
     @classmethod
     def implied_volatility(cls):
         print('implied_volatility')

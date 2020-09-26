@@ -1,6 +1,5 @@
 #Imports##########################################
 from FooFinder import KungFu
-from FooFinder import PythonBaseClasses
 ##################################################
 
 #Test#############################################
