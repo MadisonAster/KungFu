@@ -35,9 +35,15 @@ def _find(cwd, name, down_only=False):
     else:
         raise ImportError('FooFinder could not find '+name+' searching from '+cwd)
 
+def _is_ipython():
+    return hasattr(builtins, '__IPYTHON__')
+
+def _is_interactive():
+    return hasattr(sys, 'ps1')
+    
 def _import(pname, *args, **kwargs):
     if 'FooFinder' not in pname or not args[2]:
-        return globals()['original_import'](pname, *args, **kwargs)
+        return globals()['_original_import'](pname, *args, **kwargs)
     name = args[2][0]
     if name in globals():
         return sys.modules['FooFinder']
@@ -45,10 +51,10 @@ def _import(pname, *args, **kwargs):
         frame = kwargs['frame']
     else:
         frame = inspect.currentframe().f_back
-    try:
+    if _is_ipython() or _is_interactive():
+        cwd = os.getcwd()
+    else:
         cwd = os.path.dirname(os.path.abspath(frame.f_globals['__file__']))
-    except:
-        cwd = os.getcwd() #iPython needs this
     spname = pname.rsplit('.',1)[-1]
     if spname != 'FooFinder': #relative child imports
         if spname not in globals():
@@ -67,36 +73,35 @@ def _import(pname, *args, **kwargs):
     return sys.modules['FooFinder']
 
 def _framedrag(frame, functionname):
-    while inspect.getframeinfo(frame).function != '_find_and_load':
+    while inspect.getframeinfo(frame).function != functionname:
         frame = frame.f_back
     frame = frame.f_back #go 1 more step back to the actual function
     return frame
 
-def _get_frame_code():
+def _get_frame():
     frame = inspect.currentframe()
-    context = None
-    while context == None:
-        frame = _framedrag(frame, '_find_and_load')
-        context = inspect.getframeinfo(frame).code_context
-    code = context[0].rstrip()
-    return frame, code
-
-def _parse_code(code):
-    #parsing these is hacky and lame...
-    pname = code.split('from ',1)[-1].split(' import',1)[0]
-    mname = code.split(' import ',1)[-1].split(' ')[0].split('#')[0].rstrip()
-    return pname, mname
+    co_names = ()
+    while len(co_names) == 0:
+        frame = _framedrag(frame, '_find_and_load_unlocked')
+        frame = frame.f_back #_import is 1 more step back
+        co_names = frame.f_code.co_names
+    return frame
 
 def _first_run():
     #replace python's builtin importer
-    globals()['original_import'] = builtins.__import__
+    globals()['_original_import'] = builtins.__import__
     builtins.__import__ = _import
 
     #hack first run by doing some frame dragging because _bootstrap.exec_module doesn't give us *args
-    frame, code = _get_frame_code() #get line of code that called FooFinder
-    pname, mname = _parse_code(code) #parse package and module names from code
-    if mname != 'FooFinder': #"import FooFinder" shouldn't run _import
-        args = ('','',(mname,))
-        _import(pname, *args, frame=frame)
+    frame = _get_frame()
+    if 'FooFinder' in frame.f_code.co_varnames: #import FooFinder
+        return
+    for i, name in enumerate(frame.f_code.co_names):
+        if 'FooFinder' in name:
+            break
+    pname = frame.f_code.co_names[i]
+    mname = frame.f_code.co_names[i+1]
+    args = ('','',(mname,))
+    return _import(pname, *args, frame=frame)
 
 _first_run()
