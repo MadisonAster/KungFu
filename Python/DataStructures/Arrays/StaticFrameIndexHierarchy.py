@@ -45,12 +45,13 @@ class StaticFrameIndexHierarchy(sf.IndexHierarchy):
         f1 = sf.Frame(np.arange(256).reshape(16, 16), index=ih1, columns=ih2)
         print(f1)
         print('@@@@@@')
-        return
+        #return
         #print(f1.loc['x', 'B']) #KeyError! try Hloc!
-        print(f1.loc[sf.HLoc['x','B']])
-        print(f1.loc[sf.HLoc[:, ['B','D']]])
-        print('ih1', type(ih1))
-        print('ih1', dir(ih1))
+        print(f1.loc[sf.HLoc['A',:]])
+        #print(f1.loc[sf.HLoc['A','E']])
+        #print(f1.loc[sf.HLoc[:, ['B','D']]])
+        #print('ih1', type(ih1))
+        #print('ih1', dir(ih1))
 ##################################################
 
 #Main#############################################
