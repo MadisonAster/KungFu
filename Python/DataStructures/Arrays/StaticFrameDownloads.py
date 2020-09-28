@@ -9,7 +9,7 @@ class test_StaticFrame(KungFu.TimedTest):
     #Currencies
     def test_GLD(self):
         frame = StaticFrame.from_symbol('GLD', period='5d', interval='1d')
-    
+    '''
     def test_GOLD(self):
         frame = StaticFrame.from_symbol('GC=F', period='5d', interval='1d')
     def test_SLV(self):
@@ -94,47 +94,132 @@ class test_StaticFrame(KungFu.TimedTest):
     #    frame = StaticFrame.from_symbol('SWBI')
     def test_RGR(self):
         frame = StaticFrame.from_symbol('RGR', period='5d', interval='1d')
-
-    #class test_StaticFrameGO(KungFu.TimedTest):
-    def test_GOLD(self):
-        import numpy
-        start = datetime.today() - timedelta(days=10)
-        end = datetime.today() - timedelta(days=3)
-        frame = StaticFrame.from_symbol('GC=F', start=start, end=end)
-        print('frame1', frame)
-        #print('len', len(frame.index))
-        #frame2 = frame.update_symbol()
-        #print('frame2', frame2)
-        
-        #print('len', len(frame2.index))
-        #print('busday_count', numpy.busday_count(start.date()+timedelta(days=1), date.today()))
-
-    def test_close(self):
-        start = datetime.now() - timedelta(days=30)
-        end = datetime.now() - timedelta(days=5)
-        frame = StaticFrame.from_symbol('GC=F', start=start, end=end)
-        print('close1', frame.get_close())
-        '''
-        s = datetime.now() - timedelta(days=10)
-        print('s', s, type(s))
-        print('close11', frame.get_close(end=datetime.now()))
-        print('close2', frame.get_close(start=s))
-        close = frame.get_close(start=datetime.now() - timedelta(days=20))
-        print('close3', close)
-        '''
+    '''
     
+    def test_fred_d4oil(self):
+        frame = StaticFrame.from_fred('SP500')
+        print('d4oil', frame)
+    
+        #DAILY fredcode:
+        'd4defl'             # synthetic deflator dataframe, see deflator()
+
+        'JPY3MTD156N'        # 3-m LIBOR JPY, daily
+        'EUR3MTD156N'        # 3-m LIBOR EUR, daily
+        'USD3MTD156N'        # 3-m LIBOR USD, daily
+        'DFF'                # Fed Funds, daily since 1954
+        'd4ff30'             # Fed Funds synthetic, "30-day" exp.mov.avg.
+        'DTB3'               # Treasury bills, daily
+        'd4zero10'           # Zero-coupon price of Treasury 10-y, daily
+        'DGS10'              # Treasury 10-y constant, daily
+        'DFII10'             # TIPS 10-y constant, daily
+        'd4curve'            # Treasury 10_y-bills, getfred synthetic
+        'd4bei'              # 10_y Break-even inflation, getfred synthetic
+
+        'DEXJPUS'            # USDJPY, daily
+        'DEXUSEU'            # EURUSD, daily
+        'd4eurjpy'           # EURJPY, daily, getfred synthetic
+        'DEXCHUS'            # USDCNY, daily since 1981, not offshore USDCNH
+
+        'GOLDPMGBD228NLBM'   # London PM Gold fix, daily
+
+        'VIXCLS'             # CBOE volatility on S&P options, daily
+        'SP500'              # S&P 500 index a.k.a. SPX, daily
+
+        'DCOILBRENTEU'        # Oil Brent, DoE NSA daily
+        'DCOILWTICO'          # Oil WTI,   DoE NSA daily
+        'd4oil'               # Oil av. Brent and WTI, synthetic daily
+        'd4gas'               # Reg. gasoline $/gal. w/ tax, synthetic daily
+
+        #MONTHLY fredcode:
+        'm4gdpus'    # U.S. GDP in billions, SA monthly synthetic
+        'm4gdpusr'   # U.S. real GDP in current billions, SA monthly synthetic
+        'HOUST'      # U.S. Housing Starts, SA monthly
+        'm4homepx'   # Home price index Case-Shiller 20-city, SA monthly synthetic
+
+        'AHETPI'     # Hourly earnings, all private nonfarm, SA monthly
+                             #    production/nonsupervisory since 1964.
+        'CES0500000003'  # Hourly earnings, all private nonfarm, SA monthly
+        'UNRATE'     # Unemployment rate, SA monthly
+        'EMRATIO'    # Civilian employment/population, percent SA monthly
+        'POP'        # Total US population in thousands, NSA monthly
+        'm4workers'  # Total US working population in thousands, NSA monthly
+        'PAYEMS'     # US Nonfarm Payroll workers  in thousands,  SA monthly
+        'm4debt'     # U.S. Federal debt in millions, NSA monthly synthetic
+
+        'm4defl'     # synthetic deflator, see getdeflator().
+        'CPIAUCSL'   # Consumer Price Index, SA monthly since 1947
+        'CPILFESL'   # CPI core, SA monthly since 1957
+                             #     core excludes food and energy.
+        'PCEPI'      # Personal Consumption Expenditure, SA monthly
+        'PCEPILFE'   # PCE core, SA monthly
+        'm4infl'     # synthetic inflation, see getinflations().
+        'm4inflbei'  # synthetic inflation averaged with BEI, see getfred.
+
+        'TB3MS'      # Treasury bills, monthly
+        'm4zero10'   # Zero-coupon price of Treasury 10-y, monthly
+        'GS10'       # Treasury 10-y constant, monthly
+        'FII10'      # TIPS 10-y constant, monthly
+        'm4bei'      # 10_y Break-even inflation, getfred synthetic
+
+        'TWEXBPA'    # Real trade-weighted USD index: Broad, monthly
+        'm4xau'      # London Gold PM fix, synthetic monthly for getfred
+        'm4xaueur'   # Gold euro-denominated, synthetic monthly
+        'm4xaujpy'   # Gold  yen-denominated,           monthly
+        'm4xaurtb'   # Real trade-weighted Gold index, synthetic monthly
+
+        'm4usdjpy'   # USDJPY monthly, getfred synthetic
+        'm4eurusd'   # EURUSD, DEM FRF synthetic 1971-2002, getfred monthly
+        'm4eurjpy'   # EURJPY monthly, getfred synthetic back to 1971
+
+        'AMBSL'      # U.S. Adjusted Monetary Base in billions, SA monthly
+
+        'm4spx'      # S&P 500 index a.k.a. SPX, synthetic monthly for getfred
+        'm4spxrtb'   # Real trade-weighted SPX index, synthetic monthly
+
+        'm4oil'      # Oil av. Brent and WTI, synthetic monthly
+
+        #QUARTERLY fredcode:
+        'GDP'        # U.S. GDP in billions, SA quarterly
+        'GDPC1'      # U.S. real GDP in 2009 billions, SA quarterly
+        'GFDEBTN'    # U.S. Federal debt in millions, NSA quarterly
+
+        'q4spx'      # S&P 500 index, synthetic quarterly for getfred
+        
+        #EUROZONE fredcode:
+        'EUNGDP'           # EU GDP in million euros, Eurostat SA quarterly
+        'm4gdpeur'         # EU GDP in real billions, synthetic SA monthly
+        'm4infleu'         # EU Consumer Prices, synthetic Eurostat monthly
+        'm4defleu'         # EU deflator, synthetic monthly
+
+        'LRHUTTTTEZM156S'  # EU Unemployment rate, OECD SA monthly
+        'LRHUTTTTFRM156S'  # FR Unemployment rate, OECD SA monthly 
+
 ##################################################
 
 #Code#############################################
+from urllib.request import urlopen
 from datetime import datetime, timedelta, date
 import static_frame as sf
 import yfinance as yf
+import pandas as pd
 class StaticFrame(sf.Frame):
     @classmethod
-    def from_symbol(cls, Symbol, start=None, end=None, interval='1d', period=None, silent=True):
-        #self.ticker = yf.Ticker(Symbol)
+    def from_fred(cls, fredcode):
+        url = 'http://research.stlouisfed.org/fred2/series/'
+        url += fredcode + '/downloaddata/' + fredcode + '.csv'
+        fredcsv = urlopen(url)
+        #data = cls.from_csv(fredcsv) #why doesn't this work?
+        data = cls.from_pandas(pd.read_csv(fredcsv))
+        
+        data = data.rename(fredcode)
+        data.symbol = fredcode
+        return data
+
+    @classmethod
+    def from_symbol(cls, symbol, start=None, end=None, interval='1d', period=None, silent=True):
+        #self.ticker = yf.Ticker(symbol)
         data = cls.from_pandas(yf.download(
-            tickers = Symbol,
+            tickers = symbol,
             #datetime objects
             start = start,
             end = end,
@@ -148,8 +233,8 @@ class StaticFrame(sf.Frame):
             threads = True,
             proxy = None
         ))
-        data = data.rename(Symbol)
-        data.Symbol = Symbol
+        data = data.rename(symbol)
+        data.symbol = symbol
         data.interval = interval
         if end:
             data.end = end
