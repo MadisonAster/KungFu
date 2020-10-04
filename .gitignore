@@ -2,6 +2,7 @@ Java/bin/
 Desktop.ini
 Thumbs.db
 .DS_Store
+.vscode
 workspace.wp
 *.pyc
 __pycache__
