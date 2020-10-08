@@ -12,6 +12,7 @@ class UnrealTestParser():
         print('Running Unreal tests:')
         cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
         result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Smoke; quit' -log", cwd=cwd)
+        #result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -Game -ExecCmds='Automation RunFilter Smoke; quit' -log", cwd=cwd, silent=False, shell=True)
         #result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Engine; quit' -log", cwd=cwd, shell=True)
         
         print(result)
@@ -37,7 +38,7 @@ class UnrealTestParser():
 class test_UnrealTestParser(KungFu.PrototypeTestParser):
     pass
 
-if test_UnrealTestParser != None:
+if test_UnrealTestParser != None and __name__ != '__main__':
     test_UnrealTestParser.AddTests(UnrealTestParser)
 ##################################################
 
