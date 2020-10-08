@@ -36,7 +36,7 @@ class CPPTestParser():
 class test_CPPTestParser(KungFu.PrototypeTestParser):
     pass
 
-if False: #disabling for now, until compiler is done
+if False and __name__ != '__main__': #disabling for now, until compiler is done
     test_CPPTestParser.AddTests(CPPTestParser)
 ##################################################
 

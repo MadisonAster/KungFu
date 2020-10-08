@@ -37,7 +37,7 @@ class NPMTestParser():
 class test_NPMTestParser(KungFu.PrototypeTestParser):
     pass
 
-if test_NPMTestParser != None:
+if test_NPMTestParser != None and __name__ != '__main__':
     test_NPMTestParser.AddTests(NPMTestParser)
 ##################################################
 
