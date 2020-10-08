@@ -3,11 +3,13 @@ Desktop.ini
 Thumbs.db
 .DS_Store
 .vscode
+.vs
 workspace.wp
 *.pyc
 __pycache__
 .ipynb_checkpoints/
 Python/codility/__pycache__
+Python/DataStructures/Notebooks/fecon235/
 Java/guava-29.0
 Javascript/node_modules
 Javascript/package-lock.json
@@ -18,6 +20,10 @@ C++/x64
 C++/Qt/QtApp/x64
 C++/Kata/x64
 C++/Kata/Debug
+Unreal/Binaries
+Unreal/DerivedDataCache
+Unreal/Intermediate
+Unreal/Saved
 *.tfstate
 *.tfstate.backup
 *.tfplan

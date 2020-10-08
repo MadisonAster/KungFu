@@ -11,36 +11,34 @@ class UnrealTestParser():
         print('#######################################################')
         print('Running Unreal tests:')
         cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
-        result, returncode = KungFu.RunCmd('unreal', cwd=cwd, shell=True)
-        nextline = False
-        return False
+        result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Smoke; quit' -log", cwd=cwd)
+        #result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Engine; quit' -log", cwd=cwd, shell=True)
         
         print(result)
         for line in result.rstrip().split('\n'):
-            if u'\u221A' in line:
+            if 'Result={Passed}' in line:
                 result = True
-                testinfo = line.split('\u221A')[-1].strip()
-                testname = testinfo.rsplit(' (',1)[0]
-                testtime = '('+testinfo.rsplit(' (',1)[-1]
+                testname = line.split('Name={',1)[-1].split('}',1)[0]
+                testtime = line.split('[',2)[-1].split(']',1)[0]
                 self.results[testname] = (result, testtime)
-            elif u'\u00D7' in line:
+            elif 'Result={Failed}' in line:
                 result = False
-                testinfo = line.split('\u00D7')[-1].strip()
-                testname = testinfo.rsplit(' (',1)[0]
-                testtime = '('+testinfo.rsplit(' (',1)[-1]
+                testname = line.split('Name={',1)[-1].split('}',1)[0]
+                testtime = line.split('[',2)[-1].split(']',1)[0]
                 self.results[testname] = (result, testtime)
             else:
-                print(line)
+                pass
+                #print(line)
         print('#######################################################')
 ##################################################
 
 #Test#############################################
-#@KungFu.depends('nodejs', 'npm.jest')
-#class test_UnrealTestParser(KungFu.PrototypeTestParser):
-#    pass
+@KungFu.depends('unreal')
+class test_UnrealTestParser(KungFu.PrototypeTestParser):
+    pass
 
-#if test_UnrealTestParser != None:
-#    test_UnrealTestParser.AddTests(UnrealTestParser)
+if test_UnrealTestParser != None:
+    test_UnrealTestParser.AddTests(UnrealTestParser)
 ##################################################
 
 #Main#############################################
