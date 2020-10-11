@@ -1,2 +1,5 @@
 numpy
 pandas
+static-frame
+yfinance
+lxml
