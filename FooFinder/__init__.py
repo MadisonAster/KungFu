@@ -55,6 +55,8 @@ def _import(pname, *args, **kwargs):
         frame = kwargs['frame']
     else:
         frame = inspect.currentframe().f_back
+        if inspect.getframeinfo(frame).function == '_import':
+            frame = frame.f_back
     if _is_ipython() or _is_interactive():
         cwd = os.getcwd()
     else:
