@@ -3,3 +3,5 @@ pandas
 static-frame
 yfinance
 lxml
+pyside2
+qt.py
