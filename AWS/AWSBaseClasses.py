@@ -21,8 +21,9 @@ class EKSCluster(dict):
     def output(self):
         result, returncode = self.run_command('terraform output')
         for line in result.rstrip().split('\n'):
-            (var, val) = line.replace(' = ','=').split('=',1)
-            self[var] = val
+            if ' = ' in line:
+                (var, val) = line.replace(' = ','=').split('=',1)
+                self[var] = val
         return result, returncode
 
     def run_command(self, CommandString, silent=True):
