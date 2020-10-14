@@ -1,22 +1,22 @@
 #Imports##########################################
 import os
 from FooFinder import KungFu
-from FooFinder import AWSBaseClasses
+from FooFinder.EKS import EKSCluster
 ##################################################
 
 #Code#############################################
-class SimpleCluster(AWSBaseClasses.EKSCluster):
+class GitRepoCluster(EKSCluster.EKSCluster):
     def __init__(self):
-        super(SimpleCluster, self).__init__()
+        super(GitRepoCluster, self).__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__))
 ##################################################
 
 #Test#############################################
 @KungFu.depends('terraform', 'aws')
-class test_SimpleCluster(AWSBaseClasses.test_EKSCluster):
-    TestCluster = SimpleCluster()
+class test_GitRepoCluster(EKSCluster.test_EKSCluster):
+    TestCluster = GitRepoCluster()
     
-    def test_11_SimpleCLuster_init(self): #REPLACEME: Just leaving this as an example for now
+    def test_11_GitRepoCluster_init(self): #REPLACEME: Just leaving this as an example for now
         result, returncode = self.__class__.TestCluster.init()
         self.assertEqual(returncode, 0)
 ##################################################

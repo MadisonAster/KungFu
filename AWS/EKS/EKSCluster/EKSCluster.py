@@ -20,6 +20,10 @@ class EKSCluster(dict):
 
     def output(self):
         result, returncode = self.run_command('terraform output')
+        print('result')
+        for line in result.rstrip().split('\n'):
+            print(line,)
+            print('\n\n')
         for line in result.rstrip().split('\n'):
             if ' = ' in line:
                 (var, val) = line.replace(' = ','=').split('=',1)
