@@ -11,10 +11,15 @@ class UnrealTestParser():
         print('#######################################################')
         print('Running Unreal tests:')
         cwd = os.path.dirname(os.path.abspath(__file__)).replace('\\','/')
-        result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Smoke; quit' -stdout", cwd=cwd)
+        result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Engine; quit' -stdout", cwd=cwd)
         #result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -Game -ExecCmds='Automation RunFilter Smoke; quit' -log", cwd=cwd, silent=False, shell=True)
         #result, returncode = KungFu.RunCmd("UE4Editor-Cmd.exe '"+cwd+"/KungFu.uproject' -ExecCmds='Automation RunFilter Engine; quit' -stdout", cwd=cwd, shell=True)
+        #W:\"Epic Games"\UnrealEngine\Engine\Build\BatchFiles\GenerateProjectFiles.bat "W:\Portfolio\KungFu\Unreal\KungFu.uproject"
         
+        #epath, _ = KungFu.RunCmd('where UE4Editor-Cmd.exe')
+        #epath = epath.replace('\\','/').split('/Binaries',1)[0]
+        #result, returncode = KungFu.RunCmd(epath+'/Build/BatchFiles/Build.bat UE4Editor Win64 Debug "'+cwd+'/KungFu.uproject" -waitmutex', cwd=cwd)
+
         print(result)
         for line in result.rstrip().split('\n'):
             if 'Result={Passed}' in line:

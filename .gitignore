@@ -24,6 +24,7 @@ Unreal/Binaries
 Unreal/DerivedDataCache
 Unreal/Intermediate
 Unreal/Saved
+Unreal/_backup
 *.tfstate
 *.tfstate.backup
 *.tfplan
