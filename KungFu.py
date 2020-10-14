@@ -6,6 +6,8 @@ examples:
 python3 KungFu.py                          #Run all tests, automatically decide if gui is available.
 
 python3 KungFu.py -sleep 1.0               #Run tests with a sleeptime of 1.0 seconds.
+python3 KungFu.py -filter test_0           #Run only tests with names that begin with 'test_0'
+python3 KungFu.py -casefilter test_A       #Run only testcases with names that begin with 'test_A'
 python3 KungFu.py -folder Python/Qt        #Run all tests in the Python/Qt folder.
 python3 KungFu.py -folders Python,AWS      #Run all tests in the Python and AWS folders.
 python3 KungFu.py --create                 #Run tests that provision real cloud resources. THIS WILL COST MONEY!
@@ -38,19 +40,19 @@ ExpectedTestCount = {
  'gui': 9,
  'java': 0,
  'kubectl': 0,
- 'lxml': 76,
+ 'lxml': 3,
  'maya': 0,
  'msgpack': 1,
  'msgpack_numpy': 1,
  'nodejs': 7,
  'npm.jest': 7,
  'nuke': 0,
- 'numpy': 76,
- 'pandas': 81,
- 'static-frame': 76,
+ 'numpy': 4,
+ 'pandas': 8,
+ 'static-frame': 3,
  'terraform': 7,
  'unreal': 396,
- 'yfinance': 76,
+ 'yfinance': 3,
 }
 
 def WriteBack():
