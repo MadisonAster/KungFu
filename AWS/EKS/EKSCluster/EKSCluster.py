@@ -57,8 +57,11 @@ class EKSCluster(dict):
 #Test#############################################
 @KungFu.depends('base', 'terraform', 'aws')
 class test_EKSCluster(KungFu.TimedTest):
-    def test_01_init(self):
+    def __init__(self, *args):
+        super().__init__(*args)
         self.TestCluster = EKSCluster()
+
+    def test_01_init(self):
         result, returncode = self.TestCluster.init()
         self.assertEqual(returncode, 0)
     

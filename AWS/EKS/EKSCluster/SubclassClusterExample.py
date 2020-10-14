@@ -1,7 +1,7 @@
 #Imports##########################################
 import os
 from FooFinder import KungFu
-from FooFinder.EKS import EKSCluster
+from FooFinder import EKSCluster
 ##################################################
 
 #Code#############################################
@@ -14,7 +14,9 @@ class SomeCluster(EKSCluster.EKSCluster):
 #Test#############################################
 @KungFu.depends('terraform', 'aws')
 class test_SomeCluster(EKSCluster.test_EKSCluster):
-    TestCluster = SomeCluster()
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.TestCluster = SomeCluster()
     
     def test_11_SomeCluster_init(self): #REPLACEME: Just leaving this as an example for now
         result, returncode = self.__class__.TestCluster.init()

@@ -1,7 +1,7 @@
 #Imports##########################################
 import os
 from FooFinder import KungFu
-from FooFinder.EKS import EKSCluster
+from FooFinder import EKSCluster
 ##################################################
 
 #Code#############################################
@@ -12,12 +12,15 @@ class DeadlineCluster(EKSCluster.EKSCluster):
 ##################################################
 
 #Test#############################################
-@KungFu.depends('terraform', 'aws')
+@KungFu.depends('base', 'terraform', 'aws')
 class test_DeadlineCluster(EKSCluster.test_EKSCluster):
-    TestCluster = DeadlineCluster()
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.TestCluster = DeadlineCluster()
     
     def test_11_DeadlineCluster_init(self): #REPLACEME: Just leaving this as an example for now
         result, returncode = self.__class__.TestCluster.init()
+        TestCluster = DeadlineCluster()
         self.assertEqual(returncode, 0)
 ##################################################
 
