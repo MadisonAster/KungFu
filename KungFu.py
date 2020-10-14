@@ -193,6 +193,8 @@ class PrototypeTestParser(unittest.TestCase):
 
     @classmethod
     def AddTests(cls, parsercls):
+        if sys.TestArgs.filter and sys.TestArgs.filter not in cls.__name__:
+            return
         cls.parser = parsercls()
         cls.parser.run()
         for testname in cls.parser.results:
