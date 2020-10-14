@@ -1,4 +1,5 @@
 #Imports##########################################
+import os
 from FooFinder import KungFu
 ##################################################
 
@@ -7,6 +8,8 @@ import subprocess, shlex
 class EKSCluster(dict):
     def __init__(self):
         super(EKSCluster, self).__init__()
+        self.cwd = os.path.dirname(os.path.abspath(__file__))
+
     def init(self):
         return self.run_command('terraform init')
     def plan(self):
@@ -55,31 +58,32 @@ class EKSCluster(dict):
 @KungFu.depends('base', 'terraform', 'aws')
 class test_EKSCluster(KungFu.TimedTest):
     def test_01_init(self):
-        result, returncode = self.__class__.TestCluster.init()
+        self.TestCluster = EKSCluster()
+        result, returncode = self.TestCluster.init()
         self.assertEqual(returncode, 0)
     
     def test_02_plan(self):
-        result, returncode = self.__class__.TestCluster.plan()
+        result, returncode = self.TestCluster.plan()
         self.assertEqual(returncode, 0)
 
     def test_03_plan_destroy(self):
-        result, returncode = self.__class__.TestCluster.plan_destroy()
+        result, returncode = self.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
 
     @KungFu.create
     def test_04_apply(self):
-        result, returncode = self.__class__.TestCluster.apply()
+        result, returncode = self.TestCluster.apply()
         self.assertEqual(returncode, 0)
 
     @KungFu.create
     def test_05_output(self):
-        result, returncode = self.__class__.TestCluster.output()
-        print('vpc_id', self.__class__.TestCluster['vpc_id'])
+        result, returncode = self.TestCluster.output()
+        print('vpc_id', self.TestCluster['vpc_id'])
         self.assertEqual(returncode, 0)
 
     @KungFu.destroy
     def test_06_destroy(self):
-        result, returncode = self.__class__.TestCluster.destroy()
+        result, returncode = self.TestCluster.destroy()
         self.assertEqual(returncode, 0)
 ##################################################
 

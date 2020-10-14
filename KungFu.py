@@ -704,6 +704,8 @@ class TestRunner():
             pass
         for ClassName, Class in inspect.getmembers(Module):
             if 'test_' in ClassName and Class != None:
+                if self.TestArgs.filter and self.TestArgs.filter not in ClassName:
+                    continue                    
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 globals()[ClassName] = Class
@@ -714,6 +716,7 @@ class TestRunner():
         def csv(val): return val.split(',')
         parser.add_argument("-folders", help="Run all tests in the specified folders.", type=csv)
         parser.add_argument("-folder", help="Run all tests in the specified folder.", type=str)
+        parser.add_argument("-filter", help="Run only test cases with names that match this filter.", type=str)
         parser.add_argument("-sleep", help="Run tests with a sleeptime of n seconds.", type=float)
         parser.add_argument("--create", help="Run tests that provision real cloud resources. THIS WILL COST MONEY!", action="store_true")
         parser.add_argument("--destroy", help="Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!", action="store_true")
