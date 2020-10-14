@@ -19,7 +19,7 @@ class test_MongoDBCluster(EKSCluster.test_EKSCluster):
         self.TestCluster = MongoDBCluster()
     
     def test_11_MongoDBCluster_init(self): #REPLACEME: Just leaving this as an example for now
-        result, returncode = self.__class__.TestCluster.init()
+        result, returncode = self.TestCluster.init()
         self.assertEqual(returncode, 0)
 ##################################################
 
