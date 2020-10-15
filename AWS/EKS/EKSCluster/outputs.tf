@@ -5,6 +5,12 @@ output "vpc_name" {
     value = var.vpc_name
 }
 
+output "public_subnets" {
+    value = module.vpc.public_subnets
+}
+output "default_security_group_id" {
+    value = module.vpc.default_security_group_id
+}
 output "default_securitygroup" {
     value = module.vpc.default_security_group_id
 }
@@ -22,9 +28,11 @@ output "cluster_name" {
 }
 
 output "KubeNodeSecurityGroup" {
-    value = aws_security_group.KubeNodeSecurityGroup.id
+    value = aws_security_group.KubeNodeSecurityGroup
 }
-
+output "ControlPlaneSecurityGroup" {
+    value = aws_security_group.ControlPlaneSecurityGroup
+}
 
 
 output "cluster_endpoint" {
@@ -42,7 +50,12 @@ output "kubectl_config" {
     value       = module.eks.kubeconfig
 }
 
+output "kubeconfig" {
+    value = module.eks.kubeconfig
+}
+
 output "config_map_aws_auth" {
     description = "A kubernetes configuration to authenticate to this EKS cluster."
     value       = module.eks.config_map_aws_auth
 }
+

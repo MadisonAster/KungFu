@@ -1,5 +1,5 @@
 output "vpc_id" {
-    value = module.EKSCluster.vpc.vpc_id
+    value = module.EKSCluster.vpc_id
 }
 output "vpc_name" {
     value = var.vpc_name
@@ -14,22 +14,11 @@ output "private_key_path" {
 }
 
 output "cluster_id" {
-    value = module.EKSCluster.eks.cluster_id
+    value = module.EKSCluster.cluster_id
 }
 
 output "cluster_name" {
     value = var.cluster_name
-}
-
-output "KubeNodeSecurityGroup" {
-    value = aws_security_group.KubeNodeSecurityGroup.id
-}
-
-
-
-output "cluster_endpoint" {
-    description = "Endpoint for EKS control plane."
-    value       = module.EKSCluster.cluster_endpoint
 }
 
 output "cluster_security_group_id" {

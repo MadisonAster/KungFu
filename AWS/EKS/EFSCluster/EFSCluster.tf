@@ -30,9 +30,8 @@ resource "aws_efs_mount_target" "KungFu_MountTargets" {
   subnet_id = element(module.EKSCluster.public_subnets, count.index)
   security_groups = [
     module.EKSCluster.default_security_group_id,
-    aws_security_group.KungFu_ControlPlaneSecurityGroup.id,
-    aws_security_group.KungFu_WebserverSecurityGroup.id,
-    aws_security_group.KungFu_DataScraperSecurityGroup.id,
+    module.EKSCluster.ControlPlaneSecurityGroup.id,
+    module.EKSCluster.KubeNodeSecurityGroup.id,
   ]
 }
 
