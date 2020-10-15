@@ -1,3 +1,11 @@
+variable "efs_name" {
+    description = "Name of EFS"
+    type        = string
+    default     = "KungFu_EFS"
+}
+
+#==================EKSCLuster variables===================#
+
 variable "cluster_name" {
     description = "Name of EKS Cluster"
     type        = string
@@ -124,11 +132,4 @@ variable "map_users" {
             groups   = ["system:masters"]
         },
     ]
-}
-
-
-variable "efs_name" {
-    description = "Name of EFS"
-    type        = string
-    default     = "KungFu_EFS"
 }

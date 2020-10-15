@@ -81,7 +81,7 @@ class test_EKSCluster(KungFu.TimedTest):
     @KungFu.create
     def test_05_output(self):
         result, returncode = self.TestCluster.output()
-        print('vpc_id', self.TestCluster['vpc_id'])
+        #print('vpc_id', self.TestCluster['vpc_id'])
         self.assertEqual(returncode, 0)
 
     @KungFu.destroy
