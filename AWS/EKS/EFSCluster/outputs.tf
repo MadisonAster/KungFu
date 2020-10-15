@@ -1,3 +1,4 @@
+/*
 output "vpc_id" {
     value = module.EKSCluster.vpc_id
 }
@@ -34,4 +35,16 @@ output "kubectl_config" {
 output "config_map_aws_auth" {
     description = "A kubernetes configuration to authenticate to this EKS cluster."
     value       = module.EKSCluster.config_map_aws_auth
+}
+*/
+
+output "efs_id" {
+    value = aws_efs_file_system.KungFu_FileSystem.id
+}
+output "efs_name" {
+    value = var.efs_name
+}
+
+output "mount_id" {
+    value = aws_efs_mount_target.KungFu_MountTarget.id
 }

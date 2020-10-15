@@ -23,7 +23,7 @@ resource "aws_efs_file_system" "KungFu_FileSystem" {
   }
 }
 
-resource "aws_efs_mount_target" "KungFu_MountTargets" {
+resource "aws_efs_mount_target" "KungFu_MountTarget" {
   count = length(module.EKSCluster.public_subnets)
 
   file_system_id  = aws_efs_file_system.KungFu_FileSystem.id
