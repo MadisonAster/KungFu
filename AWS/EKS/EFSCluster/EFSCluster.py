@@ -7,8 +7,12 @@ from FooFinder import EKSCluster
 #Code#############################################
 class EFSCluster(EKSCluster.EKSCluster):
     def __init__(self):
-        super(EFSCluster, self).__init__()
+        super().__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__))
+    def apply(self):
+        result, returncode = super().apply()
+        result2, returncode2 = self.run_command('kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"')
+        return result, returncode
 ##################################################
 
 #Test#############################################
