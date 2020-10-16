@@ -24,6 +24,9 @@
     <ClCompile Include="..\DataStructures\LinkedList.cpp">
       <Filter>DataStructures</Filter>
     </ClCompile>
+    <ClCompile Include="..\DataStructures\Files\FileOperations.cpp">
+      <Filter>DataStructures\Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -76,6 +79,9 @@
     </Filter>
     <Filter Include="Algorithms\Searching">
       <UniqueIdentifier>{477972fa-c378-4e08-a1b7-56b4937d0c25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataStructures\Files">
+      <UniqueIdentifier>{23b99262-4b60-4981-a4e9-2e6422d91a0a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

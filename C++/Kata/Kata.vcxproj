@@ -46,6 +46,7 @@
     <ClCompile Include="..\Algorithms\_CodeWars\PlanetById.cpp" />
     <ClCompile Include="..\Algorithms\_CodeWars\SakuraFall.cpp" />
     <ClCompile Include="..\DataStructures\DoublyLinkedList.cpp" />
+    <ClCompile Include="..\DataStructures\Files\FileOperations.cpp" />
     <ClCompile Include="..\DataStructures\LinkedList.cpp" />
     <ClCompile Include="..\RunTests.cpp" />
     <ClCompile Include="stdafx.cpp">
