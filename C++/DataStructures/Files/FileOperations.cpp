@@ -7,18 +7,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
-//#include <boost/filesystem.hpp>
-
 //using namespace std;
 
-
-//namespace fs = std::filesystem;
-
 /*
-void ReadFileLines() {
-
-}
-
 void GetLines(std::ifstream& in) {
 	int count = 0;
 	while (true) {
@@ -70,12 +61,15 @@ std::string ReadFileText(std::string fpath) {
 void WriteFileText(std::string fpath, std::string ftext) {
 	std::ofstream out;
 	out.open(fpath.c_str());
+	out << ftext;
+	out.close();
+}
 
-	char* cstr = new char[ftext.length() + 1];
-	std::strcpy(cstr, ftext.c_str());
-
-	out.put(*cstr);
-	//out << num << str;
+void WriteFileText2(std::string fpath, std::string ftext) {
+	std::FILE* out = std::fopen(fpath.c_str(), "w");
+	//out << ftext;
+	std::fputs(ftext.c_str(), out);
+	//out.close();
 }
 
 
@@ -89,7 +83,9 @@ std::string GetTempFilePath() {
 TEST(pch, test_WriteRead1) {
 	std::string ftext = "0123456789";
 	std::string fpath = GetTempFilePath();
+	std::cout << fpath << std::endl;
 	WriteFileText(fpath, ftext);
+	//WriteFileText2(fpath, ftext);
 
 	std::string rtext = ReadFileText(fpath);
 	EXPECT_EQ(rtext, ftext);
