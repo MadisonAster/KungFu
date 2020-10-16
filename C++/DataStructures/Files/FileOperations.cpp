@@ -2,7 +2,17 @@
 #include <fstream>
 #include <istream>
 #include <string>
+
+
+#include <cstdio>
+#include <cstdlib>
+#include <filesystem>
+//#include <boost/filesystem.hpp>
+
 //using namespace std;
+
+
+//namespace fs = std::filesystem;
 
 /*
 void ReadFileLines() {
@@ -53,39 +63,35 @@ std::string ReadFileText(std::string fpath) {
 		return(contents);
 	}
 	throw(errno);
-
-
-	//std::string text = in.get();
-	//return text;
-
 	//getline(in, line)
-	
-	//in >> num >> str;
-
-	//if (in.fail())
-	//	in.clear();
 }
 
-/*
+
 void WriteFileText(std::string fpath, std::string ftext) {
-	ofstream out;
+	std::ofstream out;
 	out.open(fpath.c_str());
-	out.put(ftext);
+
+	char* cstr = new char[ftext.length() + 1];
+	std::strcpy(cstr, ftext.c_str());
+
+	out.put(*cstr);
 	//out << num << str;
 }
-*/
-
-//void WriteFileLines(std::string fpath, std::array<std::string>& lines) {
-//	//out << line << endl;
-//}
 
 
+std::string GetTempFilePath() {
+	char name[L_tmpnam];
+	return std::tmpnam(name);
+	//std::FILE* tmpf = std::tmpfile();
+	//std::fputs(ftext.c_str(), tmpf);
+}
 
 TEST(pch, test_WriteRead1) {
 	std::string ftext = "0123456789";
-	std::string fpath = ""; //tempfile somehow?
-	//WriteFileText(fpath, ftext);
-	//string rtext = ReadFileText(fpath);
-	//EXPECT_EQ(rtext, ftext);
+	std::string fpath = GetTempFilePath();
+	WriteFileText(fpath, ftext);
+
+	std::string rtext = ReadFileText(fpath);
+	EXPECT_EQ(rtext, ftext);
 }
 
