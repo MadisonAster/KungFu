@@ -10,9 +10,15 @@ class EFSCluster(EKSCluster.EKSCluster):
         super().__init__()
         self.cwd = os.path.dirname(os.path.abspath(__file__))
     def apply(self):
-        result, returncode = super().apply()
+        result0, returncode0 = super().apply()
+        rdata, returncode1 = self.output()
         result2, returncode2 = self.run_command('kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"')
-        return result, returncode
+        
+        returncodes = 0
+        for r in [returncode0, returncode1, returncode2]:
+            returncodes += int(r)
+        returncodes = bool(returncodes)
+        return result0, returncodes
 ##################################################
 
 #Test#############################################

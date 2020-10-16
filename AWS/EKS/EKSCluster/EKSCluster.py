@@ -4,7 +4,7 @@ from FooFinder import KungFu
 ##################################################
 
 #Code#############################################
-import subprocess, shlex
+import subprocess, shlex, json
 class EKSCluster(dict):
     def __init__(self):
         super(EKSCluster, self).__init__()
@@ -17,21 +17,42 @@ class EKSCluster(dict):
     def plan_destroy(self):
         return self.run_command('terraform plan -destroy -out=KungFu_destroy.tfplan')
     def apply(self):
-        return self.run_command('terraform apply "KungFu.tfplan"')
+        result0, returncode0 = self.run_command('terraform apply "KungFu.tfplan"')
+
+        rdata, returncode1 = self.output()
+
+        #cluster_name = rdata['cluster_name']
+        #kubernetes_namespace = rdata['kubernetes_namespace']
+        #fargate_profile_name = rdata['fargate_profile_name']
+        
+        #create fargate profile
+        #result3, returncode3 = self.run_command('eksctl create fargateprofile --cluster '+rdata['cluster_name']+' --name '+rdata['fargate_profile_name']+' --namespace '+rdata['kubernetes_namespace'])
+        #print('result3')
+        #print(result3)
+        
+        #recreate existing pods?
+        #result4, returncode4 = self.run_command('kubectl rollout restart -n <kube-system> <deployment coredns>')
+        
+        returncodes = 0
+        for r in [returncode0, returncode1]:
+            returncodes += int(r)
+        returncodes = bool(returncodes)
+        return rdata, returncode0
+
     def destroy(self):
         return self.run_command('terraform apply "KungFu_destroy.tfplan"')
 
     def output(self):
-        result, returncode = self.run_command('terraform output')
-        print('result')
-        for line in result.rstrip().split('\n'):
-            print(line,)
-            print('\n\n')
-        for line in result.rstrip().split('\n'):
-            if ' = ' in line:
-                (var, val) = line.replace(' = ','=').split('=',1)
-                self[var] = val
-        return result, returncode
+        result, returncode = self.run_command('terraform output -json')
+        rdata = json.loads(result)
+        if 'EKSCluster' in rdata.keys():
+            for key, value in rdata['EKSCluster']['value'].items():
+                rdata[key] = value
+        for key, value in rdata.items():
+            if hasattr(value, 'keys') and 'value' in value.keys():
+                rdata[key] = value['value']
+                #self[key] = value['value']
+        return rdata, returncode
 
     def run_command(self, CommandString, silent=True):
         if not silent:
@@ -85,7 +106,7 @@ class test_EKSCluster(KungFu.TimedTest):
         self.assertEqual(returncode, 0)
 
     @KungFu.destroy
-    def test_06_destroy(self):
+    def test_99_destroy(self):
         result, returncode = self.TestCluster.destroy()
         self.assertEqual(returncode, 0)
 ##################################################

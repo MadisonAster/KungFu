@@ -11,6 +11,17 @@ variable "cluster_name" {
     type        = string
     default     = "KungFu_Cluster"
 }
+variable "fargate_profile_name" {
+    description = "Name of FargateProfile"
+    type        = string
+    default     = "KungFu_FProfile"
+}
+variable "kubernetes_namespace" {
+    description = "kubernetes namespace"
+    type        = string
+    default     = "KungFu"
+}
+
 variable "kubenode_instance_type" {
     type        = string
     //default     = "t3.small"
@@ -21,8 +32,6 @@ variable "region" {
     type        = string
     default     = "us-west-2"
 }
-
-
 
 
 variable "vpc_name" {

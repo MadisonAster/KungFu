@@ -40,3 +40,9 @@ output "config_map_aws_auth" {
     value       = module.eks.config_map_aws_auth
 }
 
+output "fargate_profile_name" {
+    value = var.fargate_profile_name
+}
+output "kubernetes_namespace" {
+    value = var.kubernetes_namespace
+}
