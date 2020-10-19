@@ -2,6 +2,7 @@
 import os
 from FooFinder import KungFu
 from FooFinder import EKSCluster
+from FooFinder import envsubst
 ##################################################
 
 #Code#############################################
@@ -13,9 +14,14 @@ class EFSCluster(EKSCluster.EKSCluster):
         result0, returncode0 = super().apply()
         rdata, returncode1 = self.output()
         result2, returncode2 = self.run_command('kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"')
-        
+
+        envsubst.envsubst(self.cwd+'/eks_efsvolume.yaml', self.cwd+'/eks_efsvolume_temp.yaml', dict(self.items()))
+        result4, returncode4 = self.run_command('kubectl apply -f '+self.cwd+'/eks_efsstorageclass.yaml')
+        result5, returncode5 = self.run_command('kubectl apply -f '+self.cwd+'/eks_efsclaim.yaml')
+        result6, returncode6 = self.run_command('kubectl apply -f '+self.cwd+'/eks_efsvolume_temp.yaml')
+
         returncodes = 0
-        for r in [returncode0, returncode1, returncode2]:
+        for r in [returncode0, returncode1, returncode2, returncode4, returncode5, returncode6]:
             returncodes += int(r)
         returncodes = bool(returncodes)
         return result0, returncodes
