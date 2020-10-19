@@ -28,6 +28,7 @@ Unreal/_backup
 *.tfstate
 *.tfstate.backup
 *.tfplan
+*_temp.yaml
 
 .terraform
 kubeconfig_*
