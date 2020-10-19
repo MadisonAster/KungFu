@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: efs-pv
+  name: kungfu-efs-pv
 spec:
   capacity:
     storage: 2Gi
@@ -9,7 +9,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: efs-sc
+  storageClassName: kungfu-efs-sc
   csi:
     driver: efs.csi.aws.com
     volumeHandle: ${efs_id}

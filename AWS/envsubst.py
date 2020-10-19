@@ -34,7 +34,8 @@ def envsubst(inpath, outpath, vars):
     with open(inpath, 'r') as file:
         ydata = yaml.safe_load(file)
     for key, value in vars.items():
-        recurse_replace(ydata, '${'+key+'}', value)
+        if isinstance(value, str):
+            recurse_replace(ydata, '${'+key+'}', value)
     with open(outpath, 'w') as file:
         ydump = yaml.dump(ydata)
         file.write(ydump)

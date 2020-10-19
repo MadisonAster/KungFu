@@ -14,8 +14,7 @@ class EFSCluster(EKSCluster.EKSCluster):
         result0, returncode0 = super().apply()
         rdata, returncode1 = self.output()
         result2, returncode2 = self.run_command('kubectl apply -k "github.com/kubernetes-sigs/aws-efs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"')
-
-        envsubst.envsubst(self.cwd+'/eks_efsvolume.yaml', self.cwd+'/eks_efsvolume_temp.yaml', dict(self.items()))
+        envsubst.envsubst(self.cwd+'/eks_efsvolume.yaml', self.cwd+'/eks_efsvolume_temp.yaml', rdata)
         result4, returncode4 = self.run_command('kubectl apply -f '+self.cwd+'/eks_efsstorageclass.yaml')
         result5, returncode5 = self.run_command('kubectl apply -f '+self.cwd+'/eks_efsclaim.yaml')
         result6, returncode6 = self.run_command('kubectl apply -f '+self.cwd+'/eks_efsvolume_temp.yaml')
