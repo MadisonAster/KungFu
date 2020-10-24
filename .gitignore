@@ -25,6 +25,7 @@ Unreal/DerivedDataCache
 Unreal/Intermediate
 Unreal/Saved
 Unreal/_backup
+Houdini/backup
 *.tfstate
 *.tfstate.backup
 *.tfplan
