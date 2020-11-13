@@ -13,6 +13,7 @@ class ALBCluster(EKSCluster.EKSCluster):
     def apply(self):
         result0, returncode0 = super().apply()
         rdata, returncode1 = self.output()
+        print('rdata', rdata)
         result2, returncode2 = self.run_command("eksctl utils associate-iam-oidc-provider --region "+rdata["region_id"]+" --cluster "+rdata["cluster_id"]+" --approve")
         result3, returncode3 = self.run_command("aws iam create-policy --policy-name <ALBIngressControllerIAMPolicy> --policy-document file://iam-policy.json")
         result4, returncode4 = self.run_command("kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-alb-ingress-controller/v1.1.8/docs/examples/rbac-role.yaml")
@@ -39,7 +40,6 @@ class ALBCluster(EKSCluster.EKSCluster):
         
         result9, returncode9 = self.run_command("kubectl get pods -n kube-system")
         print('result9', result9)
-
 
         returncodes = 0
         for r in [returncode0, returncode1, returncode2, returncode3, returncode4,  returncode5, returncode6, returncode7, returncode8, returncode9]:
