@@ -23,6 +23,8 @@ C++/Kata/Debug
 Unreal/Binaries
 Unreal/DerivedDataCache
 Unreal/Intermediate
+Unreal/Content/StarterContent
+Unreal/Content/PrivateContent
 Unreal/Saved
 Unreal/_backup
 Houdini/backup
