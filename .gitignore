@@ -4,6 +4,7 @@ Thumbs.db
 .DS_Store
 .vscode
 .vs
+*.sln
 workspace.wp
 *.pyc
 __pycache__
