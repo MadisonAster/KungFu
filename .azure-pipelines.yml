@@ -1,0 +1,22 @@
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: 3.5
+    architecture: 'x64'
+
+- script: |
+    python -m pip install --upgrade pip setuptools wheel
+    pip install -r requirements-test.txt
+
+- script: |
+    python KungFu.py
+  condition: succeededOrFailed()
+  displayName: 'KungFu Test Runner'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: "**/TEST-*.xml"
+    testRunTitle: 'Python $(PYTHON_VERSION)'
