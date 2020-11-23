@@ -12,7 +12,7 @@ steps:
     pip install -r requirements-test.txt
 
 - script: |
-    python KungFu.py
+    python KungFu.py --skip
   condition: succeededOrFailed()
   displayName: 'KungFu Test Runner'
 
