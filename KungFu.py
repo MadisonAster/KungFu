@@ -234,15 +234,18 @@ class DependencyHandler():
     
     #Checks###########################################
     def Check(self, name):  
-        print('Check', name)
+        
         manager = None
         if '.' in name:
             manager, name = name.split('.',1)
         if name in self.Installed:
+            print('Check Installed', name)
             return True
         elif name in self.NotInstalled:
+            print('Check Not Installed', name)
             return False
         else:
+            print('Run Checks', name)
             return self.RunChecks(name, manager=manager)
 
     def RunChecks(self, name, manager=None):
