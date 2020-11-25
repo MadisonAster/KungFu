@@ -82,7 +82,6 @@ class test_EKSCluster(KungFu.TimedTest):
         super().__init__(*args)
         self.TestCluster = EKSCluster()
 
-    '''
     def test_01_init(self):
         result, returncode = self.TestCluster.init()
         self.assertEqual(returncode, 0)
@@ -94,7 +93,6 @@ class test_EKSCluster(KungFu.TimedTest):
     def test_03_plan_destroy(self):
         result, returncode = self.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
-    '''
 
     @KungFu.create
     def test_04_apply(self):
