@@ -662,7 +662,6 @@ class TestRunner():
         PluginCompile   P-50.000s       P-20.000s
         SublevelHell    P-300.000s      P-250.000s
         '''
-        Dependencies = DependencyHandler()
         start = datetime.now()
         #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
         self.Runner = unittest.TextTestRunner()
@@ -675,7 +674,7 @@ class TestRunner():
         else:
             print('Everything OK!')
         if not self.TestArgs.skip:
-            Dependencies.OfferInstallers()
+            DependencyHandler().OfferInstallers()
         sys.exit(int(not result.wasSuccessful()))
 
     def RecursiveImport(self, folders=None):
@@ -791,6 +790,7 @@ def main(*args):
     KungFu.main([file1, file2]) will run a list of files
     '''
     import FooFinder
+    DependencyHandler()
     TestInstance = TestRunner(*args)
     TestInstance.main()
 
