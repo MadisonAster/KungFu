@@ -233,7 +233,8 @@ class DependencyHandler():
         return sys.DependencyHandler
     
     #Checks###########################################
-    def Check(self, name):
+    def Check(self, name):  
+        print('Check', name)
         manager = None
         if '.' in name:
             manager, name = name.split('.',1)
@@ -673,7 +674,6 @@ class TestRunner():
             print('KungFu FAILED (errors='+str(len(result.errors))+')')
         else:
             print('Everything OK!')
-            print(sys.DependencyHandler)
         if not self.TestArgs.skip:
             sys.DependencyHandler.OfferInstallers()
         sys.exit(int(not result.wasSuccessful()))
