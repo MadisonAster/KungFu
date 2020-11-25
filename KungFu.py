@@ -673,8 +673,9 @@ class TestRunner():
             print('KungFu FAILED (errors='+str(len(result.errors))+')')
         else:
             print('Everything OK!')
+            print(sys.DependencyHandler)
         if not self.TestArgs.skip:
-            DependencyHandler().OfferInstallers()
+            sys.DependencyHandler.OfferInstallers()
         sys.exit(int(not result.wasSuccessful()))
 
     def RecursiveImport(self, folders=None):
