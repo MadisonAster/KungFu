@@ -4,7 +4,7 @@ from FooFinder import KungFu
 ##################################################
 
 #Test#############################################
-@KungFu.depends('conda.pyside2', 'conda.qt.py', 'gui')
+@KungFu.depends('pip.pyside2', 'pip.qt.py', 'gui')
 class test_FramelessWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_FramelessWindow, self).__init__(*args)
