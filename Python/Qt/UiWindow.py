@@ -26,7 +26,6 @@ class UiWindow(BasicWindow.BasicWindow):
     def __init__(self, *args, **kwargs):
         super(UiWindow, self).__init__(*args, **kwargs)
         self.setWindowTitle('UiWindow')
-        print('Ui MainWindow __init__!!!!')
         ui = __file__.rsplit('.',1)[0]+'.ui'
         QtCompat.loadUi(ui, baseinstance=self)
 

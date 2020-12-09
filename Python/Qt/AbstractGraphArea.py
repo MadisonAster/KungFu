@@ -4,35 +4,65 @@ import math
 from time import time
 import datetime
 from FooFinder import KungFu
-##################################################
-
 from copy import copy
-
-from PyQt import QtGui, QtCore
-
-import AppCore
-from DataStructures import KeyboardDict
-
+##################################################
 
 #Test#############################################
 @KungFu.depends('pip.pyside2', 'pip.qt.py', 'gui')
 class test_AbstractGraphArea(KungFu.TimedTest):
     def __init__(self, *args):
-        super(test_UiWindow, self).__init__(*args)
+        super(test_AbstractGraphArea, self).__init__(*args)
         from FooFinder import SingletonApp
         self.QApp = SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
     
     def test_1(self, sleep=0.5):
-        self.MainWindow = UiWindow()
-        self.MainWindow.show()
+        self.Instance = AbstractGraphArea()
+        self.Instance.show()
         self.QApp.processEvents()
         time.sleep(sleep)
-        self.MainWindow.hide()
+        self.Instance.close()
 ##################################################
 
 #Code#############################################
 from Qt import QtCore, QtGui, QtWidgets, QtCompat
 #from FooFinder import BasicWindow
+
+KeyboardDict = {
+    32 : 'Space',
+    65 : 'A',
+    66 : 'B',
+    67 : 'C',
+    68 : 'D',
+    69 : 'E',
+    70 : 'F',
+    71 : 'G',
+    72 : 'H',
+    73 : 'I',
+    74 : 'J',
+    75 : 'K',
+    76 : 'L',
+    77 : 'M',
+    78 : 'N',
+    79 : 'O',
+    80 : 'P',
+    81 : 'Q',
+    82 : 'R',
+    83 : 'S',
+    84 : 'T',
+    85 : 'U',
+    86 : 'V',
+    87 : 'W',
+    88 : 'X',
+    89 : 'Y',
+    90 : 'Z',
+    16777220 : 'Enter',
+    16777234 : 'Left',
+    16777235 : 'Up',
+    16777236 : 'Right',
+    16777237 : 'Down',
+    16777248 : 'Shift',
+    16777249 : 'Ctrl',
+}
 
 #Provides unordered comparisons for a list, In this case keyboard keys,
 #so that it does not matter what order you pressed the keys in
@@ -118,6 +148,7 @@ class touchList(list):
 class AbstractGraphArea(QtWidgets.QWidget):
     ###Initialize Class###
     def __init__(self):
+        print('AbstractGraphArea init!!!!')
         self.dropThreshhold = datetime.timedelta(1.0/24/60/60*0.02)
         self.dropRange = 30
         self.touchEventList = []
