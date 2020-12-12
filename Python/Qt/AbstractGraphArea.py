@@ -15,7 +15,7 @@ class test_AbstractGraphArea(KungFu.TimedTest):
         from FooFinder import SingletonApp
         self.QApp = SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
     
-    def test_1(self, sleep=0.5):
+    def test_1(self, sleep=3.0):
         self.Instance = AbstractGraphArea()
         self.Instance.show()
         self.QApp.processEvents()
@@ -146,6 +146,22 @@ class touchList(list):
         return False
 
 class AbstractGraphArea(QtWidgets.QWidget):
+    settings = {
+        'FocusPolicy' : QtCore.Qt.ClickFocus,
+        'InputInterval' : 0.1,
+        'ZoomSensitivity' : 1.0,
+        'UpperXZoomLimit' : 10,
+        'UpperYZoomLimit' : 10,
+        'LowerXZoomLimit' : -0.9,
+        'LowerYZoomLimit' : -0.9,
+        'ZoomXYJoined' : True,
+        'XPixelsPerUnit' : 1,
+        'YPixelsPerUnit' : 1,
+        'GraphX' : 0,
+        'GraphY' : 0,
+        'GraphXS' : 0,
+        'GraphYS' : 0,
+    }
     ###Initialize Class###
     def __init__(self):
         print('AbstractGraphArea init!!!!')
@@ -157,7 +173,7 @@ class AbstractGraphArea(QtWidgets.QWidget):
         self.className = self.__class__.__name__
         
         #QWidget Settings
-        self.setFocusPolicy(AppCore.AppSettings['FocusPolicy'])
+        self.setFocusPolicy(self.settings['FocusPolicy'])
         self.setMinimumSize(0, 0)
         self.setGeometry(0, 0, 0, 0)
         self.setAttribute(QtCore.Qt.WA_AcceptTouchEvents)
@@ -168,14 +184,15 @@ class AbstractGraphArea(QtWidgets.QWidget):
         self.inputInterval = 0
         self.curGraphAngle = 0.0
         
-        self.addToolBarLayouts()
-        self.getDictSettings()
+        #self.addToolBarLayouts()
+        #self.getDictSettings()
         
         self.TabletPressure = 1.0
         
         self.TouchList = touchList()
         self.TouchMode = False
-        
+    
+    '''
     def addToolBarLayouts(self):
         self.VBox = QtWidgets.QVBoxLayout()
         self.HBox = QtWidgets.QHBoxLayout()
@@ -214,6 +231,7 @@ class AbstractGraphArea(QtWidgets.QWidget):
         self.HBox.addLayout(self.rightToolBars)
 
         self.VBox.addLayout(self.bottomToolBars)
+    
     ####################
         
     def getDictSettings(self):
@@ -231,17 +249,21 @@ class AbstractGraphArea(QtWidgets.QWidget):
         self.curGraphXS = AppCore.AppAttributes[self.className+'-GraphXS']
         self.curGraphYS = AppCore.AppAttributes[self.className+'-GraphYS']
     ######################
+    '''
     
     ###Input Events###
+
     def keyPressEvent(self, event):
         if event.key() in KeyboardDict.keys():
             key = KeyboardDict[event.key()]
         else:
             print('key '+str(event.key())+' pressed.')
+            super()
             return
         self.setButton(key)
         self.callShortcuts()
         self.subclassPressEvents(event)
+    
     def keyReleaseEvent(self, event):    
         if event.key() in KeyboardDict.keys():
             key = KeyboardDict[event.key()]
@@ -651,6 +673,7 @@ class AbstractGraphArea(QtWidgets.QWidget):
         return angle
     ####################
     
+    '''
     ###Other Functions###
     def addToolBar(self, ToolBarArea, ToolBar):
         if ToolBarArea == QtCore.Qt.TopToolBarArea:
@@ -670,6 +693,7 @@ class AbstractGraphArea(QtWidgets.QWidget):
         self.rightToolBars.removeWidget(ToolBar)
         ToolBar.hide()
     #####################
+    '''
     pass
 ##################################################
 
