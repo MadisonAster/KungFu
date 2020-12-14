@@ -639,6 +639,22 @@ class TestRunner():
     SkippedCount = 0
     def __init__(self, *args):
         super(TestRunner, self).__init__()
+        
+        self.TechGroupings = {
+            'Languages' : ['Python', 'Go', 'C++', 'Javascript', 'Java', 'C#', 'PHP'],
+            'Cloud Platforms' : ['AWS', 'GCP', 'Azure'],
+            'Game Engines' : ['Unreal', 'Unity', 'CryEngine'],
+            '3D Tools' : ['Houdini', 'Maya', 'Cinema4D', 'Lightwave'],
+            '2D Tools' : ['Nuke', 'Fusion', 'AfterEffects'],
+        }
+        self.TestSuites = {
+            'Languages' : [],
+            'Cloud Platforms' : [],
+            'Game Engines' : [],
+            '3D Tools' : [],
+            '2D Tools' : [],
+            'Other' : [],
+        }
         self.TestSuite = unittest.TestSuite()
         self.TestArgs = self.LoadTestVars()
         if len(args) > 0:
