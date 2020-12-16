@@ -7,6 +7,7 @@ from FooFinder import KungFu
 from copy import copy
 ##################################################
 
+"""
 #Test#############################################
 @KungFu.depends('pip.pyside2', 'pip.qt.py', 'gui')
 class test_AbstractGraphArea(KungFu.TimedTest):
@@ -674,6 +675,7 @@ class AbstractGraphArea(QtWidgets.QWidget):
     '''
     pass
 ##################################################
+"""
 
 #Main#############################################
 if __name__ == '__main__':
