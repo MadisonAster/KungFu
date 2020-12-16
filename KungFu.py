@@ -655,12 +655,14 @@ class TestRunner():
             '2D Tools' : [],
             'Other' : [],
         }
-        self.TestSuite = unittest.TestSuite()
+        #self.TestSuite = unittest.TestSuite()
         self.TestArgs = self.LoadTestVars()
         if len(args) > 0:
             for filepath in args:
+                TestSuite = unittest.TestSuite()
                 print('ImportTests!', filepath)
-                self.ImportTests(os.path.abspath(filepath))
+                self.ImportTests(os.path.abspath(filepath), TestSuite)
+                self.TestSuites['Other'].append(TestSuite)
         else:
             self.RecursiveImport(folders=self.TestArgs.folders)
 
@@ -705,6 +707,7 @@ class TestRunner():
             for i, folder in enumerate(folders):
                 folders[i] = wd+'/'+folder
         for folder in folders:
+            TestSuite = unittest.TestSuite()
             for root, dirs, files in os.walk(folder):
                 dirs.sort()
                 files.sort()
@@ -717,9 +720,10 @@ class TestRunner():
                         del dirs[i]
                 for file in files:
                     if file.rsplit('.',1)[-1] == 'py':
-                        self.ImportTests(root.replace('\\','/')+'/'+file)
+                        self.ImportTests(root.replace('\\','/')+'/'+file, TestSuite)
+            self.TestSuites['Other'].append(TestSuite)
 
-    def ImportTests(self, ModulePath):
+    def ImportTests(self, ModulePath, TestSuite):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
         if ModuleName in ['KungFu', '__init__'] or 'BaseClasses' in ModuleName:
             return
@@ -738,7 +742,7 @@ class TestRunner():
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 globals()[ClassName] = Class
-                self.TestSuite.addTest(unittest.makeSuite(Class))
+                TestSuite.addTest(unittest.makeSuite(Class))
     
     def LoadTestVars(self):
         parser = argparse.ArgumentParser()
