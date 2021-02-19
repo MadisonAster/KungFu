@@ -28,7 +28,6 @@ Unreal/Content/StarterContent
 Unreal/Content/PrivateContent
 Unreal/Saved
 Unreal/_backup
-Houdini/backup
 *.tfstate
 *.tfstate.backup
 *.tfplan
@@ -38,5 +37,6 @@ Houdini/backup
 kubeconfig_*
 
 *_bak*.hdanc
+*_bak*.hipnc
 Python/DataStructures/Notebooks/.ipynb_checkpoints
 Python/DataStructures/Notebooks/.examples
