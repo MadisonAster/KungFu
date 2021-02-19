@@ -37,5 +37,6 @@ Houdini/backup
 .terraform
 kubeconfig_*
 
+*_bak*.hdanc
 Python/DataStructures/Notebooks/.ipynb_checkpoints
 Python/DataStructures/Notebooks/.examples
