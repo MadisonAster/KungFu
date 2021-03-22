@@ -12,10 +12,13 @@ class EKSCluster(dict):
 
     def init(self):
         return self.run_command('terraform init')
+
     def plan(self):
         return self.run_command('terraform plan -out=KungFu.tfplan')
+
     def plan_destroy(self):
         return self.run_command('terraform plan -destroy -out=KungFu_destroy.tfplan')
+
     def apply(self):
         result0, returncode0 = self.run_command('terraform apply "KungFu.tfplan"')
 
@@ -82,14 +85,17 @@ class test_EKSCluster(KungFu.TimedTest):
         super().__init__(*args)
         self.TestCluster = EKSCluster()
 
+    @KungFu.cloud
     def test_01_init(self):
         result, returncode = self.TestCluster.init()
         self.assertEqual(returncode, 0)
     
+    @KungFu.cloud
     def test_02_plan(self):
         result, returncode = self.TestCluster.plan()
         self.assertEqual(returncode, 0)
 
+    @KungFu.cloud
     def test_03_plan_destroy(self):
         result, returncode = self.TestCluster.plan_destroy()
         self.assertEqual(returncode, 0)
