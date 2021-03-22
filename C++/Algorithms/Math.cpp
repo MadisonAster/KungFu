@@ -2,6 +2,8 @@
 //General Math
 //
 
+#include "gtest/gtest.h"
+
 int max(int a, int b) {
 	int result;
 	if (a > b)
