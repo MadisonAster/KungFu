@@ -5,29 +5,29 @@ from FooFinder import KungFu
 
 #Test#############################################
 @KungFu.depends('pip.pyside2', 'pip.qt.py', 'gui')
-class test_FramelessWindow(KungFu.TimedTest):
+class test_UiWindow(KungFu.TimedTest):
     def __init__(self, *args):
-        super(test_FramelessWindow, self).__init__(*args)
+        super(test_UiWindow, self).__init__(*args)
         from FooFinder import SingletonApp
-        SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
-
+        self.QApp = SingletonApp.SingletonApp() #Global because it QApplication must be a singleton
+    
     def test_1(self, sleep=0.5):
-        self.MainWindow = FramelessWindow()
+        self.MainWindow = UiWindow()
         self.MainWindow.show()
+        self.QApp.processEvents()
         time.sleep(sleep)
         self.MainWindow.hide()
 ##################################################
 
 #Code#############################################
-from Qt import QtCore, QtGui, QtWidgets
+from Qt import QtCore, QtGui, QtWidgets, QtCompat
 from FooFinder import BasicWindow
-class FramelessWindow(BasicWindow.BasicWindow):
+class UiWindow(BasicWindow.BasicWindow):
     def __init__(self, *args, **kwargs):
-        super(FramelessWindow, self).__init__(*args, **kwargs)
-        self.setWindowTitle('Frameless Window')
-        
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        super(UiWindow, self).__init__(*args, **kwargs)
+        self.setWindowTitle('UiWindow')
+        ui = __file__.rsplit('.',1)[0]+'.ui'
+        QtCompat.loadUi(ui, baseinstance=self)
 
     def sizeHint(self):
         return QtCore.QSize(800,600)

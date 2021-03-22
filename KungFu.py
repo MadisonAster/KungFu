@@ -639,12 +639,38 @@ class TestRunner():
     SkippedCount = 0
     def __init__(self, *args):
         super(TestRunner, self).__init__()
-        self.TestSuite = unittest.TestSuite()
+        
+        self.TechGroupings = {
+            'Languages' : ['Python', 'Go', 'C++', 'Javascript', 'Java', 'C#', 'PHP'],
+            'Cloud Platforms' : ['AWS', 'GCP', 'Azure'],
+            'Game Engines' : ['Unreal', 'Unity', 'CryEngine'],
+            '3D Tools' : ['Houdini', 'Maya', 'Cinema4D', 'Lightwave'],
+            '2D Tools' : ['Nuke', 'Fusion', 'AfterEffects'],
+        }
+        self.TestSuites = {
+            'Languages' : {},
+            'Cloud Platforms' : {},
+            'Game Engines' : {},
+            '3D Tools' : {},
+            '2D Tools' : {},
+            'Other' : {},
+        }
+        self.TestResults = {
+            'Languages' : {},
+            'Cloud Platforms' : {},
+            'Game Engines' : {},
+            '3D Tools' : {},
+            '2D Tools' : {},
+            'Other' : {},
+        }
+        #self.TestSuite = unittest.TestSuite()
         self.TestArgs = self.LoadTestVars()
         if len(args) > 0:
             for filepath in args:
+                testsuite = unittest.TestSuite()
                 print('ImportTests!', filepath)
-                self.ImportTests(os.path.abspath(filepath))
+                self.ImportTests(os.path.abspath(filepath), testsuite)
+                self.TestSuites['Other'][filepath] = testsuite
         else:
             self.RecursiveImport(folders=self.TestArgs.folders)
 
@@ -668,15 +694,25 @@ class TestRunner():
         '''
         start = datetime.now()
         #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
-        self.Runner = unittest.TextTestRunner()
-        result = self.Runner.run(self.TestSuite)
+        for grouping in self.TestSuites.keys():
+            for techname, testsuite in self.TestSuites[grouping].items():
+                self.Runner = unittest.TextTestRunner()
+                result = self.Runner.run(testsuite)
+                self.TestResults[grouping][techname] = result
+        #result = self.Runner.run(self.TestSuite)
         print('----------------------------------------------------------------------')
         t = datetime.now()-start
-        print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
-        if len(result.errors) > 0:
-            print('KungFu FAILED (errors='+str(len(result.errors))+')')
-        else:
-            print('Everything OK!')
+        for grouping in self.TestResults.keys():
+            print(grouping+':')
+            print('TestName')
+            for techname, result in self.TestResults[grouping].items():
+                print(techname)
+                print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
+                if len(result.errors) > 0:
+                    print('KungFu FAILED (errors='+str(len(result.errors))+')')
+                else:
+                    print('Everything OK!')
+            print('\n\n')
         if not self.TestArgs.skip:
             sys.DependencyHandler.OfferInstallers()
         sys.exit(int(not result.wasSuccessful()))
@@ -689,6 +725,7 @@ class TestRunner():
             for i, folder in enumerate(folders):
                 folders[i] = wd+'/'+folder
         for folder in folders:
+            testsuite = unittest.TestSuite()
             for root, dirs, files in os.walk(folder):
                 dirs.sort()
                 files.sort()
@@ -701,9 +738,16 @@ class TestRunner():
                         del dirs[i]
                 for file in files:
                     if file.rsplit('.',1)[-1] == 'py':
-                        self.ImportTests(root.replace('\\','/')+'/'+file)
+                        self.ImportTests(root.replace('\\','/')+'/'+file, testsuite)
+            grouping = 'Other'
+            for group, techlist in self.TechGroupings.items():
+                if folder in techlist:
+                    self.TestSuites[group][folder] = testsuite
+                    break
+            else:
+                self.TestSuites['Other'][folder] = testsuite
 
-    def ImportTests(self, ModulePath):
+    def ImportTests(self, ModulePath, TestSuite):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
         if ModuleName in ['KungFu', '__init__'] or 'BaseClasses' in ModuleName:
             return
@@ -722,7 +766,7 @@ class TestRunner():
                 if ClassName in globals().keys():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 globals()[ClassName] = Class
-                self.TestSuite.addTest(unittest.makeSuite(Class))
+                TestSuite.addTest(unittest.makeSuite(Class))
     
     def LoadTestVars(self):
         parser = argparse.ArgumentParser()

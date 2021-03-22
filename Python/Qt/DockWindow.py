@@ -4,7 +4,7 @@ from FooFinder import KungFu
 ##################################################
 
 #Test#############################################
-@KungFu.depends('conda.pyside2', 'conda.qt.py', 'gui')
+@KungFu.depends('pip.pyside2', 'pip.qt.py', 'gui')
 class test_DockWindow(KungFu.TimedTest):
     def __init__(self, *args):
         super(test_DockWindow, self).__init__(*args)
