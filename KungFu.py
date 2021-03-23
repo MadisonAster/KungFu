@@ -81,14 +81,23 @@ def WriteBack():
 ##################################################
 
 #Decorators#######################################
+def cloud(func):
+    '''
+    KungFu.cloud decorator is for marking functions that will simulate
+    the creation of cloud resources.
+    '''
+    if not sys.TestArgs.create:
+        print('Skipping cloud Test')
+        return None
+    else:
+        return func
+
 def create(func):
     '''
     KungFu.create decorator is for marking functions that will create
     cloud resources and cost money. Any function marked with this 
     decorator will not run unless the --create flag is passed into 
     argparse.
-    See:
-        AWSBaseClasses.py
     '''
     if not sys.TestArgs.create:
         print('Skipping create Test')
@@ -101,8 +110,6 @@ def destroy(func):
     KungFu.create decorator is for marking functions that will destroy
     cloud resources. Any function marked with this decorator will not
     run unless the --destroy flag is passed into argparse.
-    See:
-        AWSBaseClasses.py
     '''
     if not sys.TestArgs.destroy:
         print('Skipping destroy Test')
@@ -775,6 +782,7 @@ class TestRunner():
         parser.add_argument("-folder", help="Run all tests in the specified folder.", type=str)
         parser.add_argument("-filter", help="Run only test cases with names that match this filter.", type=str)
         parser.add_argument("-sleep", help="Run tests with a sleeptime of n seconds.", type=float)
+        parser.add_argument("--cloud", help="Run tests that simulate the creation of cloud resources.", action="store_true")
         parser.add_argument("--create", help="Run tests that provision real cloud resources. THIS WILL COST MONEY!", action="store_true")
         parser.add_argument("--destroy", help="Run tests that destroy real cloud resources. THIS IS POTENTIALLY DESTRUCTIVE!", action="store_true")
         parser.add_argument("--install", help="Run all installers. You probably shouldn't do this in the full KungFu library!", action="store_true")
