@@ -756,14 +756,8 @@ class TestRunner():
                 #self.Runner = unittest.TextTestRunner()
                 #print('testsuite', testsuite, testsuite.countTestCases())
                 #for subtestsuite in testsuite:
-                
-
-
-                print('testsuite', testsuite.countTestCases())
                 for test in testsuite:
                     testname = test.__class__.__name__
-                    print('test!!!!!!!!!', testname, test.countTestCases())
-                    #print(dir(test))
                     #raise Exception('stop')
                     testsuite.results[testname] = self.Runner.run(test)
                     #TODO: also update threaded display interface here
@@ -775,33 +769,7 @@ class TestRunner():
                         errors.append(e)
                     for f in testsuite.results[testname].failures:
                         errors.append(f)
-
-                #self.TestResults[groupingname][techname] = result
         
-        #for grouping in self.TestResults.keys():
-        #    print(grouping+':')
-        #    for techname, testresults in self.TestResults[grouping].items():
-        #        self.Runner = unittest.TextTestRunner()
-        #        result = self.Runner.run(testsuite)
-        #        self.TestResults[grouping][techname] = result
-        #result = self.Runner.run(self.TestSuite)
-        #print('----------------------------------------------------------------------')
-        #t = datetime.now()-start
-        #for grouping in self.TestResults.keys():
-        #    print(grouping+':')
-        #    print('TestName')
-        #    for techname, result in self.TestResults[grouping].items():
-        #        print(techname)
-        #        print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
-        #        if len(result.errors) > 0:
-        #            print('KungFu FAILED (errors='+str(len(result.errors))+')')
-        #        else:
-        #            print('Everything OK!')
-        #    print('\n\n')
-        #print('----------------------------------------------------------------------')
-        #if not self.TestArgs.skip:
-        #    sys.DependencyHandler.OfferInstallers()
-
         print('----------------------------------------------------------------------')
         t = datetime.now()-start
         print('KungFu ran '+str(testsRun)+' tests in '+str(t.total_seconds())+'s')
@@ -818,7 +786,6 @@ class TestRunner():
             sys.exit(0)
         else:
             sys.exit(1)
-        #sys.exit(int(not result.wasSuccessful()))
 
     def GetTestSuite(self, foldername):
         for grouping in self.TestSuites.values():
