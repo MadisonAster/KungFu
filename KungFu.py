@@ -741,8 +741,12 @@ class TestRunner():
         SublevelHell    P-300.000s      P-250.000s
         '''
         start = datetime.now()
-        #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
-        self.Runner = unittest.TextTestRunner()
+
+        #run, errors, failures = 0, 0, 0
+        testsRun, errors, failures = 0, [], []
+        finalresult = True
+        self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
+        #self.Runner = unittest.TextTestRunner()
         for groupingname, grouping in self.TestSuites.items():
             print(groupingname+':')
             
@@ -753,6 +757,8 @@ class TestRunner():
                 #print('testsuite', testsuite, testsuite.countTestCases())
                 #for subtestsuite in testsuite:
                 
+
+
                 print('testsuite', testsuite.countTestCases())
                 for test in testsuite:
                     testname = test.__class__.__name__
@@ -761,10 +767,16 @@ class TestRunner():
                     #raise Exception('stop')
                     testsuite.results[testname] = self.Runner.run(test)
                     #TODO: also update threaded display interface here
-                print('\tresult', testsuite.results)
+                    print('\tresult', testsuite.results)
+                    if not testsuite.results[testname].wasSuccessful():
+                        finalresult = False
+                    testsRun += testsuite.results[testname].testsRun
+                    for e in testsuite.results[testname].errors:
+                        errors.append(e)
+                    for f in testsuite.results[testname].failures:
+                        errors.append(f)
 
                 #self.TestResults[groupingname][techname] = result
-        print('----------------------------------------------------------------------')
         
         #for grouping in self.TestResults.keys():
         #    print(grouping+':')
@@ -790,7 +802,23 @@ class TestRunner():
         #if not self.TestArgs.skip:
         #    sys.DependencyHandler.OfferInstallers()
 
-        sys.exit(int(not result.wasSuccessful()))
+        print('----------------------------------------------------------------------')
+        t = datetime.now()-start
+        print('KungFu ran '+str(testsRun)+' tests in '+str(t.total_seconds())+'s')
+        if len(errors) > 0:
+            for e in errors:
+                print(e)
+            print('KungFu ERRORED (errors='+str(len(errors))+')')
+        if len(failures) > 0:
+            for f in failures:
+                print(f)
+            print('KungFu FAILED (failures='+str(len(failures))+')')
+        if finalresult == True:
+            print('Everything OK!')
+            sys.exit(0)
+        else:
+            sys.exit(1)
+        #sys.exit(int(not result.wasSuccessful()))
 
     def GetTestSuite(self, foldername):
         for grouping in self.TestSuites.values():
@@ -801,7 +829,6 @@ class TestRunner():
             testsuite = unittest.TestSuite()
             self.TestSuites['Other'][foldername] = testsuite
             return testsuite
-
 
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
