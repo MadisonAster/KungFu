@@ -20,6 +20,7 @@ import sys, os
 import unittest, inspect, argparse, json
 from importlib import util
 from datetime import datetime
+import threading
 import subprocess, shlex
 import traceback
 import functools, copy
@@ -647,31 +648,70 @@ class TestRunner():
     def __init__(self, *args):
         super(TestRunner, self).__init__()
         
+        '''
         self.TechGroupings = {
             'Languages' : ['Python', 'Go', 'C++', 'Javascript', 'Java', 'C#', 'PHP'],
-            'Cloud Platforms' : ['AWS', 'GCP', 'Azure'],
-            'Game Engines' : ['Unreal', 'Unity', 'CryEngine'],
-            '3D Tools' : ['Houdini', 'Maya', 'Cinema4D', 'Lightwave'],
-            '2D Tools' : ['Nuke', 'Fusion', 'AfterEffects'],
+            #'Libraries' : [],
+            #'Cloud Platforms' : ['AWS', 'GCP', 'Azure'],
+            #'Game Engines' : ['Unreal', 'Unity', 'CryEngine'],
+            #'3D Tools' : ['Houdini', 'Maya', 'Cinema4D', 'Lightwave'],
+            #'2D Tools' : ['Nuke', 'Fusion', 'AfterEffects'],
         }
+        '''
+        self.TestLoader = unittest.TestLoader()
         self.TestSuites = {
-            'Languages' : {},
-            'Cloud Platforms' : {},
-            'Game Engines' : {},
-            '3D Tools' : {},
-            '2D Tools' : {},
+            'Languages' : {
+                'Python' : unittest.TestSuite(),
+                'Go' : unittest.TestSuite(),
+                'C++' : unittest.TestSuite(),
+                'Javascript' : unittest.TestSuite(),
+                'Java' : unittest.TestSuite(),
+                'C#' : unittest.TestSuite(),
+                'PHP' : unittest.TestSuite(),
+                'C#' : unittest.TestSuite(),
+            },
+            #'PythonLibraries' : {
+            #    'pandas' : unittest.TestSuite(),
+            #    'numpy' : unittest.TestSuite(),
+            #    'static-frame' : unittest.TestSuite(),
+            #},
+            'Cloud Platforms' : {
+                'AWS' : unittest.TestSuite(),
+                'GCP' : unittest.TestSuite(),
+                'Azure' : unittest.TestSuite(),
+            },
+            'Game Engines' : {
+                'Unreal' : unittest.TestSuite(),
+                'Unity' : unittest.TestSuite(),
+                'CryEngine' : unittest.TestSuite(),
+            },
+            '3D Tools' : {
+                'Houdini' : unittest.TestSuite(),
+                'Maya' : unittest.TestSuite(),
+                'Cinema4D' : unittest.TestSuite(),
+                'Lightwave' : unittest.TestSuite(),
+                'Lightwave' : unittest.TestSuite(),
+            },
+            '2D Tools' : {
+                'Nuke' : unittest.TestSuite(),
+                'Fusion' : unittest.TestSuite(),
+                'AfterEffects' : unittest.TestSuite(),
+            },
             'Other' : {},
         }
         self.TestResults = {
             'Languages' : {},
-            'Cloud Platforms' : {},
-            'Game Engines' : {},
-            '3D Tools' : {},
-            '2D Tools' : {},
+            #'Libraries' : {},
+            #'Cloud Platforms' : {},
+            #'Game Engines' : {},
+            #'3D Tools' : {},
+            #'2D Tools' : {},
             'Other' : {},
         }
+
         #self.TestSuite = unittest.TestSuite()
         self.TestArgs = self.LoadTestVars()
+
         if len(args) > 0:
             for filepath in args:
                 testsuite = unittest.TestSuite()
@@ -679,6 +719,7 @@ class TestRunner():
                 self.ImportTests(os.path.abspath(filepath), testsuite)
                 self.TestSuites['Other'][filepath] = testsuite
         else:
+            print('self.TestArgs.folders', self.TestArgs.folders)
             self.RecursiveImport(folders=self.TestArgs.folders)
 
     def main(self):
@@ -688,7 +729,7 @@ class TestRunner():
         TestName        python3         c++             javascript      go 
         Dijkstras       P-1.000s        P-0.500s        P-0.800s        F-10.000s
         Fibonacci       P-1.000s        P-0.500s        P-0.800s        F-10.000s
-        QuickSort       P-1.000s        P-0.500s        P-0.800s        F-10.000s
+        QuickSort       P-1.000s                        P-0.800s        F-10.000s
         Darts           P-1.000s        P-0.500s        P-0.800s        F-10.000s
 
         TestName        aws             gcp
@@ -701,28 +742,66 @@ class TestRunner():
         '''
         start = datetime.now()
         #self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
-        for grouping in self.TestSuites.keys():
-            for techname, testsuite in self.TestSuites[grouping].items():
-                self.Runner = unittest.TextTestRunner()
-                result = self.Runner.run(testsuite)
-                self.TestResults[grouping][techname] = result
-        #result = self.Runner.run(self.TestSuite)
+        self.Runner = unittest.TextTestRunner()
+        for groupingname, grouping in self.TestSuites.items():
+            print(groupingname+':')
+            
+            for techname, testsuite in grouping.items():
+                print(techname+':')
+                testsuite.results = {}
+                #self.Runner = unittest.TextTestRunner()
+                #print('testsuite', testsuite, testsuite.countTestCases())
+                #for subtestsuite in testsuite:
+                
+                print('testsuite', testsuite.countTestCases())
+                for test in testsuite:
+                    testname = test.__class__.__name__
+                    print('test!!!!!!!!!', testname, test.countTestCases())
+                    #print(dir(test))
+                    #raise Exception('stop')
+                    testsuite.results[testname] = self.Runner.run(test)
+                    #TODO: also update threaded display interface here
+                print('\tresult', testsuite.results)
+
+                #self.TestResults[groupingname][techname] = result
         print('----------------------------------------------------------------------')
-        t = datetime.now()-start
-        for grouping in self.TestResults.keys():
-            print(grouping+':')
-            print('TestName')
-            for techname, result in self.TestResults[grouping].items():
-                print(techname)
-                print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
-                if len(result.errors) > 0:
-                    print('KungFu FAILED (errors='+str(len(result.errors))+')')
-                else:
-                    print('Everything OK!')
-            print('\n\n')
-        if not self.TestArgs.skip:
-            sys.DependencyHandler.OfferInstallers()
+        
+        #for grouping in self.TestResults.keys():
+        #    print(grouping+':')
+        #    for techname, testresults in self.TestResults[grouping].items():
+        #        self.Runner = unittest.TextTestRunner()
+        #        result = self.Runner.run(testsuite)
+        #        self.TestResults[grouping][techname] = result
+        #result = self.Runner.run(self.TestSuite)
+        #print('----------------------------------------------------------------------')
+        #t = datetime.now()-start
+        #for grouping in self.TestResults.keys():
+        #    print(grouping+':')
+        #    print('TestName')
+        #    for techname, result in self.TestResults[grouping].items():
+        #        print(techname)
+        #        print('KungFu ran '+str(result.testsRun)+' tests in '+str(t.total_seconds())+'s')
+        #        if len(result.errors) > 0:
+        #            print('KungFu FAILED (errors='+str(len(result.errors))+')')
+        #        else:
+        #            print('Everything OK!')
+        #    print('\n\n')
+        #print('----------------------------------------------------------------------')
+        #if not self.TestArgs.skip:
+        #    sys.DependencyHandler.OfferInstallers()
+
         sys.exit(int(not result.wasSuccessful()))
+
+    def GetTestSuite(self, foldername):
+        for grouping in self.TestSuites.values():
+            print('grouping', grouping)
+            if foldername in grouping.keys():
+                return grouping[foldername]
+        else:
+            testsuite = unittest.TestSuite()
+            self.TestSuites['Other'][foldername] = testsuite
+            return testsuite
+
 
     def RecursiveImport(self, folders=None):
         wd = os.path.dirname(os.path.abspath(__file__))
@@ -732,7 +811,8 @@ class TestRunner():
             for i, folder in enumerate(folders):
                 folders[i] = wd+'/'+folder
         for folder in folders:
-            testsuite = unittest.TestSuite()
+            #testsuite = unittest.TestSuite()
+            testsuite = self.GetTestSuite(folder)
             for root, dirs, files in os.walk(folder):
                 dirs.sort()
                 files.sort()
@@ -746,13 +826,13 @@ class TestRunner():
                 for file in files:
                     if file.rsplit('.',1)[-1] == 'py':
                         self.ImportTests(root.replace('\\','/')+'/'+file, testsuite)
-            grouping = 'Other'
-            for group, techlist in self.TechGroupings.items():
-                if folder in techlist:
-                    self.TestSuites[group][folder] = testsuite
-                    break
-            else:
-                self.TestSuites['Other'][folder] = testsuite
+            #grouping = 'Other'
+            #for group, techlist in self.TechGroupings.items():
+            #    if folder in techlist:
+            #        self.TestSuites[group][folder] = testsuite
+            #        break
+            #else:
+            #    self.TestSuites['Other'][folder] = testsuite
 
     def ImportTests(self, ModulePath, TestSuite):
         ModuleName = ModulePath.rsplit('/',1)[-1].rsplit('.',1)[0]
@@ -774,7 +854,9 @@ class TestRunner():
                     raise Exception('Namespace conflict found. Class Name already in use, pick another.', ClassName, Module.__file__)
                 globals()[ClassName] = Class
                 TestSuite.addTest(unittest.makeSuite(Class))
-    
+                #tests = self.TestLoader.loadTestsFromTestCase(Class)
+                #TestSuite.addTests(tests)
+
     def LoadTestVars(self):
         parser = argparse.ArgumentParser()
         def csv(val): return val.split(',')
