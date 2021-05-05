@@ -182,8 +182,12 @@ class TimedTest(unittest.TestCase):
         self.starttime = datetime.now()
 
     def tearDown(self):
-        t = datetime.now() - self.starttime
-        print(str(t), self.id())
+        t = self.getTime()
+        #print(str(t), self.id())
+
+    def getTime(self):
+        return datetime.now() - self.starttime
+
 
 class PrototypeTestParser(unittest.TestCase):
     '''
@@ -748,20 +752,16 @@ class TestRunner():
         self.Runner = unittest.TextTestRunner(stream=open(os.devnull, 'w'))
         #self.Runner = unittest.TextTestRunner()
         for groupingname, grouping in self.TestSuites.items():
-            print(groupingname+':')
-            
+            print(groupingname+':\n')
+            print('\t\t'+'\t\t'.join(grouping.keys()))
             for techname, testsuite in grouping.items():
-                print(techname+':')
                 testsuite.results = {}
-                #self.Runner = unittest.TextTestRunner()
-                #print('testsuite', testsuite, testsuite.countTestCases())
-                #for subtestsuite in testsuite:
                 for test in testsuite:
-                    testname = test.__class__.__name__
-                    #raise Exception('stop')
+                    testname = test._tests[0].__class__.__name__
+                    starttime = datetime.now()
                     testsuite.results[testname] = self.Runner.run(test)
-                    #TODO: also update threaded display interface here
-                    print('\tresult', testsuite.results)
+                    resulttime = datetime.now() - starttime
+                    print(testname+':\t', resulttime)
                     if not testsuite.results[testname].wasSuccessful():
                         finalresult = False
                     testsRun += testsuite.results[testname].testsRun
@@ -769,6 +769,7 @@ class TestRunner():
                         errors.append(e)
                     for f in testsuite.results[testname].failures:
                         errors.append(f)
+            print('\n')
         
         print('----------------------------------------------------------------------')
         t = datetime.now()-start
