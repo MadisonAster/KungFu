@@ -757,11 +757,13 @@ class TestRunner():
             for techname, testsuite in grouping.items():
                 testsuite.results = {}
                 for test in testsuite:
-                    testname = test._tests[0].__class__.__name__
+                    if len(test._tests) == 0:
+                        continue
+                    testname = test._tests[0].__class__.__name__.replace('test_','',1)
                     starttime = datetime.now()
                     testsuite.results[testname] = self.Runner.run(test)
                     resulttime = datetime.now() - starttime
-                    print(testname+':\t', resulttime)
+                    print(testname+'\t\t'+str(resulttime))
                     if not testsuite.results[testname].wasSuccessful():
                         finalresult = False
                     testsRun += testsuite.results[testname].testsRun
