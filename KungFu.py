@@ -744,6 +744,7 @@ class TestRunner():
         PluginCompile   P-50.000s       P-20.000s
         SublevelHell    P-300.000s      P-250.000s
         '''
+        print('----------------------------------------------------------------------')
         start = datetime.now()
 
         #run, errors, failures = 0, 0, 0
@@ -791,13 +792,16 @@ class TestRunner():
             sys.exit(1)
 
     def GetTestSuite(self, foldername):
+        print('GetTestSuite', foldername)
+        #wd = os.path.dirname(os.path.abspath(__file__))
+        fname = foldername.split(os.sep,1)[0]
         for grouping in self.TestSuites.values():
-            print('grouping', grouping)
-            if foldername in grouping.keys():
-                return grouping[foldername]
+            print('grouping', grouping.keys())
+            if fname in grouping.keys():
+                return grouping[fname]
         else:
             testsuite = unittest.TestSuite()
-            self.TestSuites['Other'][foldername] = testsuite
+            self.TestSuites['Other'][fname] = testsuite
             return testsuite
 
     def RecursiveImport(self, folders=None):
@@ -806,11 +810,12 @@ class TestRunner():
             folders = [wd]
         else:
             for i, folder in enumerate(folders):
-                folders[i] = wd+'/'+folder
+                folders[i] = folder.replace('\\', os.sep).replace('/',os.sep)
+                #folders[i] = wd+os.sep+folder
         for folder in folders:
             #testsuite = unittest.TestSuite()
             testsuite = self.GetTestSuite(folder)
-            for root, dirs, files in os.walk(folder):
+            for root, dirs, files in os.walk(wd+os.sep+folder):
                 dirs.sort()
                 files.sort()
                 for i, dir in reversed(list(enumerate(dirs))):
@@ -822,7 +827,8 @@ class TestRunner():
                         del dirs[i]
                 for file in files:
                     if file.rsplit('.',1)[-1] == 'py':
-                        self.ImportTests(root.replace('\\','/')+'/'+file, testsuite)
+                        self.ImportTests(os.path.join(root, file), testsuite)
+                        #self.ImportTests(root.replace('\\','/')+'/'+file, testsuite)
             #grouping = 'Other'
             #for group, techlist in self.TechGroupings.items():
             #    if folder in techlist:
