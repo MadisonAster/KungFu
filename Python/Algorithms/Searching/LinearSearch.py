@@ -1,20 +1,10 @@
-import unittest
+#Imports##########################################
+from FooFinder import KungFu
 import random
-from datetime import datetime
+##################################################
 
-def LinearSearch(Array, n):
-    for i, m in enumerate(Array):
-        if m == n:
-            return i
-    else:
-        return -1
-
-class test_LinearSearch(unittest.TestCase):
-    def setUp(self):
-        self.starttime = datetime.now()
-    def tearDown(self):
-        t = datetime.now() - self.starttime
-        print(str(t), self.id())
+#Test#############################################
+class test_LinearSearch(KungFu.TimedTest):
 
     def test_1(self):
         Array = list(reversed(range(100000)))
@@ -38,7 +28,18 @@ class test_LinearSearch(unittest.TestCase):
         random.shuffle(Array)
         Array[len(Array)-1] = -5
         self.assertEqual(Array.index(-5), len(Array)-1)
+##################################################
 
+#Code#############################################
+def LinearSearch(Array, n):
+    for i, m in enumerate(Array):
+        if m == n:
+            return i
+    else:
+        return -1
+##################################################
 
+#Main#############################################
 if __name__ == '__main__':
-    unittest.main()
+    KungFu.main(__file__)
+##################################################

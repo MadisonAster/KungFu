@@ -97,6 +97,7 @@ class test_StaticFrame(KungFu.TimedTest):
     '''
     
     def test_fred_d4oil(self):
+        print('test_fred_d4oil')
         frame = StaticFrame.from_fred('SP500')
         print('d4oil', frame)
     
